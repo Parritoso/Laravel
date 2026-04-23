@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('facturas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pedido_id')->constrained('pedidos')->cascadeOnDelete();
+            $table->foreignId('pedido_id')->unique()->constrained('pedidos')->cascadeOnDelete();
             $table->string('numero_factura')->unique();
             $table->float('subtotal');
             $table->float('iva');

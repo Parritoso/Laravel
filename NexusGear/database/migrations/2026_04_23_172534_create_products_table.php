@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('nombre');
             $table->float('precio');
-            $table->text('descripcion')->nullable();
+            $table->text('descripcion');
         });
     }
 

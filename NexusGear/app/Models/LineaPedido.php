@@ -27,6 +27,6 @@ class LineaPedido extends Model
 
     public function producto(): BelongsTo
     {
-        return $this->belongsTo(Product::class, 'producto_id');
+        return $this->belongsTo(Producto::class, 'producto_id');
     }
 }

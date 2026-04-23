@@ -5,26 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Favorito extends Model
+class DescuentoProducto extends Model
 {
-    protected $table = 'favoritos';
+    protected $table = 'descuento_producto';
 
     public $incrementing = false;
     public $timestamps = false;
 
     protected $fillable = [
-        'usuario_id',
+        'descuento_id',
         'producto_id',
-        'agregado_el',
     ];
 
-    protected $casts = [
-        'agregado_el' => 'datetime',
-    ];
-
-    public function usuario(): BelongsTo
+    public function descuento(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'usuario_id');
+        return $this->belongsTo(Descuento::class, 'descuento_id');
     }
 
     public function producto(): BelongsTo

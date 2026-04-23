@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class RolUser extends Model
+class RolUsuario extends Model
 {
     protected $table = 'rol_usuario';
 
