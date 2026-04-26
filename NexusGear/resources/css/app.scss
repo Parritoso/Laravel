@@ -1,12 +1,29 @@
-@import 'tailwindcss';
+// 1. Definición de colores de marca (NexusGear)
+$verde-agua: #4FD1C5; // Color primario: transmite calma y salud postural [cite: 2]
+$dark-gear: #2D3748;  // Gris oscuro para contraste y legibilidad técnica
 
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
-@source '../**/*.blade.php';
-@source '../**/*.js';
+// 2. Sobrescritura de variables de Bootstrap 5
+$primary: $verde-agua;
+$body-bg: #f8fafc;
+$link-color: darken($verde-agua, 15%);
+
+// 3. Tipografía (Enfoque moderno y tecnológico)
+$font-family-sans-serif: 'Inter', system-ui, -apple-system, sans-serif;
+
+// 4. Importación de Bootstrap
 @import 'bootstrap/scss/bootstrap';
 
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+// 5. Estilos personalizados del proyecto
+.navbar-nexus {
+    background-color: white;
+    border-bottom: 3px solid $primary;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.btn-primary {
+    color: white;
+    &:hover {
+        background-color: darken($primary, 10%);
+        border-color: darken($primary, 10%);
+    }
 }
