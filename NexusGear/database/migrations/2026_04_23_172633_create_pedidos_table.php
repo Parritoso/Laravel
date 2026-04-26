@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('pedidos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('usuario_id')->constrained('usuarios')->cascadeOnDelete();
+            $table->foreignId('usuario_id')->constrained('users')->cascadeOnDelete();
             $table->enum('estado', ['pendiente', 'procesando', 'enviado', 'entregado', 'cancelado']);
             $table->dateTime('fecha');
         });

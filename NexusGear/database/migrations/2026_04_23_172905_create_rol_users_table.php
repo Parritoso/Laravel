@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('rol_usuario', function (Blueprint $table) {
-            $table->foreignId('usuario_id')->constrained('usuarios')->cascadeOnDelete();
+            $table->foreignId('usuario_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('rol_id')->constrained('roles')->cascadeOnDelete();
             $table->dateTime('asignado_el');
             $table->primary(['usuario_id', 'rol_id']);
