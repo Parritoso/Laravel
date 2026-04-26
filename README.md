@@ -26,12 +26,12 @@ Para garantizar la coherencia visual en el desarrollo del frontend y el panel de
 
 | Uso | Muestra | Nombre | Código HEX |
 | :--- | :--- | :--- | :--- |
-| **Color Primario (Asignado)** | <span style="color:#45B39D">▉</span> | Verde Agua Base | `#45B39D` |
-| **Variación Clara** | <span style="color:#A2D9CE">▉</span> | Verde Agua Suave | `#A2D9CE` |
-| **Variación Oscura** | <span style="color:#117864">▉</span> | Verde Agua Profundo | `#117864` |
-| **Fondo de Interfaz** | <span style="color:#F8F9FA">▉</span> | Gris Neutro (Light) | `#F8F9FA` |
-| **Texto y Títulos** | <span style="color:#2C3E50">▉</span> | Azul Medianoche | `#2C3E50` |
-| **Acción Secundaria** | <span style="color:#E67E22">▉</span> | Naranja Alerta | `#E67E22` |
+| **Color Primario (Asignado)** | $${\color{#45B39D}▉}$$ | Verde Agua Base | `#45B39D` |
+| **Variación Clara** | $${\color{#A2D9CE}▉}$$ | Verde Agua Suave | `#A2D9CE` |
+| **Variación Oscura** | $${\color{#117864}▉}$$ | Verde Agua Profundo | `#117864` |
+| **Fondo de Interfaz** | $${\color{#F8F9FA}▉}$$ | Gris Neutro (Light) | `#F8F9FA` |
+| **Texto y Títulos** | $${\color{#2C3E50}▉}$$ | Azul Medianoche | `#2C3E50` |
+| **Acción Secundaria** | $${\color{#E67E22}▉}$$ | Naranja Alerta | `#E67E22` |
 
 ## 4. Análisis de Requisitos (v1.0)
 
