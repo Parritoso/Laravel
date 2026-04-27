@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>NexusGear - @yield('title', 'E-commerce Ergonómico')</title>
+    <title>NexusGear - @yield('title', __('layouts/app.title'))</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     @vite(['resources/css/app.scss', 'resources/js/app.js'])
@@ -22,8 +22,8 @@
                 
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav me-auto">
-                        <li class="nav-item"><a class="nav-link" href="#">Catálogo</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Favoritos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">{{__('layouts/app.catalog')}}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">{{__('layouts/app.favorites')}}</a></li>
                     </ul>
                     
                     <ul class="navbar-nav ms-auto align-items-center">
@@ -41,10 +41,10 @@
                                     {{ Auth::user()->name }}
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
-                                    <li><a class="dropdown-item" href="#">Mi Perfil</a></li>
-                                    <li><a class="dropdown-item" href="#">Mis Pedidos</a></li>
+                                    <li><a class="dropdown-item" href="#">{{__('layouts/app.profile')}}</a></li>
+                                    <li><a class="dropdown-item" href="#">{{__('layouts/app.orders')}}</a></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">Cerrar Sesión</a></li>
+                                    <li><a class="dropdown-item" href="#">{{__('layouts/app.close_session')}}</a></li>
                                 </ul>
                             </li>
                         @endguest
@@ -59,10 +59,10 @@
 
         <footer class="bg-white border-top py-5 mt-auto">
             <div class="container text-center text-muted">
-                <p>&copy; {{ date('Y') }} NexusGear - Salud y Tecnología Ergonómica</p>
+                <p>&copy; {{ date('Y') }} {{__('layouts/app.footer')}}</p>
                 <div class="small">
-                    <a href="#" class="text-decoration-none text-primary mx-2">Términos</a>
-                    <a href="#" class="text-decoration-none text-primary mx-2">Contacto</a>
+                    <a href="#" class="text-decoration-none text-primary mx-2">{{__('layouts/app.terms')}}</a>
+                    <a href="#" class="text-decoration-none text-primary mx-2">{{__('layouts/app.contact')}}</a>
                 </div>
             </div>
         </footer>
