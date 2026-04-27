@@ -60,4 +60,12 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Favorito::class, 'usuario_id');
     }
+
+    /**
+    * Método auxiliar para verificar si es administrador
+    */
+    public function isAdmin()
+    {
+        return $this->roles()->where('nombre_rol', 'admin')->exists();
+    }
 }
