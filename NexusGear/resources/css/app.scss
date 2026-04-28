@@ -386,6 +386,17 @@ $font-family-sans-serif: 'Inter', system-ui, -apple-system, sans-serif;
     grid-template-columns: minmax(0, 1fr) 120px auto;
 }
 
+.admin-product-icon {
+    width: 44px;
+    height: 44px;
+    display: grid;
+    flex: 0 0 auto;
+    place-items: center;
+    border-radius: .75rem;
+    color: darken($primary, 18%);
+    background: rgba(79, 209, 197, .14);
+}
+
 @media (max-width: 991.98px) {
     .catalog-toolbar,
     .product-detail,

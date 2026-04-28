@@ -12,7 +12,7 @@
             width: var(--admin-sidebar-width); 
             height: 100vh; 
             position: fixed; 
-            background: #2d3748; /* El Dark Gear que definimos */
+            background: #2d3748;
             color: white;
         }
         .main-content { 
@@ -27,8 +27,8 @@
             transition: all 0.3s;
         }
         .nav-link-admin:hover, .nav-link-admin.active {
-            background: rgba(79, 209, 197, 0.1); /* Verde Agua suave */
-            color: #4FD1C5; /* Verde Agua */
+            background: rgba(79, 209, 197, 0.1);
+            color: #4FD1C5;
             border-left: 4px solid #4FD1C5;
         }
     </style>
@@ -44,16 +44,10 @@
             <a href="{{ route('admin.dashboard') }}" class="nav-link-admin {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                 <i class="bi bi-speedometer2 me-2"></i> Dashboard
             </a>
-            <a href="{{ route('admin.products.index') }}" class="nav-link-admin">
+            <a href="{{ route('admin.products.index') }}" class="nav-link-admin {{ request()->routeIs('admin.products.*') ? 'active' : '' }}">
                 <i class="bi bi-box-seam me-2"></i> Productos
             </a>
-            <a href="{{ route('admin.categories.index') }}" class="nav-link-admin">
-                <i class="bi bi-tags me-2"></i> Categorías
-            </a>
-            <a href="{{ route('admin.discounts.index') }}" class="nav-link-admin">
-                <i class="bi bi-percent me-2"></i> Descuentos
-            </a>
-            <a href="{{ route('admin.orders.index') }}" class="nav-link-admin">
+            <a href="{{ route('admin.orders.index') }}" class="nav-link-admin {{ request()->routeIs('admin.orders.*') ? 'active' : '' }}">
                 <i class="bi bi-cart-check me-2"></i> Pedidos
             </a>
             <hr class="mx-3 opacity-25">
@@ -68,15 +62,36 @@
             <h2 class="fw-bold">@yield('page-title')</h2>
             <div class="dropdown">
                 <button class="btn btn-white shadow-sm dropdown-toggle" data-bs-toggle="dropdown">
-                    Admin Nexus
+                    {{ Auth::user()->name }}
                 </button>
                 <ul class="dropdown-menu shadow border-0">
-                    <li><a class="dropdown-item" href="#">Perfil</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item text-danger" href="#">Salir</a></li>
+                    <li>
+                        <a class="dropdown-item text-danger" href="#"
+                           onclick="event.preventDefault(); document.getElementById('admin-logout-form').submit();">
+                            Salir
+                        </a>
+                        <form id="admin-logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
+                    </li>
                 </ul>
             </div>
         </header>
+
+        @if (session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+            </div>
+        @endif
 
         @yield('content')
     </main>

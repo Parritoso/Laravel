@@ -3,6 +3,9 @@
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Models\Pedido;
 use App\Models\Producto;
 use Illuminate\Support\Facades\Route;
 
@@ -21,27 +24,23 @@ Route::get('/home', function() {
     ]);
 })->middleware(['auth','verified']);
 
-Route::middleware(['auth', 'verified', 'admin'])->group(function () {
+Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     
-    Route::get('/admin/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
+    Route::get('/dashboard', function () {
+        return view('admin.dashboard', [
+            'productCount' => Producto::count(),
+            'lowStockCount' => Producto::where('stock', '<=', 5)->count(),
+            'orderCount' => Pedido::count(),
+            'pendingOrderCount' => Pedido::whereIn('estado', ['pendiente', 'procesando'])->count(),
+            'recentOrders' => Pedido::with('usuario', 'factura')->latest('fecha')->take(5)->get(),
+            'lowStockProducts' => Producto::orderBy('stock')->take(5)->get(),
+        ]);
+    })->name('dashboard');
 
-    Route::get('/admin/products', function () {
-        return view('admin.products.index');
-    })->name('admin.products.index');
-
-    Route::get('/admin/categories', function () {
-        return view('admin.categories.index');
-    })->name('admin.categories.index');
-
-    Route::get('/admin/discounts', function () {
-        return view('admin.discounts.index');
-    })->name('admin.discounts.index');
-
-    Route::get('/admin/orders', function () {
-        return view('admin.orders.index');
-    })->name('admin.orders.index');
+    Route::resource('products', AdminProductController::class)->parameters(['products' => 'producto']);
+    Route::get('orders', [AdminOrderController::class, 'index'])->name('orders.index');
+    Route::get('orders/{pedido}', [AdminOrderController::class, 'show'])->name('orders.show');
+    Route::patch('orders/{pedido}', [AdminOrderController::class, 'update'])->name('orders.update');
 });
 
 Route::get('/productos', [ProductController::class, 'index'])->name('products.index');
