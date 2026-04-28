@@ -16,7 +16,47 @@ class Producto extends Model
         'nombre',
         'precio',
         'descripcion',
+        'stock',
+        'perfil',
+        'destacado',
     ];
+
+    protected $casts = [
+        'precio' => 'decimal:2',
+        'stock' => 'integer',
+        'destacado' => 'boolean',
+    ];
+
+    public function getPrecioFormateadoAttribute(): string
+    {
+        return number_format((float) $this->precio, 2, ',', '.').' €';
+    }
+
+    public function getDisponibleAttribute(): bool
+    {
+        return $this->stock > 0;
+    }
+
+    public function getPerfilNombreAttribute(): string
+    {
+        return match ($this->perfil) {
+            'gamer' => 'Gamer Pro',
+            default => 'Office & Focus',
+        };
+    }
+
+    public function getIconoAttribute(): string
+    {
+        $nombre = strtolower($this->nombre);
+
+        return match (true) {
+            str_contains($nombre, 'teclado') => 'bi-keyboard',
+            str_contains($nombre, 'mouse'), str_contains($nombre, 'raton'), str_contains($nombre, 'ratón') => 'bi-mouse2',
+            str_contains($nombre, 'reposamuñecas') => 'bi-hand-index-thumb',
+            str_contains($nombre, 'soporte') => 'bi-laptop',
+            default => 'bi-cpu',
+        };
+    }
 
     public function categorias(): BelongsToMany
     {

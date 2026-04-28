@@ -91,21 +91,35 @@
     </div>
 
     <div class="row g-4">
-        <div class="col-6 col-lg-3">
-            <div class="card border-0 shadow-sm h-100 p-2">
-                <div class="bg-light rounded-3 mb-3" style="height: 200px; display: flex; align-items: center; justify-content: center;">
-                     <i class="bi bi-mouse2 display-4 text-muted"></i>
-                </div>
-                <div class="card-body p-2">
-                    <span class="text-muted small">Ratón Vertical</span>
-                    <h6 class="fw-bold mb-1">Nexus Vertical Pro</h6>
-                    <div class="text-primary fw-bold mb-3">59.99€</div>
-                    <button class="btn btn-primary w-100 btn-sm rounded-pill shadow-sm">
-                        <i class="bi bi-cart-plus"></i> Añadir
-                    </button>
+        @forelse (($featuredProducts ?? collect()) as $product)
+            <div class="col-6 col-lg-3">
+                <article class="product-card h-100">
+                    <a href="{{ route('products.show', $product) }}" class="product-card__media product-card__media--compact">
+                        <i class="bi {{ $product->icono }}"></i>
+                    </a>
+                    <div class="product-card__body">
+                        <span class="text-muted small">{{ $product->perfil_nombre }}</span>
+                        <h3 class="h6 fw-bold mb-1">
+                            <a href="{{ route('products.show', $product) }}" class="text-reset text-decoration-none">
+                                {{ $product->nombre }}
+                            </a>
+                        </h3>
+                        <div class="text-primary fw-bold mb-3">{{ $product->precio_formateado }}</div>
+                        <a href="{{ route('products.show', $product) }}" class="btn btn-primary w-100 btn-sm rounded-pill shadow-sm">
+                            Ver detalle
+                        </a>
+                    </div>
+                </article>
+            </div>
+        @empty
+            <div class="col-12">
+                <div class="empty-state">
+                    <i class="bi bi-box-seam"></i>
+                    <h3 class="h5 fw-bold">El catálogo todavía no tiene productos</h3>
+                    <p class="text-muted mb-0">Ejecuta los seeders para cargar la colección inicial.</p>
                 </div>
             </div>
-        </div>
-        </div>
+        @endforelse
+    </div>
 </section>
 @endsection

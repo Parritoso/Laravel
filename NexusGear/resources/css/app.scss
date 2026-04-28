@@ -1,19 +1,13 @@
-// 1. Definición de colores de marca (NexusGear)
-$verde-agua: #4FD1C5; // Color primario: transmite calma y salud postural [cite: 2]
-$dark-gear: #2D3748;  // Gris oscuro para contraste y legibilidad técnica
+$verde-agua: #4FD1C5;
+$dark-gear: #2D3748;
 
-// 2. Sobrescritura de variables de Bootstrap 5
 $primary: $verde-agua;
 $body-bg: #f8fafc;
 $link-color: darken($verde-agua, 15%);
-
-// 3. Tipografía (Enfoque moderno y tecnológico)
 $font-family-sans-serif: 'Inter', system-ui, -apple-system, sans-serif;
 
-// 4. Importación de Bootstrap
 @import 'bootstrap/scss/bootstrap';
 
-// 5. Estilos personalizados del proyecto
 .navbar-nexus {
     background-color: white;
     border-bottom: 3px solid $primary;
@@ -25,5 +19,239 @@ $font-family-sans-serif: 'Inter', system-ui, -apple-system, sans-serif;
     &:hover {
         background-color: darken($primary, 10%);
         border-color: darken($primary, 10%);
+    }
+}
+
+.catalog-hero {
+    min-height: 360px;
+    display: flex;
+    align-items: center;
+    padding: clamp(2rem, 6vw, 4.5rem);
+    border-radius: 1.25rem;
+    color: white;
+    background:
+        radial-gradient(circle at 80% 20%, rgba(79, 209, 197, .42), transparent 28rem),
+        linear-gradient(135deg, #17212f 0%, #2d3748 48%, #117864 100%);
+    overflow: hidden;
+}
+
+.catalog-hero__content {
+    max-width: 680px;
+}
+
+.catalog-kicker {
+    display: inline-flex;
+    margin-bottom: .75rem;
+    font-size: .78rem;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.catalog-toolbar {
+    display: grid;
+    grid-template-columns: minmax(220px, 1fr) 180px 170px auto auto;
+    gap: .75rem;
+    align-items: center;
+    padding: 1rem;
+    border: 1px solid rgba(45, 55, 72, .08);
+    border-radius: 1rem;
+    background: white;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, .05);
+}
+
+.catalog-toolbar__search {
+    position: relative;
+
+    i {
+        position: absolute;
+        top: 50%;
+        left: 1rem;
+        transform: translateY(-50%);
+        color: #718096;
+    }
+
+    .form-control {
+        padding-left: 2.65rem;
+    }
+}
+
+.product-card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(45, 55, 72, .08);
+    border-radius: 1rem;
+    background: white;
+    overflow: hidden;
+    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+
+    &:hover {
+        transform: translateY(-4px);
+        border-color: rgba(79, 209, 197, .5);
+        box-shadow: 0 18px 40px rgba(15, 23, 42, .1);
+    }
+}
+
+.product-card__media {
+    min-height: 210px;
+    display: grid;
+    place-items: center;
+    color: darken($primary, 18%);
+    text-decoration: none;
+    background:
+        linear-gradient(145deg, rgba(79, 209, 197, .16), rgba(45, 55, 72, .07)),
+        #f8fafc;
+
+    i {
+        font-size: clamp(3.4rem, 7vw, 5.5rem);
+    }
+}
+
+.product-card__media--compact {
+    min-height: 150px;
+}
+
+.product-card__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 1.25rem;
+}
+
+.product-card__description {
+    display: -webkit-box;
+    margin-bottom: 0;
+    color: #64748b;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.product-price {
+    color: #117864;
+    font-size: 1.25rem;
+    font-weight: 800;
+}
+
+.empty-state {
+    display: grid;
+    place-items: center;
+    min-height: 260px;
+    padding: 2rem;
+    border: 1px dashed rgba(45, 55, 72, .25);
+    border-radius: 1rem;
+    background: white;
+    text-align: center;
+
+    i {
+        margin-bottom: 1rem;
+        color: $primary;
+        font-size: 3rem;
+    }
+}
+
+.featured-strip {
+    padding: 1.5rem;
+    border-radius: 1rem;
+    background: #ffffff;
+    border: 1px solid rgba(45, 55, 72, .08);
+}
+
+.featured-link {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: .85rem;
+    align-items: center;
+    padding: 1rem;
+    border-radius: .85rem;
+    color: $dark-gear;
+    text-decoration: none;
+    background: #f8fafc;
+
+    i {
+        color: $primary;
+        font-size: 1.5rem;
+    }
+
+    &:hover {
+        color: darken($primary, 20%);
+        background: rgba(79, 209, 197, .12);
+    }
+}
+
+.product-detail {
+    display: grid;
+    grid-template-columns: minmax(280px, 5fr) minmax(320px, 4fr);
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+}
+
+.product-detail__visual {
+    min-height: 520px;
+    display: grid;
+    place-items: center;
+    border-radius: 1.25rem;
+    color: darken($primary, 18%);
+    background:
+        radial-gradient(circle at 30% 30%, rgba(79, 209, 197, .34), transparent 20rem),
+        linear-gradient(145deg, #ffffff, #e8f4f2);
+
+    i {
+        font-size: clamp(6rem, 15vw, 11rem);
+    }
+}
+
+.product-detail__purchase {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 0;
+    margin: 1.5rem 0;
+    border-top: 1px solid rgba(45, 55, 72, .12);
+    border-bottom: 1px solid rgba(45, 55, 72, .12);
+}
+
+.product-detail__price {
+    color: #117864;
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-weight: 800;
+}
+
+.product-detail__facts {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: .75rem;
+
+    div {
+        padding: 1rem;
+        border-radius: .85rem;
+        background: white;
+        border: 1px solid rgba(45, 55, 72, .08);
+    }
+
+    span {
+        display: block;
+        color: #718096;
+        font-size: .85rem;
+    }
+
+    strong {
+        display: block;
+        margin-top: .25rem;
+        color: $dark-gear;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .catalog-toolbar,
+    .product-detail,
+    .product-detail__facts {
+        grid-template-columns: 1fr;
+    }
+
+    .product-detail__visual {
+        min-height: 340px;
     }
 }

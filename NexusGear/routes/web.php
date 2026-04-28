@@ -1,16 +1,22 @@
 <?php
 
+use App\Http\Controllers\ProductController;
+use App\Models\Producto;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('home');
+    return view('home', [
+        'featuredProducts' => Producto::where('destacado', true)->orderBy('nombre')->take(4)->get(),
+    ]);
 });
 
 Route::get('/home', function() {
     if (Auth::user()->isAdmin()) {
         return redirect()->route('admin.dashboard');
     }
-    return view('home');
+    return view('home', [
+        'featuredProducts' => Producto::where('destacado', true)->orderBy('nombre')->take(4)->get(),
+    ]);
 })->middleware(['auth','verified']);
 
 Route::middleware(['auth', 'verified', 'admin'])->group(function () {
@@ -36,6 +42,5 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
     })->name('admin.orders.index');
 });
 
-Route::get('/productos', function () {
-    return "Listado de productos";
-})->name('products.index');
+Route::get('/productos', [ProductController::class, 'index'])->name('products.index');
+Route::get('/productos/{producto}', [ProductController::class, 'show'])->name('products.show');
