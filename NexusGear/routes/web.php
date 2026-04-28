@@ -16,14 +16,26 @@ Route::get('/home', function() {
 Route::middleware(['auth', 'verified', 'admin'])->group(function () {
     
     Route::get('/admin/dashboard', function () {
-        return view('auth.dashboard');
+        return view('admin.dashboard');
     })->name('admin.dashboard');
 
-    // Aquí irían más rutas de gestión:
-    // Route::resource('productos', ProductoController::class);
+    Route::get('/admin/products', function () {
+        return view('admin.products.index');
+    })->name('admin.products.index');
+
+    Route::get('/admin/categories', function () {
+        return view('admin.categories.index');
+    })->name('admin.categories.index');
+
+    Route::get('/admin/discounts', function () {
+        return view('admin.discounts.index');
+    })->name('admin.discounts.index');
+
+    Route::get('/admin/orders', function () {
+        return view('admin.orders.index');
+    })->name('admin.orders.index');
 });
 
-// O si es una ruta simple de prueba por ahora:
 Route::get('/productos', function () {
     return "Listado de productos";
 })->name('products.index');
