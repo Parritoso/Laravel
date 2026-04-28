@@ -20,6 +20,22 @@ class LineaPedido extends Model
         'subtotal',
     ];
 
+    protected $casts = [
+        'cantidad' => 'integer',
+        'precio_unitario' => 'decimal:2',
+        'subtotal' => 'decimal:2',
+    ];
+
+    public function getPrecioUnitarioFormateadoAttribute(): string
+    {
+        return number_format((float) $this->precio_unitario, 2, ',', '.').' €';
+    }
+
+    public function getSubtotalFormateadoAttribute(): string
+    {
+        return number_format((float) $this->subtotal, 2, ',', '.').' €';
+    }
+
     public function pedido(): BelongsTo
     {
         return $this->belongsTo(Pedido::class, 'pedido_id');

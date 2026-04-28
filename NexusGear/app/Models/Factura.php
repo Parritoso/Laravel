@@ -24,6 +24,21 @@ class Factura extends Model
         'fecha_emision' => 'datetime',
     ];
 
+    public function getSubtotalFormateadoAttribute(): string
+    {
+        return number_format((float) $this->subtotal, 2, ',', '.').' €';
+    }
+
+    public function getIvaFormateadoAttribute(): string
+    {
+        return number_format((float) $this->iva, 2, ',', '.').' €';
+    }
+
+    public function getTotalFormateadoAttribute(): string
+    {
+        return number_format((float) $this->total_factura, 2, ',', '.').' €';
+    }
+
     public function pedido(): BelongsTo
     {
         return $this->belongsTo(Pedido::class, 'pedido_id');

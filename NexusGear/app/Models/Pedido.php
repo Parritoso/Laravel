@@ -23,6 +23,33 @@ class Pedido extends Model
         'fecha' => 'datetime',
     ];
 
+    public function getFechaFormateadaAttribute(): string
+    {
+        return $this->fecha->format('d/m/Y H:i');
+    }
+
+    public function getEstadoLabelAttribute(): string
+    {
+        return match ($this->estado) {
+            'procesando' => 'Procesando',
+            'enviado' => 'Enviado',
+            'entregado' => 'Entregado',
+            'cancelado' => 'Cancelado',
+            default => 'Pendiente',
+        };
+    }
+
+    public function getEstadoBadgeAttribute(): string
+    {
+        return match ($this->estado) {
+            'procesando' => 'warning',
+            'enviado' => 'info',
+            'entregado' => 'success',
+            'cancelado' => 'danger',
+            default => 'secondary',
+        };
+    }
+
     public function usuario(): BelongsTo
     {
         return $this->belongsTo(User::class, 'usuario_id');

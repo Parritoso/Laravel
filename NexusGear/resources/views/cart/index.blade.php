@@ -99,9 +99,12 @@
                 <strong>{{ $cart->total_formateado }}</strong>
             </div>
 
-            <button class="btn btn-primary btn-lg w-100 mt-3" type="button" disabled>
-                Tramitar pedido
-            </button>
+            <form method="POST" action="{{ route('checkout.store') }}">
+                @csrf
+                <button class="btn btn-primary btn-lg w-100 mt-3" type="submit">
+                    Tramitar pedido
+                </button>
+            </form>
             <a href="{{ route('products.index') }}" class="btn btn-outline-dark w-100 mt-2">Añadir más productos</a>
 
             <form method="POST" action="{{ route('cart.clear') }}" class="mt-3">
