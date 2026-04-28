@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Categoria;
 use App\Models\Producto;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -13,8 +14,8 @@ class ProductController extends Controller
     public function index(Request $request): View
     {
         $filters = $request->validate([
-            'q' => ['nullable', 'string', 'max:80'],
-            'profile' => ['nullable', 'in:gamer,office'],
+            'q'       => ['nullable', 'string', 'max:80'],
+            'profile' => ['nullable', 'string', 'exists:categorias,slug'],
         ]);
 
         $products = Producto::query()
@@ -22,21 +23,24 @@ class ProductController extends Controller
                 $query->where('nombre', 'like', "%{$search}%")
                     ->orWhere('descripcion', 'like', "%{$search}%");
             })
-            ->when($filters['profile'] ?? null, fn ($query, string $profile) => $query->where('perfil', $profile))
+            ->when($filters['profile'] ?? null, function ($query, string $slug) {
+                $query->whereHas('categoria', fn ($q) => $q->where('slug', $slug));
+            })
             ->orderBy('nombre')
             ->paginate(12)
             ->withQueryString();
 
         return view('admin.products.index', [
             'products' => $products,
-            'filters' => $filters,
+            'filters'  => $filters,
         ]);
     }
 
     public function create(): View
     {
         return view('admin.products.create', [
-            'product' => new Producto(['perfil' => 'office', 'stock' => 0]),
+            'product'    => new Producto(['stock' => 0]),
+            'categorias' => Categoria::orderBy('nombre')->get(),
         ]);
     }
 
@@ -57,7 +61,8 @@ class ProductController extends Controller
     public function edit(Producto $producto): View
     {
         return view('admin.products.edit', [
-            'product' => $producto,
+            'product'    => $producto,
+            'categorias' => Categoria::orderBy('nombre')->get(),
         ]);
     }
 
@@ -86,12 +91,12 @@ class ProductController extends Controller
     private function validatedData(Request $request): array
     {
         $data = $request->validate([
-            'nombre' => ['required', 'string', 'max:255'],
-            'precio' => ['required', 'numeric', 'min:0'],
-            'descripcion' => ['required', 'string', 'max:2000'],
-            'stock' => ['required', 'integer', 'min:0'],
-            'perfil' => ['required', 'in:gamer,office'],
-            'destacado' => ['nullable', 'boolean'],
+            'nombre'       => ['required', 'string', 'max:255'],
+            'precio'       => ['required', 'numeric', 'min:0'],
+            'descripcion'  => ['required', 'string', 'max:2000'],
+            'stock'        => ['required', 'integer', 'min:0'],
+            'categoria_id' => ['required', 'exists:categorias,id'],
+            'destacado'    => ['nullable', 'boolean'],
         ]);
 
         $data['destacado'] = $request->boolean('destacado');

@@ -77,7 +77,7 @@
                 <span class="catalog-kicker text-primary">También encajan</span>
                 <h2 class="h4 fw-bold mb-0">Productos del mismo perfil</h2>
             </div>
-            <a href="{{ route('products.index', ['profile' => $product->perfil]) }}" class="text-primary fw-bold text-decoration-none">
+            <a href="{{ route('products.index', ['profile' => $product->categoria->slug ?? '']) }}" class="text-primary fw-bold text-decoration-none">
                 Ver perfil <i class="bi bi-arrow-right"></i>
             </a>
         </div>

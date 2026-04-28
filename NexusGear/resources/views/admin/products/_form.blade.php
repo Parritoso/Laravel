@@ -38,12 +38,14 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="perfil" class="form-label fw-semibold">Perfil</label>
-                    <select id="perfil" name="perfil" class="form-select @error('perfil') is-invalid @enderror" required>
-                        <option value="office" @selected(old('perfil', $product->perfil) === 'office')>Office & Focus</option>
-                        <option value="gamer" @selected(old('perfil', $product->perfil) === 'gamer')>Gamer Pro</option>
+                    <label for="categoria_id" class="form-label fw-semibold">Perfil</label>
+                    <select id="categoria_id" name="categoria_id" class="form-select @error('categoria_id') is-invalid @enderror" required>
+                        <option value="">Selecciona un perfil</option>
+                        @foreach ($categorias as $cat)
+                            <option value="{{ $cat->id }}" @selected(old('categoria_id', $product->categoria_id) == $cat->id)>{{ $cat->nombre }}</option>
+                        @endforeach
                     </select>
-                    @error('perfil') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    @error('categoria_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>
 
                 <div class="form-check form-switch mb-4">
