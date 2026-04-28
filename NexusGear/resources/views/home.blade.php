@@ -1,134 +1,247 @@
 @extends('layouts.app')
 
-@section('title', 'Inicio - Tu Bienestar Postural')
+@section('title', 'Inicio')
 
 @section('content')
-<section class="py-5 mb-5 rounded-4 shadow-sm" style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); border-left: 8px solid var(--bs-primary);">
-    <div class="row align-items-center px-4">
-        <div class="col-lg-6">
-            <span class="badge bg-primary mb-3 px-3 py-2">Nueva Colección 2026</span>
-            <h1 class="display-4 fw-bold text-dark">Diseñados para <span class="text-primary">rendir</span>, creados para <span class="text-primary">cuidarte</span>.</h1>
-            <p class="lead text-muted mb-4">En NexusGear fusionamos la alta tecnología con la ergonomía avanzada para que tu única preocupación sea alcanzar tus objetivos.</p>
-            <div class="d-flex gap-3">
-                <a href="{{ route('products.index') }}" class="btn btn-primary btn-lg px-4 fw-bold">Explorar Todo</a>
-                <a href="#perfiles" class="btn btn-outline-dark btn-lg px-4">Personalizar mi setup</a>
-            </div>
-        </div>
-        <div class="col-lg-6 d-none d-lg-block text-center">
-            <i class="bi bi-mouse3 text-primary" style="font-size: 10rem; opacity: 0.2;"></i>
-        </div>
-    </div>
-</section>
+<style>
+    .home-shell {
+        --ng-ink: #1f2937;
+        --ng-muted: #64748b;
+        --ng-line: rgba(45, 55, 72, .1);
+    }
 
-<section id="perfiles" class="py-5">
-    <div class="text-center mb-5">
-        <h2 class="fw-bold">¿Cómo es tu jornada?</h2>
-        <p class="text-muted">Elige tu perfil y te mostraremos los periféricos que mejor se adaptan a ti.</p>
-    </div>
-    
-    <div class="row g-4">
-        <div class="col-md-6">
-            <div class="card h-100 border-0 shadow-sm overflow-hidden card-hover">
-                <div class="card-body p-0 d-flex">
-                    <div class="bg-dark text-white p-5 w-100">
-                        <i class="bi bi-controller display-3 mb-3"></i>
-                        <h3 class="fw-bold">Gamer Pro</h3>
-                        <p class="opacity-75">Busco precisión milimétrica y switches mecánicos sin sacrificar la salud de mis muñecas.</p>
-                        <a href="{{ route('products.index', ['profile' => 'gamer']) }}" class="btn btn-primary mt-3 px-4">Ver Selección Gamer</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-md-6">
-            <div class="card h-100 border-0 shadow-sm overflow-hidden card-hover">
-                <div class="card-body p-0 d-flex">
-                    <div class="bg-light p-5 w-100 border-start border-primary border-5">
-                        <i class="bi bi-briefcase display-3 text-primary mb-3"></i>
-                        <h3 class="fw-bold">Office & Focus</h3>
-                        <p class="text-muted">Necesito silencio, confort absoluto y periféricos que reduzcan la fatiga tras 8 horas de trabajo.</p>
-                        <a href="{{ route('products.index', ['profile' => 'office']) }}" class="btn btn-outline-primary mt-3 px-4">Ver Selección Oficina</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+    .home-hero {
+        padding: clamp(2rem, 6vw, 4rem) 0;
+        border-radius: 1.25rem;
+        color: white;
+        background:
+            linear-gradient(135deg, #16202c 0%, #2D3748 48%, #117864 100%);
+        box-shadow: 0 24px 55px rgba(15, 23, 42, .18);
+    }
 
-<section class="py-5 bg-white rounded-4 shadow-sm my-5">
-    <div class="row text-center g-4">
-        <div class="col-md-4">
-            <div class="p-3">
-                <i class="bi bi-shield-check text-primary display-5 mb-3"></i>
-                <h4 class="fw-bold">Postura Natural</h4>
-                <p class="text-muted">Nuestros ratones verticales mantienen el antebrazo en una posición neutra de "apretón de manos".</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="p-3">
-                <i class="bi bi-lightning-charge text-primary display-5 mb-3"></i>
-                <h4 class="fw-bold">Rendimiento</h4>
-                <p class="text-muted">Teclados compactos (60%) que reducen el recorrido de tus brazos, aumentando la velocidad.</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="p-3">
-                <i class="bi bi-heart-pulse text-primary display-5 mb-3"></i>
-                <h4 class="fw-bold">Salud a largo plazo</h4>
-                <p class="text-muted">Materiales viscoelásticos en reposamuñecas para prevenir el síndrome del túnel carpiano.</p>
-            </div>
-        </div>
-    </div>
-</section>
+    .home-hero__inner {
+        width: 100%;
+        padding: 0 clamp(1.25rem, 5vw, 4rem);
+    }
 
-<section class="py-5">
-    <div class="d-flex justify-content-between align-items-end mb-4">
+    .home-kicker {
+        display: inline-flex;
+        margin-bottom: 1rem;
+        color: #A2D9CE;
+        font-size: .78rem;
+        font-weight: 800;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+    }
+
+    .home-hero h1 {
+        margin-bottom: 1rem;
+        font-size: clamp(2.2rem, 5vw, 4.4rem);
+        line-height: 1.04;
+        letter-spacing: 0;
+    }
+
+    .home-hero p {
+        color: rgba(255,255,255,.78);
+    }
+
+    .home-band {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(260px, 380px);
+        gap: 2rem;
+        align-items: end;
+        padding: 3rem 0 1.5rem;
+        border-bottom: 1px solid var(--ng-line);
+    }
+
+    .home-band p {
+        color: var(--ng-muted);
+    }
+
+    .profile-link {
+        display: block;
+        height: 100%;
+        padding: 1.35rem;
+        border: 1px solid var(--ng-line);
+        border-radius: 1rem;
+        background: white;
+        color: var(--ng-ink);
+        text-decoration: none;
+        transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+
+    .profile-link:hover {
+        transform: translateY(-3px);
+        border-color: rgba(79, 209, 197, .55);
+        box-shadow: 0 18px 38px rgba(15,23,42,.08);
+        color: var(--ng-ink);
+    }
+
+    .profile-link i {
+        color: #117864;
+        font-size: 2rem;
+    }
+
+    .principle-list {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1px;
+        margin: 2rem 0 4rem;
+        background: var(--ng-line);
+        border: 1px solid var(--ng-line);
+        border-radius: 1rem;
+        overflow: hidden;
+    }
+
+    .principle-list article {
+        padding: 1.5rem;
+        background: #fff;
+    }
+
+    .principle-list span {
+        display: block;
+        margin-bottom: .75rem;
+        color: #117864;
+        font-weight: 800;
+    }
+
+    .home-product-card {
+        display: grid;
+        height: 100%;
+        grid-template-rows: 150px 1fr;
+        border: 1px solid var(--ng-line);
+        border-radius: 1rem;
+        background: white;
+        overflow: hidden;
+        text-decoration: none;
+        color: var(--ng-ink);
+        transition: transform .18s ease, box-shadow .18s ease;
+    }
+
+    .home-product-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 18px 38px rgba(15,23,42,.08);
+        color: var(--ng-ink);
+    }
+
+    .home-product-visual {
+        display: grid;
+        place-items: center;
+        background: linear-gradient(145deg, rgba(79, 209, 197, .15), rgba(45, 55, 72, .06));
+        color: #117864;
+    }
+
+    .home-product-visual i {
+        font-size: 3.2rem;
+    }
+
+    .home-product-body {
+        padding: 1rem;
+    }
+
+    @media (max-width: 991.98px) {
+        .home-band,
+        .principle-list {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="home-shell">
+    <section class="home-hero mb-5">
+        <div class="home-hero__inner">
+            <span class="home-kicker">NexusGear</span>
+            <h1 class="fw-bold">Periféricos cómodos para trabajar y jugar mejor.</h1>
+            <p class="lead mb-4">Una selección sencilla de teclados, ratones y accesorios para montar un escritorio más agradable cada día.</p>
+            <div class="d-flex flex-wrap gap-3">
+                <a href="{{ route('products.index') }}" class="btn btn-primary btn-lg px-4 fw-bold">Ver catálogo</a>
+                <a href="#setup" class="btn btn-outline-light btn-lg px-4">Elegir por uso</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="setup" class="home-band">
         <div>
-            <h2 class="fw-bold">Los favoritos de la comunidad</h2>
-            <p class="text-muted mb-0">Periféricos que ya están cambiando la forma de trabajar y jugar.</p>
+            <span class="home-kicker text-primary">Dos formas de comprar</span>
+            <h2 class="fw-bold mb-2">No todo el mundo necesita el mismo escritorio.</h2>
+            <p class="mb-0">Filtramos el catálogo por contexto real de uso: trabajo concentrado o sesiones de juego largas.</p>
         </div>
-        <a href="{{ route('products.index') }}" class="text-primary fw-bold text-decoration-none">Ver todo <i class="bi bi-arrow-right"></i></a>
+        <a href="{{ route('products.index') }}" class="text-primary fw-bold text-decoration-none">
+            Ver todos los productos <i class="bi bi-arrow-right"></i>
+        </a>
+    </section>
+
+    <div class="row g-4 py-4">
+        <div class="col-md-6">
+            <a href="{{ route('products.index', ['profile' => 'office']) }}" class="profile-link">
+                <i class="bi bi-briefcase mb-3"></i>
+                <h3 class="h4 fw-bold">Office & Focus</h3>
+                <p class="text-muted mb-0">Silencio, postura neutra y menos tensión tras muchas horas de teclado y ratón.</p>
+            </a>
+        </div>
+        <div class="col-md-6">
+            <a href="{{ route('products.index', ['profile' => 'gamer']) }}" class="profile-link">
+                <i class="bi bi-controller mb-3"></i>
+                <h3 class="h4 fw-bold">Gamer Pro</h3>
+                <p class="text-muted mb-0">Precisión, respuesta rápida y un setup que no castigue muñecas ni hombros.</p>
+            </a>
+        </div>
     </div>
 
-    <div class="row g-4">
-        @forelse (($featuredProducts ?? collect()) as $product)
-            <div class="col-6 col-lg-3">
-                <article class="product-card h-100">
-                    <a href="{{ route('products.show', $product) }}" class="product-card__media product-card__media--compact">
-                        <i class="bi {{ $product->icono }}"></i>
+    <section class="principle-list">
+        <article>
+            <span>01</span>
+            <h3 class="h5 fw-bold">Agarre natural</h3>
+            <p class="text-muted mb-0">Ratones y apoyos que evitan forzar la muñeca en posiciones incómodas.</p>
+        </article>
+        <article>
+            <span>02</span>
+            <h3 class="h5 fw-bold">Mesa despejada</h3>
+            <p class="text-muted mb-0">Formatos compactos para dejar espacio al movimiento sin perder control.</p>
+        </article>
+        <article>
+            <span>03</span>
+            <h3 class="h5 fw-bold">Uso diario</h3>
+            <p class="text-muted mb-0">Productos sencillos de mantener, con materiales pensados para muchas horas.</p>
+        </article>
+    </section>
+
+    <section class="pb-5">
+        <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+            <div>
+                <span class="home-kicker text-primary">Selección inicial</span>
+                <h2 class="fw-bold mb-1">Piezas con las que empezar bien.</h2>
+                <p class="text-muted mb-0">Una muestra del catálogo para montar una base cómoda desde el primer día.</p>
+            </div>
+            <a href="{{ route('products.index') }}" class="text-primary fw-bold text-decoration-none">
+                Ver catálogo <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+
+        <div class="row g-4">
+            @forelse (($featuredProducts ?? collect()) as $product)
+                <div class="col-6 col-lg-3">
+                    <a href="{{ route('products.show', $product) }}" class="home-product-card">
+                        <span class="home-product-visual">
+                            <i class="bi {{ $product->icono }}"></i>
+                        </span>
+                        <span class="home-product-body">
+                            <span class="text-muted small d-block mb-1">{{ $product->perfil_nombre }}</span>
+                            <strong class="d-block mb-2">{{ $product->nombre }}</strong>
+                            <span class="text-primary fw-bold">{{ $product->precio_formateado }}</span>
+                        </span>
                     </a>
-                    <div class="product-card__body">
-                        <span class="text-muted small">{{ $product->perfil_nombre }}</span>
-                        <h3 class="h6 fw-bold mb-1">
-                            <a href="{{ route('products.show', $product) }}" class="text-reset text-decoration-none">
-                                {{ $product->nombre }}
-                            </a>
-                        </h3>
-                        <div class="text-primary fw-bold mb-3">{{ $product->precio_formateado }}</div>
-                        <div class="d-grid gap-2">
-                            <a href="{{ route('products.show', $product) }}" class="btn btn-outline-primary btn-sm rounded-pill">
-                                Ver detalle
-                            </a>
-                            <form method="POST" action="{{ route('cart.store', $product) }}">
-                                @csrf
-                                <input type="hidden" name="cantidad" value="1">
-                                <button class="btn btn-primary w-100 btn-sm rounded-pill shadow-sm" type="submit" @disabled(! $product->disponible)>
-                                    <i class="bi bi-cart-plus"></i> Añadir
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </article>
-            </div>
-        @empty
-            <div class="col-12">
-                <div class="empty-state">
-                    <i class="bi bi-box-seam"></i>
-                    <h3 class="h5 fw-bold">El catálogo todavía no tiene productos</h3>
-                    <p class="text-muted mb-0">Ejecuta los seeders para cargar la colección inicial.</p>
                 </div>
-            </div>
-        @endforelse
-    </div>
-</section>
+            @empty
+                <div class="col-12">
+                    <div class="empty-state">
+                        <i class="bi bi-box-seam"></i>
+                        <h3 class="h5 fw-bold">El catálogo todavía no tiene productos</h3>
+                        <p class="text-muted mb-0">Ejecuta los seeders para cargar la colección inicial.</p>
+                    </div>
+                </div>
+            @endforelse
+        </div>
+    </section>
+</div>
 @endsection
