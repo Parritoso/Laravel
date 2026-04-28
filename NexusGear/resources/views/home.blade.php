@@ -105,9 +105,18 @@
                             </a>
                         </h3>
                         <div class="text-primary fw-bold mb-3">{{ $product->precio_formateado }}</div>
-                        <a href="{{ route('products.show', $product) }}" class="btn btn-primary w-100 btn-sm rounded-pill shadow-sm">
-                            Ver detalle
-                        </a>
+                        <div class="d-grid gap-2">
+                            <a href="{{ route('products.show', $product) }}" class="btn btn-outline-primary btn-sm rounded-pill">
+                                Ver detalle
+                            </a>
+                            <form method="POST" action="{{ route('cart.store', $product) }}">
+                                @csrf
+                                <input type="hidden" name="cantidad" value="1">
+                                <button class="btn btn-primary w-100 btn-sm rounded-pill shadow-sm" type="submit" @disabled(! $product->disponible)>
+                                    <i class="bi bi-cart-plus"></i> Añadir
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </article>
             </div>

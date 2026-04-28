@@ -34,7 +34,23 @@
                 </div>
             </div>
 
-            <a href="{{ route('products.index') }}" class="btn btn-outline-dark btn-lg">Seguir explorando</a>
+            <form method="POST" action="{{ route('cart.store', $product) }}" class="add-to-cart-form">
+                @csrf
+                <label for="cantidad" class="visually-hidden">Cantidad</label>
+                <input
+                    id="cantidad"
+                    type="number"
+                    name="cantidad"
+                    value="1"
+                    min="1"
+                    max="{{ max($product->stock, 1) }}"
+                    class="form-control form-control-lg"
+                    @disabled(! $product->disponible)
+                >
+                <button class="btn btn-primary btn-lg" type="submit" @disabled(! $product->disponible)>
+                    <i class="bi bi-cart-plus me-1"></i> Añadir
+                </button>
+            </form>
         </div>
 
         <div class="product-detail__facts">
@@ -43,11 +59,11 @@
                 <strong>{{ $product->perfil_nombre }}</strong>
             </div>
             <div>
-                <span>Envio</span>
+                <span>Envío</span>
                 <strong>24-48 h</strong>
             </div>
             <div>
-                <span>Garantia</span>
+                <span>Garantía</span>
                 <strong>2 años</strong>
             </div>
         </div>

@@ -19,6 +19,26 @@ class ItemCarrito extends Model
         'precio_actual',
     ];
 
+    protected $casts = [
+        'cantidad' => 'integer',
+        'precio_actual' => 'decimal:2',
+    ];
+
+    public function getSubtotalAttribute(): float
+    {
+        return $this->cantidad * (float) $this->precio_actual;
+    }
+
+    public function getSubtotalFormateadoAttribute(): string
+    {
+        return number_format($this->subtotal, 2, ',', '.').' €';
+    }
+
+    public function getPrecioActualFormateadoAttribute(): string
+    {
+        return number_format((float) $this->precio_actual, 2, ',', '.').' €';
+    }
+
     public function carrito(): BelongsTo
     {
         return $this->belongsTo(Carrito::class, 'carrito_id');

@@ -30,10 +30,10 @@
 
                     <ul class="navbar-nav ms-auto align-items-center">
                         <li class="nav-item me-3">
-                            <a href="#" class="position-relative text-dark text-decoration-none">
+                            <a href="{{ route('cart.index') }}" class="position-relative text-dark text-decoration-none" aria-label="Carrito">
                                 <i class="bi bi-cart3 fs-5"></i>
                                 <span
-                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">0</span>
+                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">{{ $cartCount ?? 0 }}</span>
                             </a>
                         </li>
                         @guest
@@ -64,6 +64,20 @@
         </nav>
 
         <main class="py-4 container">
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                </div>
+            @endif
+
+            @if (session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                </div>
+            @endif
+
             @yield('content')
         </main>
 

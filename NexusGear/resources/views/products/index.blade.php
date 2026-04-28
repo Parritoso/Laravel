@@ -81,16 +81,25 @@
 
                         <p class="product-card__description">{{ $product->descripcion }}</p>
 
-                        <div class="d-flex justify-content-between align-items-center mt-4">
+                        <div class="d-flex justify-content-between align-items-center gap-3 mt-4">
                             <div>
                                 <div class="product-price">{{ $product->precio_formateado }}</div>
                                 <small class="{{ $product->disponible ? 'text-success' : 'text-danger' }}">
                                     {{ $product->disponible ? $product->stock.' en stock' : 'Sin stock' }}
                                 </small>
                             </div>
-                            <a href="{{ route('products.show', $product) }}" class="btn btn-outline-primary">
-                                Ver detalle
-                            </a>
+                            <div class="d-flex gap-2">
+                                <a href="{{ route('products.show', $product) }}" class="btn btn-outline-primary">
+                                    Ver detalle
+                                </a>
+                                <form method="POST" action="{{ route('cart.store', $product) }}">
+                                    @csrf
+                                    <input type="hidden" name="cantidad" value="1">
+                                    <button class="btn btn-primary" type="submit" @disabled(! $product->disponible) aria-label="Añadir {{ $product->nombre }} al carrito">
+                                        <i class="bi bi-cart-plus"></i>
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </article>
