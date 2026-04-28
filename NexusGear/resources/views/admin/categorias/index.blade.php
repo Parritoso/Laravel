@@ -31,17 +31,19 @@
                             <span class="badge text-bg-light">{{ $categoria->productos_count }}</span>
                         </td>
                         <td class="text-end">
-                            <a href="{{ route('admin.categorias.edit', $categoria) }}" class="btn btn-sm btn-outline-secondary">
-                                <i class="bi bi-pencil"></i>
-                            </a>
-                            <form method="POST" action="{{ route('admin.categorias.destroy', $categoria) }}" class="d-inline">
-                                @csrf
-                                @method('DELETE')
-                                <button class="btn btn-sm btn-outline-danger" type="submit"
-                                        onclick="return confirm('¿Eliminar la categoría «{{ $categoria->nombre }}»?')">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </form>
+                            <div class="d-flex gap-1 justify-content-end">
+                                <a href="{{ route('admin.categorias.edit', $categoria) }}" class="btn btn-sm btn-outline-secondary">
+                                    <i class="bi bi-pencil me-1"></i> Editar
+                                </a>
+                                <form method="POST" action="{{ route('admin.categorias.destroy', $categoria) }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-sm btn-outline-danger" type="submit"
+                                            onclick="return confirm('¿Eliminar «{{ $categoria->nombre }}»?')">
+                                        <i class="bi bi-trash me-1"></i> Eliminar
+                                    </button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 @empty

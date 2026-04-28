@@ -72,19 +72,22 @@
                             @endif
                         </td>
                         <td class="text-end">
-                            <a href="{{ route('products.show', $product) }}" class="btn btn-sm btn-outline-dark" target="_blank">
-                                <i class="bi bi-eye"></i>
-                            </a>
-                            <a href="{{ route('admin.products.edit', $product) }}" class="btn btn-sm btn-outline-secondary">
-                                <i class="bi bi-pencil"></i>
-                            </a>
-                            <form method="POST" action="{{ route('admin.products.destroy', $product) }}" class="d-inline">
-                                @csrf
-                                @method('DELETE')
-                                <button class="btn btn-sm btn-outline-danger" type="submit" onclick="return confirm('¿Eliminar este producto?')">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </form>
+                            <div class="d-flex gap-1 justify-content-end">
+                                <a href="{{ route('products.show', $product) }}" class="btn btn-sm btn-outline-dark" target="_blank">
+                                    <i class="bi bi-eye me-1"></i> Ver
+                                </a>
+                                <a href="{{ route('admin.products.edit', $product) }}" class="btn btn-sm btn-outline-secondary">
+                                    <i class="bi bi-pencil me-1"></i> Editar
+                                </a>
+                                <form method="POST" action="{{ route('admin.products.destroy', $product) }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-sm btn-outline-danger" type="submit"
+                                            onclick="return confirm('¿Eliminar «{{ $product->nombre }}»?')">
+                                        <i class="bi bi-trash me-1"></i> Eliminar
+                                    </button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 @empty
