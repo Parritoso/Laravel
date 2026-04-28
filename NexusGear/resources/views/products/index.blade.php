@@ -8,10 +8,10 @@
         <span class="catalog-kicker">Catálogo NexusGear</span>
         <h1 class="display-5 fw-bold mb-3">Periféricos ergonómicos para trabajar y jugar mejor.</h1>
         <p class="lead mb-4">Explora productos pensados para mantener el rendimiento sin renunciar a una postura cómoda.</p>
-        <div class="d-flex flex-wrap gap-2">
+        <!--<div class="d-flex flex-wrap gap-2">
             <a href="{{ route('products.index', ['profile' => 'office']) }}" class="btn btn-light btn-lg">Office & Focus</a>
             <a href="{{ route('products.index', ['profile' => 'gamer']) }}" class="btn btn-outline-light btn-lg">Gamer Pro</a>
-        </div>
+        </div>-->
     </div>
 </section>
 
