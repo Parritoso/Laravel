@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Inicio')
+@section('title', __('home.title'))
 
 @section('content')
 <style>
@@ -151,23 +151,23 @@
     <section class="home-hero mb-5">
         <div class="home-hero__inner">
             <span class="home-kicker">NexusGear</span>
-            <h1 class="fw-bold">Periféricos cómodos para trabajar y jugar mejor.</h1>
-            <p class="lead mb-4">Una selección sencilla de teclados, ratones y accesorios para montar un escritorio más agradable cada día.</p>
+            <h1 class="fw-bold">{{ __('home.hero_title') }}</h1>
+            <p class="lead mb-4">{{ __('home.hero_subtitle') }}</p>
             <div class="d-flex flex-wrap gap-3">
-                <a href="{{ route('products.index') }}" class="btn btn-primary btn-lg px-4 fw-bold">Ver catálogo</a>
-                <a href="#setup" class="btn btn-outline-light btn-lg px-4">Elegir por uso</a>
+                <a href="{{ route('products.index') }}" class="btn btn-primary btn-lg px-4 fw-bold">{{ __('home.view_catalog') }}</a>
+                <a href="#setup" class="btn btn-outline-light btn-lg px-4">{{ __('home.choose_by_use') }}</a>
             </div>
         </div>
     </section>
 
     <section id="setup" class="home-band">
         <div>
-            <span class="home-kicker text-primary">Dos formas de comprar</span>
-            <h2 class="fw-bold mb-2">No todo el mundo necesita el mismo escritorio.</h2>
-            <p class="mb-0">Filtramos el catálogo por contexto real de uso: trabajo concentrado o sesiones de juego largas.</p>
+            <span class="home-kicker text-primary">{{ __('home.ways_to_buy') }}</span>
+            <h2 class="fw-bold mb-2">{{ __('home.ways_desc_1') }}</h2>
+            <p class="mb-0">{{ __('home.ways_desc_2') }}</p>
         </div>
         <a href="{{ route('products.index') }}" class="text-primary fw-bold text-decoration-none">
-            Ver todos los productos <i class="bi bi-arrow-right"></i>
+            {{ __('home.view_all') }} <i class="bi bi-arrow-right"></i>
         </a>
     </section>
 
@@ -175,15 +175,15 @@
         <div class="col-md-6">
             <a href="{{ route('products.index', ['profile' => 'office']) }}" class="profile-link">
                 <i class="bi bi-briefcase mb-3"></i>
-                <h3 class="h4 fw-bold">Office & Focus</h3>
-                <p class="text-muted mb-0">Silencio, postura neutra y menos tensión tras muchas horas de teclado y ratón.</p>
+                <h3 class="h4 fw-bold">{{ __('home.office_title') }}</h3>
+                <p class="text-muted mb-0">{{ __('home.office_desc') }}</p>
             </a>
         </div>
         <div class="col-md-6">
             <a href="{{ route('products.index', ['profile' => 'gamer']) }}" class="profile-link">
                 <i class="bi bi-controller mb-3"></i>
-                <h3 class="h4 fw-bold">Gamer Pro</h3>
-                <p class="text-muted mb-0">Precisión, respuesta rápida y un setup que no castigue muñecas ni hombros.</p>
+                <h3 class="h4 fw-bold">{{ __('home.gamer_title') }}</h3>
+                <p class="text-muted mb-0">{{ __('home.gamer_desc') }}</p>
             </a>
         </div>
     </div>
@@ -191,27 +191,27 @@
     <section class="principle-list">
         <article>
             <span>01</span>
-            <h3 class="h5 fw-bold">Agarre natural</h3>
-            <p class="text-muted mb-0">Ratones y apoyos que evitan forzar la muñeca en posiciones incómodas.</p>
+            <h3 class="h5 fw-bold">{{ __('home.feat_01_title') }}</h3>
+            <p class="text-muted mb-0">{{ __('home.feat_01_desc') }}</p>
         </article>
         <article>
             <span>02</span>
-            <h3 class="h5 fw-bold">Mesa despejada</h3>
-            <p class="text-muted mb-0">Formatos compactos para dejar espacio al movimiento sin perder control.</p>
+            <h3 class="h5 fw-bold">{{ __('home.feat_02_title') }}</h3>
+            <p class="text-muted mb-0">{{ __('home.feat_02_desc') }}</p>
         </article>
         <article>
             <span>03</span>
-            <h3 class="h5 fw-bold">Uso diario</h3>
-            <p class="text-muted mb-0">Productos sencillos de mantener, con materiales pensados para muchas horas.</p>
+            <h3 class="h5 fw-bold">{{ __('home.feat_03_title') }}</h3>
+            <p class="text-muted mb-0">{{ __('home.feat_03_desc') }}</p>
         </article>
     </section>
 
     <section class="pb-5">
         <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
             <div>
-                <span class="home-kicker text-primary">Selección inicial</span>
-                <h2 class="fw-bold mb-1">Piezas con las que empezar bien.</h2>
-                <p class="text-muted mb-0">Una muestra del catálogo para montar una base cómoda desde el primer día.</p>
+                <span class="home-kicker text-primary">{{ __('home.initial_sel') }}</span>
+                <h2 class="fw-bold mb-1">{{ __('home.initial_title') }}</h2>
+                <p class="text-muted mb-0">{{ __('home.initial_desc') }}</p>
             </div>
             <a href="{{ route('products.index') }}" class="text-primary fw-bold text-decoration-none">
                 Ver catálogo <i class="bi bi-arrow-right"></i>
@@ -236,8 +236,7 @@
                 <div class="col-12">
                     <div class="empty-state">
                         <i class="bi bi-box-seam"></i>
-                        <h3 class="h5 fw-bold">El catálogo todavía no tiene productos</h3>
-                        <p class="text-muted mb-0">Ejecuta los seeders para cargar la colección inicial.</p>
+                        <h3 class="h5 fw-bold">{{ __('home.no_products') }}</h3>
                     </div>
                 </div>
             @endforelse

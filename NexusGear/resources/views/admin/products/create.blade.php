@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
-@section('title', 'Nuevo producto')
-@section('page-title', 'Nuevo producto')
+@section('title', __('admin/products/create.title'))
+@section('page-title', __('admin/products/create.title'))
 
 @section('content')
 <form method="POST" action="{{ route('admin.products.store') }}">

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin NexusGear - @yield('title')</title>
+    <title>{{ __('layouts/admin.brand')}} - @yield('title')</title>
     @vite(['resources/css/app.scss', 'resources/js/app.js'])
     <style>
         :root { --admin-sidebar-width: 260px; }
@@ -37,25 +37,25 @@
     <div class="sidebar d-flex flex-column shadow">
         <div class="p-4">
             <h4 class="text-primary fw-bold"><i class="bi bi-cpu"></i> NexusGear</h4>
-            <small class="text-muted">Panel de Control</small>
+            <small class="text-muted">{{ __('layouts/admin.control_panel')}}</small>
         </div>
         
         <nav class="mt-2">
             <a href="{{ route('admin.dashboard') }}" class="nav-link-admin {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                <i class="bi bi-speedometer2 me-2"></i> Dashboard
+                <i class="bi bi-speedometer2 me-2"></i> {{ __('layouts/admin.dashboard')}}
             </a>
             <a href="{{ route('admin.products.index') }}" class="nav-link-admin {{ request()->routeIs('admin.products.*') ? 'active' : '' }}">
-                <i class="bi bi-box-seam me-2"></i> Productos
+                <i class="bi bi-box-seam me-2"></i> {{ __('layouts/admin.products')}}
             </a>
             <a href="{{ route('admin.categorias.index') }}" class="nav-link-admin {{ request()->routeIs('admin.categorias.*') ? 'active' : '' }}">
-                <i class="bi bi-tags me-2"></i> Categorías
+                <i class="bi bi-tags me-2"></i> {{ __('layouts/admin.categories')}}
             </a>
             <a href="{{ route('admin.orders.index') }}" class="nav-link-admin {{ request()->routeIs('admin.orders.*') ? 'active' : '' }}">
-                <i class="bi bi-cart-check me-2"></i> Pedidos
+                <i class="bi bi-cart-check me-2"></i> {{ __('layouts/admin.orders')}}
             </a>
             <hr class="mx-3 opacity-25">
             <a href="{{ url('/') }}" class="nav-link-admin">
-                <i class="bi bi-house me-2"></i> Ir a la tienda
+                <i class="bi bi-house me-2"></i> {{ __('layouts/admin.go_to_store')}}
             </a>
         </nav>
     </div>
@@ -72,7 +72,7 @@
                     <li>
                         <a class="dropdown-item text-danger" href="#"
                            onclick="event.preventDefault(); document.getElementById('admin-logout-form').submit();">
-                            Salir
+                            {{ __('layouts/admin.logout')}}
                         </a>
                         <form id="admin-logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                             @csrf

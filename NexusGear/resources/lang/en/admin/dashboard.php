@@ -1,0 +1,20 @@
+<?php
+return [
+    'summary'=>'Summary',
+    'dashboard'=> 'Dashboard',
+    'products' => 'Products',
+    'low_stock'=> 'Low stock',
+    'orders'=> 'Orders',
+    'in_progress'=> 'In progress',
+    'recent_orders'=> 'Recent orders',
+    'view_all'=> 'View all',
+    'order'=> 'Order',
+    'customer'=> 'Customer',
+    'status'=> 'Status',
+    'total'=> 'Total',
+    'no_orders'=> 'No orders yet.',
+    'stock_control'=> 'Stock control',
+    'manage'=> 'Manage',
+    'units'=> ':count units',
+    'no_products'=> 'No products registered.',
+];

@@ -1,32 +1,32 @@
 @extends('layouts.admin')
 
-@section('title', 'Productos')
-@section('page-title', 'Gestión de productos')
+@section('title', __('admin/products/index.products'))
+@section('page-title', __('admin/products/index.management'))
 
 @section('content')
 <div class="card border-0 shadow-sm">
     <div class="card-header bg-white border-0 py-3">
         <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
-            <h5 class="fw-bold mb-0">Catálogo</h5>
+            <h5 class="fw-bold mb-0">{{ __('admin/products/index.catalog') }}</h5>
             <a href="{{ route('admin.products.create') }}" class="btn btn-primary fw-bold shadow-sm">
-                <i class="bi bi-plus-lg"></i> Nuevo producto
+                <i class="bi bi-plus-lg"></i> {{ __('admin/products/index.new_product') }}
             </a>
         </div>
 
         <form method="GET" action="{{ route('admin.products.index') }}" class="row g-2 mt-3">
             <div class="col-md-6">
-                <input type="search" name="q" value="{{ $filters['q'] ?? '' }}" class="form-control" placeholder="Buscar producto">
+                <input type="search" name="q" value="{{ $filters['q'] ?? '' }}" class="form-control" placeholder="{{ __('admin/products/index.search') }}">
             </div>
             <div class="col-md-3">
                 <select name="profile" class="form-select">
-                    <option value="">Todos los perfiles</option>
-                    <option value="office" @selected(($filters['profile'] ?? '') === 'office')>Office & Focus</option>
-                    <option value="gamer" @selected(($filters['profile'] ?? '') === 'gamer')>Gamer Pro</option>
+                    <option value="">{{ __('admin/products/index.all_profiles') }}</option>
+                    <option value="office" @selected(($filters['profile'] ?? '') === 'office')>{{ __('admin/products/index.office') }}</option>
+                    <option value="gamer" @selected(($filters['profile'] ?? '') === 'gamer')>{{ __('admin/products/index.gamer') }}</option>
                 </select>
             </div>
             <div class="col-md-3 d-flex gap-2">
-                <button class="btn btn-dark" type="submit">Filtrar</button>
-                <a href="{{ route('admin.products.index') }}" class="btn btn-outline-secondary">Limpiar</a>
+                <button class="btn btn-dark" type="submit">{{ __('admin/products/index.filter') }}</button>
+                <a href="{{ route('admin.products.index') }}" class="btn btn-outline-secondary">{{ __('admin/products/index.clear') }}</a>
             </div>
         </form>
     </div>
@@ -35,12 +35,12 @@
         <table class="table table-hover align-middle">
             <thead>
                 <tr>
-                    <th>Producto</th>
-                    <th>Perfil</th>
-                    <th>Stock</th>
-                    <th>Precio</th>
-                    <th>Destacado</th>
-                    <th class="text-end">Acciones</th>
+                    <th>{{ __('admin/products/index.product') }}</th>
+                    <th>{{ __('admin/products/index.profile') }}</th>
+                    <th>{{ __('admin/products/index.stock') }}</th>
+                    <th>{{ __('admin/products/index.price') }}</th>
+                    <th>{{ __('admin/products/index.featured') }}</th>
+                    <th class="text-end">{{ __('admin/products/index.actions') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -74,17 +74,17 @@
                         <td class="text-end">
                             <div class="d-flex gap-1 justify-content-end">
                                 <a href="{{ route('products.show', $product) }}" class="btn btn-sm btn-outline-dark" target="_blank">
-                                    <i class="bi bi-eye me-1"></i> Ver
+                                    <i class="bi bi-eye me-1"></i> {{ __('admin/products/index.view') }}
                                 </a>
                                 <a href="{{ route('admin.products.edit', $product) }}" class="btn btn-sm btn-outline-secondary">
-                                    <i class="bi bi-pencil me-1"></i> Editar
+                                    <i class="bi bi-pencil me-1"></i> {{ __('admin/products/index.edit') }}
                                 </a>
                                 <form method="POST" action="{{ route('admin.products.destroy', $product) }}">
                                     @csrf
                                     @method('DELETE')
                                     <button class="btn btn-sm btn-outline-danger" type="submit"
-                                            onclick="return confirm('¿Eliminar «{{ $product->nombre }}»?')">
-                                        <i class="bi bi-trash me-1"></i> Eliminar
+                                            onclick="return confirm('{{ __('admin/products/index.delete_confirm', ['name' => $product->nombre]) }}')">
+                                        <i class="bi bi-trash me-1"></i> {{ __('admin/products/index.delete') }}
                                     </button>
                                 </form>
                             </div>
@@ -92,7 +92,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="text-center py-5 text-muted">No hay productos con esos filtros.</td>
+                        <td colspan="6" class="text-center py-5 text-muted">{{ __('admin/products/index.no_results') }}</td>
                     </tr>
                 @endforelse
             </tbody>

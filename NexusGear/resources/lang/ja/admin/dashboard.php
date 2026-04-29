@@ -1,0 +1,20 @@
+<?php
+return [
+    'summary'=>'概要',
+    'dashboard'=> '',
+    'products' => '',
+    'low_stock'=> '在庫少',
+    'orders'=> '',
+    'in_progress'=> '進行中',
+    'recent_orders'=> '最近の注文',
+    'view_all'=> 'すべて表示',
+    'order'=> '注文',
+    'customer'=> '顧客',
+    'status'=> 'ステータス',
+    'total'=> '合計',
+    'no_orders'=> 'まだ注文はありません。',
+    'stock_control'=> '在庫管理',
+    'manage'=> '管理する',
+    'units'=> ':count 個',
+    'no_products'=> '登録されている商品はありません。',
+];

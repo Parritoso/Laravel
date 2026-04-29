@@ -1,0 +1,20 @@
+<?php
+return [
+    'summary'=>'Resumo',
+    'dashboard'=> 'Painel',
+    'products' => 'Produtos',
+    'low_stock'=> 'Stock baixo',
+    'orders'=> 'Pedidos',
+    'in_progress'=> 'Em curso',
+    'recent_orders'=> 'Pedidos recentes',
+    'view_all'=> 'Ver todos',
+    'order'=> 'Pedido',
+    'customer'=> 'Cliente',
+    'status'=> 'Estado',
+    'total'=> 'Total',
+    'no_orders'=> 'Ainda não há pedidos.',
+    'stock_control'=> 'Controlo de stock',
+    'manage'=> 'Gerir',
+    'units'=> ':count uds.',
+    'no_products'=> 'Não há produtos.',
+];
