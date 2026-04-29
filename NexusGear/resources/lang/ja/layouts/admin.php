@@ -8,4 +8,5 @@ return[
     'orders' => '注文',
     'go_to_store' => 'ストアへ戻る',
     'logout' => 'ログアウト',
+    'discounts'=> 'Descuentos',
 ];

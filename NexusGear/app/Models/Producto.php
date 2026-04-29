@@ -86,4 +86,17 @@ class Producto extends Model
     {
         return $this->hasMany(LineaPedido::class, 'producto_id');
     }
+
+    /**
+    * Método extra para obtener el precio final ya rebajado
+    */
+    public function getPrecioFinalAttribute()
+    {
+        // Buscamos si tiene algún descuento activo
+        $descuento = $this->descuentos()->active()->first();
+        
+        return $descuento 
+            ? $descuento->calcularPrecioDescontado($this->precio) 
+            : $this->precio;
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Categoria;
 use App\Models\Producto;
+use App\Models\Descuento;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -41,12 +42,18 @@ class ProductController extends Controller
         return view('admin.products.create', [
             'product'    => new Producto(['stock' => 0]),
             'categorias' => Categoria::orderBy('nombre')->get(),
+            'descuentos' => Descuento::active()->orderBy('codigo')->get(),
         ]);
     }
 
     public function store(Request $request): RedirectResponse
     {
         $product = Producto::create($this->validatedData($request));
+
+        // Sincronizamos el descuento si se ha seleccionado uno
+        if ($request->filled('descuento_id')) {
+            $product->descuentos()->sync([$request->descuento_id]);
+        }
 
         return redirect()
             ->route('admin.products.edit', $product)
@@ -60,15 +67,21 @@ class ProductController extends Controller
 
     public function edit(Producto $producto): View
     {
+        $producto->load('descuentos');
+
         return view('admin.products.edit', [
             'product'    => $producto,
             'categorias' => Categoria::orderBy('nombre')->get(),
+            'descuentos' => Descuento::active()->orderBy('codigo')->get(),
         ]);
     }
 
     public function update(Request $request, Producto $producto): RedirectResponse
     {
         $producto->update($this->validatedData($request));
+
+        $descuentoId = $request->filled('descuento_id') ? [$request->descuento_id] : [];
+        $producto->descuentos()->sync($descuentoId);
 
         return redirect()
             ->route('admin.products.edit', $producto)
@@ -97,6 +110,7 @@ class ProductController extends Controller
             'stock'        => ['required', 'integer', 'min:0'],
             'categoria_id' => ['required', 'exists:categorias,id'],
             'destacado'    => ['nullable', 'boolean'],
+            'descuento_id' => ['nullable', 'exists:descuentos,id'],
         ]);
 
         $data['destacado'] = $request->boolean('destacado');

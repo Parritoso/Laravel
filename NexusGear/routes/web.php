@@ -6,6 +6,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Admin\CategoriaController as AdminCategoriaController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Admin\DiscountController as AdminDiscountController;
 use App\Models\Pedido;
 use App\Models\Producto;
 use Illuminate\Support\Facades\Route;
@@ -40,6 +41,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
 
     Route::resource('products', AdminProductController::class)->parameters(['products' => 'producto']);
     Route::resource('categorias', AdminCategoriaController::class)->except('show');
+    Route::resource('discounts', AdminDiscountController::class)->except('show');
     Route::get('orders', [AdminOrderController::class, 'index'])->name('orders.index');
     Route::get('orders/{pedido}', [AdminOrderController::class, 'show'])->name('orders.show');
     Route::patch('orders/{pedido}', [AdminOrderController::class, 'update'])->name('orders.update');

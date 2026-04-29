@@ -53,6 +53,9 @@
             <a href="{{ route('admin.orders.index') }}" class="nav-link-admin {{ request()->routeIs('admin.orders.*') ? 'active' : '' }}">
                 <i class="bi bi-cart-check me-2"></i> {{ __('layouts/admin.orders')}}
             </a>
+            <a href="{{ route('admin.discounts.index') }}" class="nav-link-admin {{ request()->routeIs('admin.discounts.*') ? 'active' : '' }}">
+                <i class="bi bi-cart-check me-2"></i> {{ __('layouts/admin.discounts')}}
+            </a>
             <hr class="mx-3 opacity-25">
             <a href="{{ url('/') }}" class="nav-link-admin">
                 <i class="bi bi-house me-2"></i> {{ __('layouts/admin.go_to_store')}}

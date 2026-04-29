@@ -48,6 +48,21 @@
                     @error('categoria_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>
 
+                <div class="mb-3">
+                    <label for="descuento_id" class="form-label fw-semibold text-primary">Descuento Aplicado (Opcional)</label>
+                    <select id="descuento_id" name="descuento_id" class="form-select border-primary-subtle @error('descuento_id') is-invalid @enderror">
+                        <option value="">Sin descuento</option>
+                        @foreach ($descuentos as $desc)
+                            <option value="{{ $desc->id }}" 
+                                @selected(old('descuento_id', $product->descuentos->first()?->id) == $desc->id)>
+                                {{ $desc->codigo }} ({{ $desc->tipo === 'porcentaje' ? '-' . $desc->valor . '%' : '-' . $desc->valor . '€' }})
+                            </option>
+                        @endforeach
+                    </select>
+                    <div class="form-text">Solo aparecen descuentos que no han caducado.</div>
+                    @error('descuento_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                </div>
+
                 <div class="form-check form-switch mb-4">
                     <input class="form-check-input" type="checkbox" role="switch" id="destacado" name="destacado" value="1" @checked(old('destacado', $product->destacado))>
                     <label class="form-check-label" for="destacado">{{ __('admin/products/_form.featured') }}</label>
