@@ -399,6 +399,84 @@ erDiagram
   3. El usuario define una nueva contraseña.
   4. Puede volver a iniciar sesión.
 
+### CU-09: Verificar correo electrónico
+
+- **Actor:** usuario recién registrado.
+- **Precondición:** el usuario ha creado una cuenta y tiene pendiente verificar su correo.
+- **Flujo principal:**
+  1. El sistema envía un correo de verificación tras el registro.
+  2. El usuario abre el correo y accede al enlace de verificación.
+  3. Fortify valida la firma del enlace.
+  4. El sistema marca el correo como verificado.
+  5. El usuario accede a las funcionalidades protegidas, como carrito, checkout, pedidos y onboarding.
+- **Flujo alternativo:** si el enlace ha caducado, el usuario puede solicitar un nuevo correo de verificación.
+
+### CU-10: Cerrar sesión
+
+- **Actor:** usuario registrado con sesión activa.
+- **Precondición:** el usuario ha iniciado sesión.
+- **Flujo principal:**
+  1. El usuario abre el menú de su cuenta.
+  2. Pulsa la opción de cerrar sesión.
+  3. El sistema invalida la sesión activa.
+  4. El usuario vuelve a navegar como visitante.
+
+### CU-11: Completar onboarding
+
+- **Actor:** usuario registrado y verificado.
+- **Precondición:** el usuario accede tras verificar su correo.
+- **Flujo principal:**
+  1. El usuario entra en la pantalla de configuración inicial.
+  2. Selecciona el idioma de preferencia.
+  3. Revisa las opciones de dirección, intereses y tipo de uso propuestas por el asistente.
+  4. Completa el asistente.
+  5. El sistema guarda el idioma seleccionado y redirige al inicio de la tienda.
+
+### CU-12: Consultar dashboard de administración
+
+- **Actor:** administrador.
+- **Precondición:** sesión iniciada con rol `admin`.
+- **Flujo principal:**
+  1. El administrador accede a `/admin/dashboard`.
+  2. El sistema muestra indicadores generales de productos, stock bajo, pedidos totales y pedidos en curso.
+  3. El administrador consulta los pedidos recientes.
+  4. El administrador consulta los productos con menor stock.
+  5. Desde el panel puede ir a productos, pedidos, categorías o descuentos.
+
+### CU-13: Administrar categorías
+
+- **Actor:** administrador.
+- **Precondición:** sesión iniciada con rol `admin`.
+- **Flujo principal:**
+  1. El administrador accede a la sección de categorías.
+  2. El sistema muestra el listado de categorías existentes.
+  3. El administrador crea una categoría indicando nombre y `slug`.
+  4. El administrador edita los datos de una categoría.
+  5. El administrador elimina categorías que no estén asociadas a productos.
+  6. Las categorías quedan disponibles en los formularios y filtros de productos.
+
+### CU-14: Administrar descuentos
+
+- **Actor:** administrador.
+- **Precondición:** sesión iniciada con rol `admin`.
+- **Flujo principal:**
+  1. El administrador accede a la sección de descuentos.
+  2. El sistema muestra el listado de descuentos y el número de productos asociados.
+  3. El administrador crea un descuento indicando código, tipo, valor y fecha de fin.
+  4. El administrador edita descuentos existentes.
+  5. El administrador elimina descuentos cuando ya no se necesiten.
+
+### CU-15: Asignar descuento a producto
+
+- **Actor:** administrador.
+- **Precondición:** existen productos y descuentos activos.
+- **Flujo principal:**
+  1. El administrador entra en el formulario de creación o edición de producto.
+  2. El sistema carga los descuentos activos disponibles.
+  3. El administrador selecciona un descuento opcional para el producto.
+  4. Al guardar, el sistema sincroniza la relación entre producto y descuento.
+  5. El producto queda asociado al descuento elegido.
+
 ## 8. Estructura del Código
 
 La aplicación Laravel se encuentra en la carpeta `NexusGear/`.
