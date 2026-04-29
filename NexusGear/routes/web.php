@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\CategoriaController as AdminCategoriaController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\DiscountController as AdminDiscountController;
+use App\Http\Controllers\OnboardingController;
 use App\Models\Pedido;
 use App\Models\Producto;
 use Illuminate\Support\Facades\Route;
@@ -24,7 +25,7 @@ Route::get('/home', function() {
     return view('home', [
         'featuredProducts' => Producto::where('destacado', true)->orderBy('nombre')->take(4)->get(),
     ]);
-})->middleware(['auth','verified']);
+})->middleware(['auth','verified'])->name('home');
 
 Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     
@@ -60,4 +61,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/checkout', [OrderController::class, 'store'])->name('checkout.store');
     Route::get('/pedidos', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/pedidos/{pedido}', [OrderController::class, 'show'])->name('orders.show');
+
+    Route::get('/onboarding', [OnboardingController::class, 'index'])->name('onboarding.index');
+    Route::post('/onboarding', [OnboardingController::class, 'store'])->name('onboarding.store');
 });
