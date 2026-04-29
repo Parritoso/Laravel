@@ -559,13 +559,13 @@ Variables principales en `.env`:
 
 ```env
 MAIL_MAILER=smtp
-MAIL_HOST=sandbox.smtp.mailtrap.io
-MAIL_PORT=2525
-MAIL_USERNAME=usuario_mailtrap
-MAIL_PASSWORD=password_mailtrap
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=nexusgear.info@gmail.com
+MAIL_PASSWORD=app_password_de_gmail
 MAIL_ENCRYPTION=tls
-MAIL_FROM_ADDRESS=noreply@nexusgear.com
-MAIL_FROM_NAME="NexusGear"
+MAIL_FROM_ADDRESS=nexusgear.info@gmail.com
+MAIL_FROM_NAME="NexusGear Support"
 ```
 
 El correo de pedido se envía después de confirmar la transacción del checkout y usa la plantilla `resources/views/emails/orders/confirmation.blade.php`.
