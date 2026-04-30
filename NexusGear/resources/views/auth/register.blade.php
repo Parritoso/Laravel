@@ -3,6 +3,23 @@
 @section('title', __('auth/register.title'))
 
 @section('content')
+<style>
+    /* Estilo para posicionar el ojo dentro de los inputs de contraseña */
+    .password-container {
+        position: relative;
+    }
+    .password-container .toggle-password {
+        position: absolute;
+        right: 12px;
+        top: 38px; /* Ajustado para que quede centrado bajo el label */
+        cursor: pointer;
+        z-index: 10;
+        color: #6c757d;
+    }
+    .password-container input {
+        padding-right: 40px;
+    }
+</style>
 <div class="row justify-content-center">
     <div class="col-md-6">
         <div class="card shadow-sm border-0">
@@ -42,14 +59,16 @@
                             </div>
                         </div>
 
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-6 mb-3 password-container">
                             <label class="form-label fw-semibold">{{__('auth/register.password')}}</label>
                             <input type="password" name="password" class="form-control" required placeholder="Mín. 8 caracteres">
+                            <i class="bi bi-eye toggle-password"></i>
                         </div>
 
-                        <div class="col-md-6 mb-4">
+                        <div class="col-md-6 mb-4 password-container">
                             <label class="form-label fw-semibold">{{__('auth/register.confirm_password')}}</label>
                             <input type="password" name="password_confirmation" class="form-control" required placeholder="Repite la clave">
+                            <i class="bi bi-eye toggle-password"></i>
                         </div>
                     </div>
 
@@ -69,4 +88,25 @@
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Seleccionamos todos los iconos de "ojo"
+        const toggleButtons = document.querySelectorAll('.toggle-password');
+
+        toggleButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                // Buscamos el input que está dentro del mismo contenedor que el icono clicado
+                const input = this.parentElement.querySelector('input');
+                
+                // Cambiamos el tipo
+                const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+                input.setAttribute('type', type);
+                
+                // Cambiamos el icono solo para este elemento
+                this.classList.toggle('bi-eye');
+                this.classList.toggle('bi-eye-slash');
+            });
+        });
+    });
+</script>
 @endsection

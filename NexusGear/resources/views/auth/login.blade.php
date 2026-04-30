@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('title', __('auth/login.title'))
+@vite(['resources/css/login.scss', 'resources/js/login.js'])
 
 @section('content')
 <div class="row justify-content-center align-items-center" style="min-height: 70vh;">
@@ -33,11 +34,14 @@
                         <label for="email">{{__('auth/login.email')}}</label>
                     </div>
 
-                    <div class="form-floating mb-2">
-                        <input type="password" name="password" class="form-control" id="password" placeholder="Contraseña" required>
-                        <label for="password">{{__('auth/login.password')}}</label>
+                    <div class="password-wrapper mb-2">
+                        <div class="form-floating mb-2">
+                            <input type="password" name="password" class="form-control" id="password" placeholder="Contraseña" required>
+                            <label for="password">{{__('auth/login.password')}}</label>
+                        </div>
+                        <i class="bi bi-eye toggle-password" id="togglePasswordIcon"></i>
                     </div>
-
+                    
                     <div class="text-end mb-4">
                         <a href="{{ route('password.request') }}" class="text-primary small fw-semibold text-decoration-none">
                             {{__('auth/login.forgot_password')}}
