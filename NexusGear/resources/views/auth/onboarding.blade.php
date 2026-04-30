@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Configura tu Experiencia')
+@vite(['resources/css/onboarding.scss', 'resources/js/onboarding.js'])
 
 @section('content')
 <div class="container py-5">
@@ -128,31 +129,4 @@
     </div>
 </div>
 
-<script>
-function nextStep(step) {
-    document.querySelectorAll('.onboarding-step').forEach(el => el.classList.add('d-none'));
-    document.getElementById('step-' + step).classList.remove('d-none');
-    
-    // Actualizar barra de progreso (25% por paso)
-    let progress = (step / 4) * 100;
-    document.getElementById('onboarding-progress').style.width = progress + '%';
-    window.scrollTo(0,0);
-}
-</script>
-
-<style>
-.pointer { cursor: pointer; }
-.btn-check:checked + .btn-outline-primary {
-    background-color: rgba(79, 209, 197, 0.1); /* Verde Agua suave */
-    transform: scale(1.02);
-    border-color: var(--bs-primary);
-}
-.onboarding-step {
-    animation: slideUp 0.4s ease-out;
-}
-@keyframes slideUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-</style>
 @endsection

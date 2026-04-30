@@ -1,0 +1,13 @@
+.pointer { cursor: pointer; }
+.btn-check:checked + .btn-outline-primary {
+    background-color: rgba(79, 209, 197, 0.1); /* Verde Agua suave */
+    transform: scale(1.02);
+    border-color: var(--bs-primary);
+}
+.onboarding-step {
+    animation: slideUp 0.4s ease-out;
+}
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}

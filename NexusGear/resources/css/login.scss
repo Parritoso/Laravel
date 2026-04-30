@@ -1,0 +1,17 @@
+/* Ajuste para que el icono no tape el texto y esté centrado verticalmente */
+    .password-wrapper {
+        position: relative;
+    }
+    .toggle-password {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        z-index: 10;
+        color: #6c757d;
+    }
+    /* Evita que el texto largo se oculte tras el ojo */
+    #password {
+        padding-right: 45px;
+    }

@@ -4,34 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ __('layouts/admin.brand')}} - @yield('title')</title>
-    @vite(['resources/css/app.scss', 'resources/js/app.js'])
-    <style>
-        :root { --admin-sidebar-width: 260px; }
-        body { background-color: #f4f7f6; }
-        .sidebar { 
-            width: var(--admin-sidebar-width); 
-            height: 100vh; 
-            position: fixed; 
-            background: #2d3748;
-            color: white;
-        }
-        .main-content { 
-            margin-left: var(--admin-sidebar-width); 
-            padding: 30px; 
-        }
-        .nav-link-admin {
-            color: rgba(255,255,255,0.7);
-            padding: 12px 20px;
-            display: block;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-        .nav-link-admin:hover, .nav-link-admin.active {
-            background: rgba(79, 209, 197, 0.1);
-            color: #4FD1C5;
-            border-left: 4px solid #4FD1C5;
-        }
-    </style>
+    @vite(['resources/css/app.scss','resources/css/admin.scss' ,'resources/js/app.js'])
 </head>
 <body>
     <div class="sidebar d-flex flex-column shadow">
