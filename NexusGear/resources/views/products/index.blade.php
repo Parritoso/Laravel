@@ -62,8 +62,11 @@
             <div class="col-md-6 col-xl-4">
                 <article class="product-card h-100">
                     <a href="{{ route('products.show', $product) }}" class="product-card__media">
-                        <!--<i class="bi {{ $product->icono }}"></i>-->
-                        <img src="{{ asset('storage/' . $product->imagen) }}" alt="{{ $product->nombre }}">
+                        @if (!is_null($product->imagen))
+                            <img src="{{ asset('storage/' . $product->imagen) }}" alt="{{ $product->nombre }}">
+                        @else
+                            <i class="bi {{ $product->icono }}"></i>
+                        @endif
                     </a>
 
                     <div class="product-card__body">
@@ -133,8 +136,12 @@
             @foreach ($featuredProducts as $featuredProduct)
                 <div class="col-md-4">
                     <a href="{{ route('products.show', $featuredProduct) }}" class="featured-link">
-                        <!--<i class="bi {{ $featuredProduct->icono }}"></i>-->
-                        <img src="{{ asset('storage/' . $featuredProduct->imagen) }}" alt="{{ $featuredProduct->nombre }}">
+                        @if (!is_null($featuredProduct->imagen))
+                            <img src="{{ asset('storage/' . $featuredProduct->imagen) }}" alt="{{ $featuredProduct->nombre }}">
+                        @else
+                            <i class="bi {{ $featuredProduct->icono }}"></i>
+                        @endif
+                        <!---->
                         <span>{{ $featuredProduct->nombre }}</span>
                         <strong>{{ $featuredProduct->precio_formateado }}</strong>
                     </a>
