@@ -2,6 +2,7 @@
 
 @section('title', __('admin/products/index.products'))
 @section('page-title', __('admin/products/index.management'))
+@vite(['resources/js/products_index.js'])
 
 @section('content')
 <div class="card border-0 shadow-sm">
@@ -79,14 +80,16 @@
                                 <a href="{{ route('admin.products.edit', $product) }}" class="btn btn-sm btn-outline-secondary">
                                     <i class="bi bi-pencil me-1"></i> {{ __('admin/products/index.edit') }}
                                 </a>
-                                <form method="POST" action="{{ route('admin.products.destroy', $product) }}">
+                                {{--<form method="POST" action="{{ route('admin.products.destroy', $product) }}">
                                     @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-sm btn-outline-danger" type="submit"
-                                            onclick="return confirm('{{ __('admin/products/index.delete_confirm', ['name' => $product->nombre]) }}')">
+                                    @method('DELETE')--}}
+                                    <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" 
+                                        data-bs-target="#deleteProductModal"
+                                        data-nombre="{{ $product->nombre }}"
+                                        data-action="{{ route('admin.products.destroy', $product) }}">
                                         <i class="bi bi-trash me-1"></i> {{ __('admin/products/index.delete') }}
                                     </button>
-                                </form>
+                                {{-- </form> --}}
                             </div>
                         </td>
                     </tr>
@@ -102,5 +105,32 @@
 
 <div class="mt-4">
     {{ $products->links() }}
+</div>
+{{-- MODAL DE ELIMINACIÓN DE PRODUCTO --}}
+<div class="modal fade" id="deleteProductModal" tabindex="-1" aria-labelledby="deleteProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-0">
+                <h5 class="modal-title fw-bold" id="deleteProductModalLabel">Confirmar eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center py-4">
+                <div class="text-danger mb-3">
+                    <i class="bi bi-box-seam-fill" style="font-size: 3.5rem;"></i>
+                </div>
+                <p class="mb-1 text-muted">Estás a punto de eliminar permanentemente:</p>
+                <h4 class="fw-bold px-3" id="productNameDisplay"></h4>
+                <p class="text-muted small mt-3">¿Deseas continuar? Esta acción no se puede deshacer.</p>
+            </div>
+            <div class="modal-footer border-0 bg-light d-flex justify-content-center">
+                <button type="button" class="btn btn-secondary px-4 fw-semibold" data-bs-dismiss="modal">Cancelar</button>
+                <form id="deleteProductForm" method="POST" action="">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger px-4 fw-bold">Eliminar Producto</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection

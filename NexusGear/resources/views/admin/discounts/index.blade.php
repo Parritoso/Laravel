@@ -2,6 +2,7 @@
 
 @section('title', 'Descuentos')
 @section('page-title', 'Gestión de descuentos')
+@vite(['resources/js/discounts_index.js'])
 
 @section('content')
 <div class="card border-0 shadow-sm">
@@ -68,14 +69,16 @@
                                 <a href="{{ route('admin.discounts.edit', $descuento) }}" class="btn btn-sm btn-outline-secondary">
                                     <i class="bi bi-pencil me-1"></i> Editar
                                 </a>
-                                <form method="POST" action="{{ route('admin.discounts.destroy', $descuento) }}">
+                                {{--<form method="POST" action="{{ route('admin.discounts.destroy', $descuento) }}">
                                     @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-sm btn-outline-danger" type="submit"
-                                            onclick="return confirm('¿Eliminar el descuento «{{ $descuento->codigo }}»?')">
+                                    @method('DELETE')--}}
+                                    <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" 
+                                        data-bs-target="#deleteModal"
+                                        data-codigo="{{ $descuento->codigo }}"
+                                        data-action="{{ route('admin.discounts.destroy', $descuento) }}">
                                         <i class="bi bi-trash me-1"></i> Eliminar
                                     </button>
-                                </form>
+                                {{--</form>--}}
                             </div>
                         </td>
                     </tr>
@@ -89,6 +92,33 @@
                 @endforelse
             </tbody>
         </table>
+    </div>
+</div>
+{{-- MODAL DE ELIMINACIÓN --}}
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-0">
+                <h5 class="modal-title fw-bold" id="deleteModalLabel">Confirmar eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center py-4">
+                <div class="text-danger mb-3">
+                    <i class="bi bi-exclamation-octagon" style="font-size: 3rem;"></i>
+                </div>
+                <p class="mb-1">¿Estás seguro de que deseas eliminar el descuento?</p>
+                <h4 class="fw-bold" id="discountCodeDisplay"></h4>
+                <p class="text-muted small">Esta acción no se puede deshacer.</p>
+            </div>
+            <div class="modal-footer border-0 bg-light d-flex justify-content-center">
+                <button type="button" class="btn btn-secondary px-4 fw-semibold" data-bs-dismiss="modal">Cancelar</button>
+                <form id="deleteForm" method="POST" action="">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger px-4 fw-bold">Eliminar permanentemente</button>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 @endsection
