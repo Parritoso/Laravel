@@ -2,7 +2,6 @@
 
 @section('title', 'Categorías')
 @section('page-title', 'Gestión de categorías')
-@vite(['resources/js/categorias_index.js'])
 
 @section('content')
 <div class="card border-0 shadow-sm">
@@ -60,7 +59,16 @@
     </div>
 </div>
 {{-- MODAL DE ELIMINACIÓN --}}
-<div class="modal fade" id="deleteCategoryModal" tabindex="-1" aria-labelledby="deleteCategoryModalLabel" aria-hidden="true">
+<x-delete-modal 
+    id="deleteCategoryModal" 
+    formId="deleteCategoryForm"
+    :title="__('admin/categorias/index.delete_confirm_title')"
+    :message="__('admin/categorias/index.delete_confirm_msg')"
+    :buttonText="__('admin/categorias/index.delete_btn')"
+    icon="bi-folder-trash3-fill"
+    :showWarning="true" 
+/>
+{{--<div class="modal fade" id="deleteCategoryModal" tabindex="-1" aria-labelledby="deleteCategoryModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow">
             <div class="modal-header border-0">
@@ -88,5 +96,5 @@
             </div>
         </div>
     </div>
-</div>
+</div>--}}
 @endsection

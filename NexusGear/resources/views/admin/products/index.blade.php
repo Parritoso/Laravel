@@ -2,7 +2,6 @@
 
 @section('title', __('admin/products/index.products'))
 @section('page-title', __('admin/products/index.management'))
-@vite(['resources/js/products_index.js'])
 
 @section('content')
 <div class="card border-0 shadow-sm">
@@ -107,7 +106,15 @@
     {{ $products->links() }}
 </div>
 {{-- MODAL DE ELIMINACIÓN DE PRODUCTO --}}
-<div class="modal fade" id="deleteProductModal" tabindex="-1" aria-labelledby="deleteProductModalLabel" aria-hidden="true">
+<x-delete-modal 
+    id="deleteProductModal" 
+    formId="deleteProductForm"
+    :title="__('admin/products/index.delete_confirm_title')"
+    :message="__('admin/products/index.delete_confirm_msg')"
+    :buttonText="__('admin/products/index.delete')"
+    icon="bi-box-seam-fill"
+/>
+{{--<div class="modal fade" id="deleteProductModal" tabindex="-1" aria-labelledby="deleteProductModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow">
             <div class="modal-header border-0">
@@ -132,5 +139,5 @@
             </div>
         </div>
     </div>
-</div>
+</div>--}}
 @endsection

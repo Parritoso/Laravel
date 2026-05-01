@@ -2,7 +2,6 @@
 
 @section('title', 'Descuentos')
 @section('page-title', 'Gestión de descuentos')
-@vite(['resources/js/discounts_index.js'])
 
 @section('content')
 <div class="card border-0 shadow-sm">
@@ -73,7 +72,7 @@
                                     @csrf
                                     @method('DELETE')--}}
                                     <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" 
-                                        data-bs-target="#deleteModal"
+                                        data-bs-target="#deleteDiscountsModal"
                                         data-codigo="{{ $descuento->codigo }}"
                                         data-action="{{ route('admin.discounts.destroy', $descuento) }}">
                                         <i class="bi bi-trash me-1"></i> Eliminar
@@ -95,7 +94,16 @@
     </div>
 </div>
 {{-- MODAL DE ELIMINACIÓN --}}
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+<x-delete-modal 
+    id="deleteDiscountsModal" 
+    formId="deleteCategoryForm"
+    :title="__('admin/discounts/index.delete_confirm_title')"
+    :message="__('admin/discounts/index.delete_confirm_msg')"
+    :buttonText="__('admin/discounts/index.delete_btn')"
+    icon="bi-exclamation-octagon"
+    :showWarning="false" 
+/>
+{{--<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow">
             <div class="modal-header border-0">
@@ -120,5 +128,5 @@
             </div>
         </div>
     </div>
-</div>
+</div>--}}
 @endsection
