@@ -10,9 +10,13 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $filters = $request->validate([
-            'q'       => ['nullable', 'string', 'max:80'],
-            'profile' => ['nullable', 'string', 'exists:categorias,slug'],
-            'sort'    => ['nullable', 'in:featured,price_asc,price_desc,name'],
+            'q'          => ['nullable', 'string', 'max:80'],
+            'profile'    => ['nullable', 'string', 'exists:categorias,slug'],
+            'sort'       => ['nullable', 'in:featured,price_asc,price_desc,name'],
+            'precio_min' => ['nullable', 'numeric', 'min:0'],
+            'precio_max' => ['nullable', 'numeric', 'min:0', 'gte:precio_min'],
+            'in_stock'   => ['nullable', 'boolean'],
+            'ofertas'    => ['nullable', 'boolean'],
         ]);
 
         $query = Producto::query();
@@ -28,6 +32,22 @@ class ProductController extends Controller
         if (! empty($filters['profile'])) {
             $slug = $filters['profile'];
             $query->whereHas('categoria', fn ($q) => $q->where('slug', $slug));
+        }
+
+        if (! empty($filters['in_stock'])) {
+            $query->where('stock', '>', 0);
+        }
+
+        if (filled($filters['precio_min'] ?? null)) {
+            $query->where('precio', '>=', $filters['precio_min']);
+        }
+
+        if (filled($filters['precio_max'] ?? null)) {
+            $query->where('precio', '<=', $filters['precio_max']);
+        }
+
+        if (! empty($filters['ofertas'])) {
+            $query->whereHas('descuentos', fn ($q) => $q->active());
         }
 
         match ($filters['sort'] ?? 'featured') {

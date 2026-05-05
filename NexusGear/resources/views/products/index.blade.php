@@ -36,16 +36,50 @@
 
         <select name="sort" class="form-select">
             <option value="featured" @selected(($filters['sort'] ?? 'featured') === 'featured')>Destacados</option>
-            <option value="price_asc" @selected(($filters['sort'] ?? '') === 'price_asc')>Precio menor</option>
-            <option value="price_desc" @selected(($filters['sort'] ?? '') === 'price_desc')>Precio mayor</option>
+            <option value="price_asc" @selected(($filters['sort'] ?? '') === 'price_asc')>Precio: menor a mayor</option>
+            <option value="price_desc" @selected(($filters['sort'] ?? '') === 'price_desc')>Precio: mayor a menor</option>
             <option value="name" @selected(($filters['sort'] ?? '') === 'name')>Nombre</option>
         </select>
 
         <button class="btn btn-dark" type="submit">Filtrar</button>
 
-        @if (! empty($filters))
+        @if (collect($filters)->filter()->isNotEmpty())
             <a href="{{ route('products.index') }}" class="btn btn-link text-decoration-none">Limpiar</a>
         @endif
+
+        {{-- Segunda fila: rango de precio, disponibilidad y ofertas --}}
+        <div class="catalog-toolbar__extra">
+            <div class="catalog-toolbar__price">
+                <span class="text-muted small fw-semibold">Precio:</span>
+                <input
+                    type="number" name="precio_min" step="0.01" min="0"
+                    value="{{ $filters['precio_min'] ?? '' }}"
+                    class="form-control form-control-sm"
+                    placeholder="Mín €"
+                >
+                <span class="text-muted small">—</span>
+                <input
+                    type="number" name="precio_max" step="0.01" min="0"
+                    value="{{ $filters['precio_max'] ?? '' }}"
+                    class="form-control form-control-sm"
+                    placeholder="Máx €"
+                >
+            </div>
+
+            <div class="form-check form-switch mb-0">
+                <input class="form-check-input" type="checkbox" role="switch"
+                       id="in_stock" name="in_stock" value="1"
+                       @checked(! empty($filters['in_stock']))>
+                <label class="form-check-label small" for="in_stock">Solo disponibles</label>
+            </div>
+
+            <div class="form-check form-switch mb-0">
+                <input class="form-check-input" type="checkbox" role="switch"
+                       id="ofertas" name="ofertas" value="1"
+                       @checked(! empty($filters['ofertas']))>
+                <label class="form-check-label small" for="ofertas">Solo ofertas</label>
+            </div>
+        </div>
     </form>
 </section>
 
