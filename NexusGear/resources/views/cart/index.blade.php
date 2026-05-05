@@ -99,12 +99,19 @@
                 <strong>{{ $cart->total_formateado }}</strong>
             </div>
 
-            <form method="POST" action="{{ route('checkout.store') }}">
-                @csrf
-                <button class="btn btn-primary btn-lg w-100 mt-3" type="submit">
-                    Tramitar pedido
-                </button>
-            </form>
+            @auth
+                <form method="POST" action="{{ route('checkout.store') }}">
+                    @csrf
+                    <button class="btn btn-primary btn-lg w-100 mt-3" type="submit">
+                        Tramitar pedido
+                    </button>
+                </form>
+            @else
+                <a href="{{ route('login') }}" class="btn btn-primary btn-lg w-100 mt-3">
+                    <i class="bi bi-box-arrow-in-right me-1"></i> Inicia sesión para tramitar
+                </a>
+                <p class="text-muted small text-center mt-2 mb-0">Tu carrito se conservará al iniciar sesión.</p>
+            @endauth
             <a href="{{ route('products.index') }}" class="btn btn-outline-dark w-100 mt-2">Añadir más productos</a>
 
             <form method="POST" action="{{ route('cart.clear') }}" class="mt-3">

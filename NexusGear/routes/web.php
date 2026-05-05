@@ -51,13 +51,13 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
 Route::get('/productos', [ProductController::class, 'index'])->name('products.index');
 Route::get('/productos/{producto}', [ProductController::class, 'show'])->name('products.show');
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/carrito', [CartController::class, 'index'])->name('cart.index');
-    Route::post('/carrito/productos/{producto}', [CartController::class, 'store'])->name('cart.store');
-    Route::patch('/carrito/productos/{producto}', [CartController::class, 'update'])->name('cart.update');
-    Route::delete('/carrito/productos/{producto}', [CartController::class, 'destroy'])->name('cart.destroy');
-    Route::delete('/carrito', [CartController::class, 'clear'])->name('cart.clear');
+Route::get('/carrito', [CartController::class, 'index'])->name('cart.index');
+Route::post('/carrito/productos/{producto}', [CartController::class, 'store'])->name('cart.store');
+Route::patch('/carrito/productos/{producto}', [CartController::class, 'update'])->name('cart.update');
+Route::delete('/carrito/productos/{producto}', [CartController::class, 'destroy'])->name('cart.destroy');
+Route::delete('/carrito', [CartController::class, 'clear'])->name('cart.clear');
 
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/checkout', [OrderController::class, 'store'])->name('checkout.store');
     Route::get('/pedidos', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/pedidos/{pedido}', [OrderController::class, 'show'])->name('orders.show');
