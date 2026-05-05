@@ -81,7 +81,11 @@
                 <div class="col-6 col-lg-3">
                     <a href="{{ route('products.show', $product) }}" class="home-product-card">
                         <span class="home-product-visual">
-                            <i class="bi {{ $product->icono }}"></i>
+                            @if ($product->imagen)
+                                <img src="{{ asset('storage/' . $product->imagen) }}" alt="{{ $product->nombre }}">
+                            @else
+                                <i class="bi {{ $product->icono }}"></i>
+                            @endif
                         </span>
                         <span class="home-product-body">
                             <span class="text-muted small d-block mb-1">{{ $product->perfil_nombre }}</span>

@@ -105,7 +105,11 @@
             <div class="card-body p-4">
                 <div class="d-flex align-items-center gap-3 mb-4">
                     <div class="admin-product-icon" style="width:64px;height:64px;font-size:1.8rem;flex-shrink:0;">
-                        <i class="bi {{ $producto->icono }}"></i>
+                        @if ($producto->imagen)
+                            <img src="{{ asset('storage/' . $producto->imagen) }}" alt="{{ $producto->nombre }}" class="w-100 h-100" style="object-fit: cover; border-radius: inherit;">
+                        @else
+                            <i class="bi {{ $producto->icono }}"></i>
+                        @endif
                     </div>
                     <div>
                         <h4 class="fw-bold mb-1">{{ $producto->nombre }}</h4>

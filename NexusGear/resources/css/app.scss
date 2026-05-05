@@ -105,10 +105,21 @@ $font-family-sans-serif: 'Inter', system-ui, -apple-system, sans-serif;
     i {
         font-size: clamp(3.4rem, 7vw, 5.5rem);
     }
+
+    img {
+        width: 100%;
+        height: 210px;
+        object-fit: cover;
+        display: block;
+    }
 }
 
 .product-card__media--compact {
     min-height: 150px;
+
+    img {
+        height: 150px;
+    }
 }
 
 .product-card__body {
@@ -171,6 +182,14 @@ $font-family-sans-serif: 'Inter', system-ui, -apple-system, sans-serif;
     i {
         color: $primary;
         font-size: 1.5rem;
+    }
+
+    img {
+        width: 48px;
+        height: 48px;
+        object-fit: cover;
+        border-radius: .5rem;
+        flex-shrink: 0;
     }
 
     &:hover {

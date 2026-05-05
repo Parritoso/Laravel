@@ -12,7 +12,11 @@
 
 <section class="product-detail mb-5">
     <div class="product-detail__visual">
-        <i class="bi {{ $product->icono }}"></i>
+        @if ($product->imagen)
+            <img src="{{ asset('storage/' . $product->imagen) }}" alt="{{ $product->nombre }}" class="img-fluid w-100 rounded">
+        @else
+            <i class="bi {{ $product->icono }}"></i>
+        @endif
     </div>
 
     <div class="product-detail__info">
@@ -87,7 +91,11 @@
                 <div class="col-md-4">
                     <article class="product-card h-100">
                         <a href="{{ route('products.show', $relatedProduct) }}" class="product-card__media product-card__media--compact">
-                            <i class="bi {{ $relatedProduct->icono }}"></i>
+                            @if ($relatedProduct->imagen)
+                                <img src="{{ asset('storage/' . $relatedProduct->imagen) }}" alt="{{ $relatedProduct->nombre }}">
+                            @else
+                                <i class="bi {{ $relatedProduct->icono }}"></i>
+                            @endif
                         </a>
                         <div class="product-card__body">
                             <h3 class="h6 fw-bold mb-2">

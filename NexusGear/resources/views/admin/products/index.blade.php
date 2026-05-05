@@ -49,7 +49,11 @@
                         <td>
                             <div class="d-flex align-items-center gap-3">
                                 <div class="admin-product-icon">
-                                    <i class="bi {{ $product->icono }}"></i>
+                                    @if ($product->imagen)
+                                        <img src="{{ asset('storage/' . $product->imagen) }}" alt="{{ $product->nombre }}" class="w-100 h-100" style="object-fit: cover; border-radius: inherit;">
+                                    @else
+                                        <i class="bi {{ $product->icono }}"></i>
+                                    @endif
                                 </div>
                                 <div>
                                     <div class="fw-bold">{{ $product->nombre }}</div>

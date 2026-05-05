@@ -129,6 +129,13 @@
         font-size: 3.2rem;
     }
 
+    .home-product-visual img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+        display: block;
+    }
+
     .home-product-body {
         padding: 1rem;
     }
