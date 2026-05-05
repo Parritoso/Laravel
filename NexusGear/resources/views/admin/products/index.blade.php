@@ -73,7 +73,7 @@
                         </td>
                         <td class="text-end">
                             <div class="d-flex gap-1 justify-content-end">
-                                <a href="{{ route('products.show', $product) }}" class="btn btn-sm btn-outline-dark" target="_blank">
+                                <a href="{{ route('admin.products.show', $product) }}" class="btn btn-sm btn-outline-dark">
                                     <i class="bi bi-eye me-1"></i> {{ __('admin/products/index.view') }}
                                 </a>
                                 <a href="{{ route('admin.products.edit', $product) }}" class="btn btn-sm btn-outline-secondary">

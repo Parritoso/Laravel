@@ -60,9 +60,38 @@ class ProductController extends Controller
             ->with('success', 'Producto creado correctamente.');
     }
 
-    public function show(Producto $producto): RedirectResponse
+    public function show(Producto $producto): View
     {
-        return redirect()->route('admin.products.edit', $producto);
+        $producto->load([
+            'categoria',
+            'descuentos',
+            'favoritos',
+            'itemsCarrito',
+            'lineasPedido.pedido',
+        ]);
+
+        $totalVendidas       = $producto->lineasPedido->sum('cantidad');
+        $totalIngresos       = $producto->lineasPedido->sum('subtotal');
+        $ingresosFormateados = number_format((float) $totalIngresos, 2, ',', '.') . ' €';
+        $totalFavoritos      = $producto->favoritos->count();
+        $totalCarrito        = $producto->itemsCarrito->sum('cantidad');
+        $ultimasVentas       = $producto->lineasPedido->sortByDesc('pedido_id')->take(10);
+
+        $descuentoActivo = $producto->descuentos->first(fn ($d) => $d->esValido());
+        $precioFinal     = $descuentoActivo
+            ? $descuentoActivo->calcularPrecioDescontado((float) $producto->precio)
+            : null;
+
+        return view('admin.products.show', compact(
+            'producto',
+            'totalVendidas',
+            'ingresosFormateados',
+            'totalFavoritos',
+            'totalCarrito',
+            'ultimasVentas',
+            'descuentoActivo',
+            'precioFinal',
+        ));
     }
 
     public function edit(Producto $producto): View
