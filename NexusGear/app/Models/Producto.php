@@ -17,6 +17,7 @@ class Producto extends Model
         'nombre',
         'precio',
         'descripcion',
+        'imagen',
         'stock',
         'categoria_id',
         'destacado',

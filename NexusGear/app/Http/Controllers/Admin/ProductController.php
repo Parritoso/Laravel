@@ -8,6 +8,7 @@ use App\Models\Producto;
 use App\Models\Descuento;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProductController extends Controller
@@ -48,9 +49,15 @@ class ProductController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        $product = Producto::create($this->validatedData($request));
+        $data = $this->validatedData($request);
 
-        // Sincronizamos el descuento si se ha seleccionado uno
+        if ($request->hasFile('imagen')) {
+            $request->validate(['imagen' => ['image', 'mimes:jpg,jpeg,png', 'max:2048']]);
+            $data['imagen'] = $request->file('imagen')->store('productos', 'public');
+        }
+
+        $product = Producto::create($data);
+
         if ($request->filled('descuento_id')) {
             $product->descuentos()->sync([$request->descuento_id]);
         }
@@ -107,7 +114,17 @@ class ProductController extends Controller
 
     public function update(Request $request, Producto $producto): RedirectResponse
     {
-        $producto->update($this->validatedData($request));
+        $data = $this->validatedData($request);
+
+        if ($request->hasFile('imagen')) {
+            $request->validate(['imagen' => ['image', 'mimes:jpg,jpeg,png', 'max:2048']]);
+            if ($producto->imagen) {
+                Storage::disk('public')->delete($producto->imagen);
+            }
+            $data['imagen'] = $request->file('imagen')->store('productos', 'public');
+        }
+
+        $producto->update($data);
 
         $descuentoId = $request->filled('descuento_id') ? [$request->descuento_id] : [];
         $producto->descuentos()->sync($descuentoId);
@@ -121,6 +138,10 @@ class ProductController extends Controller
     {
         if ($producto->lineasPedido()->exists()) {
             return back()->with('error', 'No se puede eliminar un producto que ya aparece en pedidos.');
+        }
+
+        if ($producto->imagen) {
+            Storage::disk('public')->delete($producto->imagen);
         }
 
         $producto->delete();
