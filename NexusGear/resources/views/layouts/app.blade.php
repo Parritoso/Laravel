@@ -44,6 +44,14 @@
                                 {{ Auth::user()->name }}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
+                                @if (Auth::user()->isAdmin())
+                                <li>
+                                    <a class="dropdown-item fw-semibold text-primary" href="{{ route('admin.dashboard') }}">
+                                        <i class="bi bi-speedometer2 me-1"></i> Panel de control
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                @endif
                                 <li><a class="dropdown-item" href="#">{{__('layouts/app.profile')}}</a></li>
                                 <li><a class="dropdown-item" href="{{ route('orders.index') }}">{{__('layouts/app.orders')}}</a></li>
                                 <li>
