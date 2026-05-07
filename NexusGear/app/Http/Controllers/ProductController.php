@@ -34,7 +34,7 @@ class ProductController extends Controller
 
         if (! empty($filters['profile'])) {
             $slug = $filters['profile'];
-            $query->whereHas('categoria', fn ($q) => $q->where('slug', $slug));
+            $query->whereHas('categorias', fn ($q) => $q->where('slug', $slug));
         }
 
         if (! empty($filters['in_stock'])) {
@@ -64,7 +64,7 @@ class ProductController extends Controller
 
         if (! empty($filters['profile'])) {
             $slug = $filters['profile'];
-            $featuredQuery->whereHas('categoria', fn ($q) => $q->where('slug', $slug));
+            $featuredQuery->whereHas('categorias', fn ($q) => $q->where('slug', $slug));
         }
 
         return view('products.index', [

@@ -19,7 +19,6 @@ class Producto extends Model
         'descripcion',
         'imagen',
         'stock',
-        'categoria_id',
         'destacado',
     ];
 
@@ -27,7 +26,6 @@ class Producto extends Model
         'precio'       => 'decimal:2',
         'stock'        => 'integer',
         'destacado'    => 'boolean',
-        'categoria_id' => 'integer',
     ];
 
     public function getPrecioFormateadoAttribute(): string
@@ -42,12 +40,7 @@ class Producto extends Model
 
     public function getPerfilNombreAttribute(): string
     {
-        return $this->categoria->nombre ?? 'Sin categoría';
-    }
-
-    public function categoria(): BelongsTo
-    {
-        return $this->belongsTo(Categoria::class, 'categoria_id');
+        return $this->categorias->first()->nombre ?? 'Sin categoría';
     }
 
     public function getIconoAttribute(): string
