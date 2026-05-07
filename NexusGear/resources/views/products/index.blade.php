@@ -30,8 +30,14 @@
 
         <select name="profile" class="form-select">
             <option value="">Todos los perfiles</option>
-            <option value="office" @selected(($filters['profile'] ?? '') === 'office')>Office & Focus</option>
-            <option value="gamer" @selected(($filters['profile'] ?? '') === 'gamer')>Gamer Pro</option>
+            @foreach ($categories as $category)
+                <option 
+                    value="{{ $category->slug }}" 
+                    @selected(($filters['profile'] ?? '') === $category->slug)
+                >
+                    {{ $category->nombre }}
+                </option>
+            @endforeach
         </select>
 
         <select name="sort" class="form-select">

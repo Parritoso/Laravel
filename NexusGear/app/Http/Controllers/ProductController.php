@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Producto;
+use App\Models\Categoria;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -18,6 +19,8 @@ class ProductController extends Controller
             'in_stock'   => ['nullable', 'boolean'],
             'ofertas'    => ['nullable', 'boolean'],
         ]);
+
+        $categories = Categoria::orderBy('nombre')->get();
 
         $query = Producto::query();
 
@@ -68,6 +71,7 @@ class ProductController extends Controller
             'products'         => $query->paginate(9)->withQueryString(),
             'featuredProducts' => $featuredQuery->get(),
             'filters'          => $filters,
+            'categories'       => $categories,
         ]);
     }
 
