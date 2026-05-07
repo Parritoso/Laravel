@@ -96,7 +96,7 @@
 {{-- MODAL DE ELIMINACIÓN --}}
 <x-delete-modal 
     id="deleteDiscountsModal" 
-    formId="deleteCategoryForm"
+    formId="deleteDiscountForm"
     :title="__('admin/discounts/index.delete_confirm_title')"
     :message="__('admin/discounts/index.delete_confirm_msg')"
     :buttonText="__('admin/discounts/index.delete_btn')"

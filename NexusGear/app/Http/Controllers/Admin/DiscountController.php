@@ -73,8 +73,8 @@ class DiscountController extends Controller {
     /**
      * Elimina un descuento específico.
      */
-    public function destroy(Descuento $descuento){
-        $descuento->delete();
+    public function destroy(Descuento $discount){
+        $discount->delete();
         return redirect()->route('admin.discounts.index')->with('success', 'Descuento eliminado.');
     }
 }
