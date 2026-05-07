@@ -12,7 +12,8 @@ class ProductController extends Controller
     {
         $filters = $request->validate([
             'q'          => ['nullable', 'string', 'max:80'],
-            'profile'    => ['nullable', 'string', 'exists:categorias,slug'],
+            'profiles'   => ['nullable', 'array'],
+            'profiles.*' => ['nullable', 'string', 'exists:categorias,slug'],
             'sort'       => ['nullable', 'in:featured,price_asc,price_desc,name'],
             'precio_min' => ['nullable', 'numeric', 'min:0'],
             'precio_max' => ['nullable', 'numeric', 'min:0', 'gte:precio_min'],
@@ -53,6 +54,12 @@ class ProductController extends Controller
             $query->whereHas('descuentos', fn ($q) => $q->active());
         }
 
+        if (! empty($filters['profiles'])) {
+            $query->whereHas('categorias', function ($q) use ($filters) {
+                $q->whereIn('slug', $filters['profiles']);
+            });
+        }
+
         match ($filters['sort'] ?? 'featured') {
             'price_asc'  => $query->orderBy('precio'),
             'price_desc' => $query->orderByDesc('precio'),
@@ -71,14 +78,17 @@ class ProductController extends Controller
             'products'         => $query->paginate(9)->withQueryString(),
             'featuredProducts' => $featuredQuery->get(),
             'filters'          => $filters,
-            'categories'       => $categories,
+            'categories'       => Categoria::orderBy('nombre')->get(),
         ]);
     }
 
     public function show(Producto $producto)
     {
+        $categoryIds = $producto->categorias->pluck('id');
         $relatedProducts = Producto::whereKeyNot($producto->id)
-            ->where('categoria_id', $producto->categoria_id)
+            ->whereHas('categorias', function ($query) use ($categoryIds) {
+                $query->whereIn('categorias.id', $categoryIds);
+            })
             ->orderByDesc('destacado')
             ->orderBy('nombre')
             ->take(3)

@@ -40,7 +40,7 @@ class Producto extends Model
 
     public function getPerfilNombreAttribute(): string
     {
-        return $this->categorias->first()->nombre ?? 'Sin categoría';
+        return $this->categorias->pluck('nombre')->implode(', ') ?? 'Sin categoría';
     }
 
     public function getIconoAttribute(): string

@@ -59,14 +59,30 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="categoria_id" class="form-label fw-semibold">Perfil</label>
-                    <select id="categoria_id" name="categoria_id" class="form-select @error('categoria_id') is-invalid @enderror" required>
+                    <label for="categorias" class="form-label fw-semibold">Categorías / Perfiles</label>
+                    {{--  <select id="categoria_id" name="categoria_id" class="form-select @error('categoria_id') is-invalid @enderror" required>
                         <option value="">{{ __('admin/products/_form.select_profile') }}</option>
                         @foreach ($categorias as $cat)
                             <option value="{{ $cat->id }}" @selected(old('categoria_id', $product->categoria_id) == $cat->id)>{{ $cat->nombre }}</option>
                         @endforeach
-                    </select>
-                    @error('categoria_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    </select>--}}
+                    <div class="card bg-light border-0">
+                        <div class="card-body p-3" style="max-height: 200px; overflow-y: auto;">
+                            @foreach ($categorias as $cat)
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" 
+                                        name="categorias[]" 
+                                        value="{{ $cat->id }}" 
+                                        id="cat_{{ $cat->id }}"
+                                        @checked(in_array($cat->id, old('categorias', $product->categorias->pluck('id')->toArray())))>
+                                    <label class="form-check-label" for="cat_{{ $cat->id }}">
+                                        {{ $cat->nombre }}
+                                    </label>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    @error('categorias') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>
 
                 <div class="mb-3">

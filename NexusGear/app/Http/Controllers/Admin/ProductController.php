@@ -26,7 +26,7 @@ class ProductController extends Controller
                     ->orWhere('descripcion', 'like', "%{$search}%");
             })
             ->when($filters['profile'] ?? null, function ($query, string $slug) {
-                $query->whereHas('categoria', fn ($q) => $q->where('slug', $slug));
+                $query->whereHas('categorias', fn ($q) => $q->where('slug', $slug));
             })
             ->orderBy('nombre')
             ->paginate(12)
@@ -58,6 +58,8 @@ class ProductController extends Controller
 
         $product = Producto::create($data);
 
+        $product->categorias()->sync($request->categorias);
+
         if ($request->filled('descuento_id')) {
             $product->descuentos()->sync([$request->descuento_id]);
         }
@@ -70,7 +72,7 @@ class ProductController extends Controller
     public function show(Producto $producto): View
     {
         $producto->load([
-            'categoria',
+            'categorias',
             'descuentos',
             'favoritos',
             'itemsCarrito',
@@ -126,6 +128,8 @@ class ProductController extends Controller
 
         $producto->update($data);
 
+        $producto->categorias()->sync($request->categorias);
+
         $descuentoId = $request->filled('descuento_id') ? [$request->descuento_id] : [];
         $producto->descuentos()->sync($descuentoId);
 
@@ -158,9 +162,11 @@ class ProductController extends Controller
             'precio'       => ['required', 'numeric', 'min:0'],
             'descripcion'  => ['required', 'string', 'max:2000'],
             'stock'        => ['required', 'integer', 'min:0'],
-            'categoria_id' => ['required', 'exists:categorias,id'],
+//            'categoria_id' => ['required', 'exists:categorias,id'],
             'destacado'    => ['nullable', 'boolean'],
             'descuento_id' => ['nullable', 'exists:descuentos,id'],
+            'categorias'   => ['required', 'array', 'min:1'],
+            'categorias.*' => ['exists:categorias,id'],
         ]);
 
         $data['destacado'] = $request->boolean('destacado');

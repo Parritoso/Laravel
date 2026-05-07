@@ -28,7 +28,7 @@
             >
         </div>
 
-        <select name="profile" class="form-select">
+        {{-- <select name="profile" class="form-select">
             <option value="">Todos los perfiles</option>
             @foreach ($categories as $category)
                 <option 
@@ -38,7 +38,36 @@
                     {{ $category->nombre }}
                 </option>
             @endforeach
-        </select>
+        </select> --}}
+        <div class="dropdown">
+            <button class="btn btn-outline-dark dropdown-toggle w-100 text-start" type="button" id="filterCategories" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                <i class="bi bi-filter me-2"></i> 
+                Categorías 
+                @if(!empty($filters['profiles'])) 
+                    <span class="badge bg-dark ms-1">{{ count($filters['profiles']) }}</span>
+                @endif
+            </button>
+            <ul class="dropdown-menu w-100 shadow-sm" aria-labelledby="filterCategories">
+                @foreach ($categories as $category)
+                    <li class="px-3 py-1">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" 
+                                name="profiles[]" 
+                                value="{{ $category->slug }}" 
+                                id="filter_{{ $category->slug }}"
+                                @checked(in_array($category->slug, (array)($filters['profiles'] ?? [])))>
+                            <label class="form-check-label small" for="filter_{{ $category->slug }}">
+                                {{ $category->nombre }}
+                            </label>
+                        </div>
+                    </li>
+                @endforeach
+                <li><hr class="dropdown-divider"></li>
+                <li class="px-3 py-1">
+                    <button type="submit" class="btn btn-sm btn-primary w-100">Aplicar</button>
+                </li>
+            </ul>
+        </div>
 
         <select name="sort" class="form-select">
             <option value="featured" @selected(($filters['sort'] ?? 'featured') === 'featured')>Destacados</option>
@@ -110,10 +139,28 @@
                     </a>
 
                     <div class="product-card__body">
-                        <div class="d-flex justify-content-between align-items-start gap-3 mb-2">
-                            <span class="badge text-bg-light">{{ $product->perfil_nombre }}</span>
+                        {{-- <div class="d-flex justify-content-between align-items-start gap-3 mb-2">
+                            {{ <span class="badge text-bg-light">{{ $product->perfil_nombre }}</span> }}
+                            @foreach($product->categorias as $cat)
+                                <span class="badge text-bg-light border" style="font-size: 0.7rem;">{{ $cat->nombre }}</span>
+                            @endforeach
                             @if ($product->destacado)
                                 <span class="badge bg-primary">Destacado</span>
+                            @endif
+                        </div> --}}
+                        <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                            {{-- Contenedor para las categorías (agrupadas a la izquierda) --}}
+                            <div class="d-flex flex-wrap gap-1">
+                                @foreach($product->categorias as $cat)
+                                    <span class="badge text-bg-light border" style="font-size: 0.7rem;">
+                                        {{ $cat->nombre }}
+                                    </span>
+                                @endforeach
+                            </div>
+
+                            {{-- Badge de destacado (sola a la derecha) --}}
+                            @if ($product->destacado)
+                                <span class="badge bg-primary" style="font-size: 0.7rem;">Destacado</span>
                             @endif
                         </div>
 
