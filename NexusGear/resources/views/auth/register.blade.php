@@ -2,24 +2,9 @@
 
 @section('title', __('auth/register.title'))
 
+@vite(['resources/css/password-view.scss', 'resources/js/password-view.js'])
+
 @section('content')
-<style>
-    /* Estilo para posicionar el ojo dentro de los inputs de contraseña */
-    .password-container {
-        position: relative;
-    }
-    .password-container .toggle-password {
-        position: absolute;
-        right: 12px;
-        top: 38px; /* Ajustado para que quede centrado bajo el label */
-        cursor: pointer;
-        z-index: 10;
-        color: #6c757d;
-    }
-    .password-container input {
-        padding-right: 40px;
-    }
-</style>
 <div class="row justify-content-center">
     <div class="col-md-6">
         <div class="card shadow-sm border-0">
@@ -88,25 +73,4 @@
         </div>
     </div>
 </div>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Seleccionamos todos los iconos de "ojo"
-        const toggleButtons = document.querySelectorAll('.toggle-password');
-
-        toggleButtons.forEach(button => {
-            button.addEventListener('click', function () {
-                // Buscamos el input que está dentro del mismo contenedor que el icono clicado
-                const input = this.parentElement.querySelector('input');
-                
-                // Cambiamos el tipo
-                const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
-                input.setAttribute('type', type);
-                
-                // Cambiamos el icono solo para este elemento
-                this.classList.toggle('bi-eye');
-                this.classList.toggle('bi-eye-slash');
-            });
-        });
-    });
-</script>
 @endsection
