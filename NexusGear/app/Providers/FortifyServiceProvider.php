@@ -51,6 +51,9 @@ class FortifyServiceProvider extends ServiceProvider
             return view('auth.verify-email');
         });
 
+        Fortify::confirmPasswordView(function () {
+            return view('auth.confirm-password');
+        });
         RateLimiter::for('login', function (Request $request) {
             $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())).'|'.$request->ip());
 
