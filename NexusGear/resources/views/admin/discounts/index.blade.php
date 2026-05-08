@@ -65,6 +65,9 @@
                         </td>
                         <td class="text-end">
                             <div class="d-flex gap-1 justify-content-end">
+                                <a href="{{ route('admin.discounts.show', $descuento) }}" class="btn btn-sm btn-outline-dark">
+                                    <i class="bi bi-eye me-1"></i> Ver
+                                </a>
                                 <a href="{{ route('admin.discounts.edit', $descuento) }}" class="btn btn-sm btn-outline-secondary">
                                     <i class="bi bi-pencil me-1"></i> Editar
                                 </a>

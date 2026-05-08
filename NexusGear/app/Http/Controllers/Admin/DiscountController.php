@@ -42,9 +42,9 @@ class DiscountController extends Controller {
     /**
      * Muestra un descuento específico (y opcionalmente los productos asociados).
      */
-    public function show(Descuento $descuento){
-        $descuento->load('productos'); 
-        return view('admin.discounts.show', compact('descuento'));
+    public function show(Descuento $discount){
+        $discount->load('productos'); 
+        return view('admin.discounts.show', compact('discount'));
     }
 
     /**

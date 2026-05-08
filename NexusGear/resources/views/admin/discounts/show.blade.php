@@ -1,0 +1,200 @@
+@extends('layouts.admin')
+
+@section('title', 'Descuento: ' . $discount->codigo)
+@section('page-title', 'Detalle del Descuento')
+
+@section('content')
+
+{{-- Cabecera: breadcrumb + botones --}}
+<div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item">
+                <a href="{{ route('admin.dashboard') }}" class="text-decoration-none">Admin</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{{ route('admin.discounts.index') }}" class="text-decoration-none">Descuentos</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">{{ $discount->codigo }}</li>
+        </ol>
+    </nav>
+    <div class="d-flex gap-2">
+        <a href="{{ route('admin.discounts.edit', $discount) }}" class="btn btn-primary fw-bold shadow-sm">
+            <i class="bi bi-pencil me-1"></i> Editar
+        </a>
+        <button class="btn btn-danger fw-bold shadow-sm"
+                data-bs-toggle="modal"
+                data-bs-target="#deleteDiscountShowModal"
+                data-nombre="{{ $discount->codigo }}"
+                data-action="{{ route('admin.discounts.destroy', $discount) }}">
+            <i class="bi bi-trash me-1"></i> Eliminar
+        </button>
+    </div>
+</div>
+
+{{-- Stat cards --}}
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm p-3">
+            <div class="d-flex align-items-center">
+                <div class="bg-primary bg-opacity-10 p-3 rounded-3 text-primary me-3">
+                    <i class="bi bi-box-seam fs-3"></i>
+                </div>
+                <div>
+                    <h6 class="text-muted mb-0">Productos asociados</h6>
+                    <h4 class="fw-bold mb-0">{{ $discount->productos->count() }}</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm p-3">
+            <div class="d-flex align-items-center">
+                @php $estaCaducado = \Carbon\Carbon::parse($discount->fecha_fin)->isPast(); @endphp
+                <div class="bg-{{ $estaCaducado ? 'danger' : 'success' }} bg-opacity-10 p-3 rounded-3 text-{{ $estaCaducado ? 'danger' : 'success' }} me-3">
+                    <i class="bi bi-calendar-event fs-3"></i>
+                </div>
+                <div>
+                    <h6 class="text-muted mb-0">Estado</h6>
+                    <h4 class="fw-bold mb-0">{{ $estaCaducado ? 'Caducado' : 'Activo' }}</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm p-3">
+            <div class="d-flex align-items-center">
+                <div class="bg-warning bg-opacity-10 p-3 rounded-3 text-warning me-3">
+                    <i class="bi bi-percent fs-3"></i>
+                </div>
+                <div>
+                    <h6 class="text-muted mb-0">Valor aplicado</h6>
+                    <h4 class="fw-bold mb-0">
+                        {{ $discount->tipo === 'porcentaje' ? $discount->valor . '%' : number_format($discount->valor, 2, ',', '.') . ' €' }}
+                    </h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    {{-- Columna principal: Productos afectados --}}
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
+                <h5 class="fw-bold mb-0">Productos con este descuento</h5>
+            </div>
+            <div class="table-responsive p-3">
+                <table class="table align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Producto</th>
+                            <th>Categoría</th>
+                            <th>Precio Base</th>
+                            <th>Precio Final</th>
+                            <th class="text-end">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($discount->productos as $producto)
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        @if ($producto->imagen)
+                                            <img src="{{ asset('storage/' . $producto->imagen) }}" alt="{{ $producto->nombre }}" width="40" height="40" class="rounded shadow-sm" style="object-fit: cover;">
+                                        @else
+                                            <div class="bg-light rounded d-flex align-items-center justify-content-center" style="width:40px; height:40px;">
+                                                <i class="bi bi-image text-muted"></i>
+                                            </div>
+                                        @endif
+                                        <span class="fw-bold">{{ $producto->nombre }}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    {{-- Asumiendo relación en el modelo Producto con Categoría --}}
+                                    <span class="badge bg-light text-dark border">
+                                        {{ $producto->getPerfilNombreAttribute() }}
+                                    </span>
+                                </td>
+                                <td>{{ number_format($producto->precio, 2, ',', '.') }} €</td>
+                                <td class="text-success fw-bold">
+                                    @php
+                                        $precioFinal = $discount->tipo === 'porcentaje' 
+                                            ? $producto->precio * (1 - ($discount->valor / 100)) 
+                                            : max(0, $producto->precio - $discount->valor);
+                                    @endphp
+                                    {{ number_format($precioFinal, 2, ',', '.') }} €
+                                </td>
+                                <td class="text-end">
+                                    <a href="{{ route('admin.products.show', $producto) }}" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-eye"></i> Ver
+                                    </a>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="text-center py-4 text-muted">
+                                    <i class="bi bi-slash-circle fs-3 d-block mb-2"></i>
+                                    Este descuento no está aplicado a ningún producto actualmente.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    {{-- Columna lateral: Detalles técnicos del descuento --}}
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white border-0 py-3">
+                <h5 class="fw-bold mb-0">Información del Cupón</h5>
+            </div>
+            <div class="card-body p-4">
+                <div class="mb-3">
+                    <label class="text-muted small d-block">Código promocional</label>
+                    <span class="fw-bold fs-5 text-primary">{{ $discount->codigo }}</span>
+                </div>
+                
+                <hr class="text-muted opacity-25">
+
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted">Tipo de descuento:</span>
+                    <span class="badge bg-info text-dark text-capitalize">{{ $discount->tipo }}</span>
+                </div>
+
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted">Fecha de expiración:</span>
+                    <strong class="{{ $estaCaducado ? 'text-danger' : '' }}">
+                        {{ \Carbon\Carbon::parse($discount->fecha_fin)->format('d/m/Y H:i') }}
+                    </strong>
+                </div>
+
+                <div class="mt-4 p-3 bg-light rounded-3">
+                    <small class="text-muted d-block mb-1">Nota interna:</small>
+                    <p class="small mb-0 italic text-secondary">
+                        Este descuento se aplica automáticamente a los productos listados en la tabla lateral.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <a href="{{ route('admin.discounts.index') }}" class="btn btn-outline-dark w-100 fw-semibold">
+            <i class="bi bi-arrow-left me-1"></i> Volver al listado
+        </a>
+    </div>
+</div>
+
+{{-- Modal de eliminación --}}
+<x-delete-modal
+    id="deleteDiscountShowModal"
+    formId="deleteDiscountShowForm"
+    :title="'¿Eliminar descuento?'"
+    :message="'¿Estás seguro de que deseas eliminar el código ' . $discount->codigo . '? Esta acción no se puede deshacer.'"
+    :buttonText="'Eliminar permanentemente'"
+    icon="bi-tag-fill"
+/>
+
+@endsection
