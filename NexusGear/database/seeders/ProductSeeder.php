@@ -20,7 +20,6 @@ class ProductSeeder extends Seeder
                 'descripcion'  => 'Ratón vertical inalámbrico con agarre neutro, sensor preciso y superficie mate para jornadas largas sin sobrecargar la muñeca.',
                 'imagen' => 'productos/default.png',
                 'stock'        => 24,
-                'categoria_id' => $office,
                 'destacado'    => true,
             ],
             [
@@ -29,7 +28,6 @@ class ProductSeeder extends Seeder
                 'descripcion'  => 'Teclado mecánico compacto con switches táctiles silenciosos, formato 60% y cuerpo rígido para escritorios despejados.',
                 'imagen' => 'productos/default.png',
                 'stock'        => 12,
-                'categoria_id' => $gamer,
                 'destacado'    => true,
             ],
             [
@@ -37,7 +35,6 @@ class ProductSeeder extends Seeder
                 'precio'       => 24.90,
                 'descripcion'  => 'Reposamuñecas de gel viscoelástico con base antideslizante y altura estable para escribir con una postura más natural.',
                 'stock'        => 38,
-                'categoria_id' => $office,
                 'destacado'    => true,
             ],
             [
@@ -45,7 +42,6 @@ class ProductSeeder extends Seeder
                 'precio'       => 129.00,
                 'descripcion'  => 'Teclado dividido con inclinación ajustable, pensado para reducir tensión en hombros y antebrazos durante sesiones intensas.',
                 'stock'        => 7,
-                'categoria_id' => $office,
                 'destacado'    => false,
             ],
             [
@@ -53,7 +49,6 @@ class ProductSeeder extends Seeder
                 'precio'       => 74.50,
                 'descripcion'  => 'Mouse ligero para gaming con laterales texturizados, baja latencia y forma ergonómica para agarres palm y claw.',
                 'stock'        => 18,
-                'categoria_id' => $gamer,
                 'destacado'    => true,
             ],
             [
@@ -61,7 +56,6 @@ class ProductSeeder extends Seeder
                 'precio'       => 39.95,
                 'descripcion'  => 'Soporte elevador para portátil con aluminio ventilado, plegado compacto y altura preparada para trabajar con pantalla a la vista.',
                 'stock'        => 20,
-                'categoria_id' => $office,
                 'destacado'    => false,
             ],
             [
@@ -69,7 +63,6 @@ class ProductSeeder extends Seeder
                 'precio'       => 29.99,
                 'descripcion'  => 'Reposamuñecas de perfil bajo con acabado textil transpirable, ideal para teclados compactos y setups minimalistas.',
                 'stock'        => 0,
-                'categoria_id' => $gamer,
                 'destacado'    => false,
             ],
             [
@@ -77,7 +70,6 @@ class ProductSeeder extends Seeder
                 'precio'       => 109.90,
                 'descripcion'  => 'Teclado TKL con switches táctiles, estabilizadores lubricados y cubierta superior sobria para trabajo y juego.',
                 'stock'        => 15,
-                'categoria_id' => $gamer,
                 'destacado'    => false,
             ],
         ];

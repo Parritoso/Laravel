@@ -29,7 +29,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('pivot', function (Blueprint $table) {
+        Schema::table('producto_categoria', function (Blueprint $table) {
             $table->foreignId('categoria_id')->nullable()->constrained('categorias');
         });
     }
