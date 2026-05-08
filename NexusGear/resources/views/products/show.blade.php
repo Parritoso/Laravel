@@ -25,6 +25,11 @@
             @if ($product->destacado)
                 <span class="badge bg-primary">Destacado</span>
             @endif
+            @if($product->precio_final < $product->precio)
+                <span class="badge bg-danger animate__animated animate__flash animate__infinite">
+                    <i class="bi bi-patch-check-fill me-1"></i> Oferta
+                </span>
+            @endif
         </div>
 
         <h1 class="display-5 fw-bold mb-3">{{ $product->nombre }}</h1>
@@ -32,7 +37,21 @@
 
         <div class="product-detail__purchase">
             <div>
-                <div class="product-detail__price">{{ $product->precio_formateado }}</div>
+                
+                @if($product->precio_final < $product->precio)
+                    {{-- Caso con Descuento --}}
+                    <div class="d-flex align-items-baseline gap-2">
+                        <div class="product-detail__price text-danger">
+                            {{ number_format($product->precio_final, 2, ',', '.') }} €
+                        </div>
+                        <span class="text-muted text-decoration-line-through fs-5">
+                            {{ $product->precio_formateado }}
+                        </span>
+                    </div>
+                @else
+                    {{-- Caso Precio Normal --}}
+                    <div class="product-detail__price">{{ $product->precio_formateado }}</div>
+                @endif
                 <div class="{{ $product->disponible ? 'text-success' : 'text-danger' }}">
                     {{ $product->disponible ? $product->stock.' unidades disponibles' : 'Producto sin stock' }}
                 </div>
@@ -91,6 +110,9 @@
                 <div class="col-md-4">
                     <article class="product-card h-100">
                         <a href="{{ route('products.show', $relatedProduct) }}" class="product-card__media product-card__media--compact">
+                            @if($relatedProduct->precio_final < $relatedProduct->precio)
+                                <span class="badge bg-danger position-absolute top-0 start-0 m-2">Oferta</span>
+                            @endif
                             @if ($relatedProduct->imagen)
                                 <img src="{{ asset('storage/' . $relatedProduct->imagen) }}" alt="{{ $relatedProduct->nombre }}">
                             @else
@@ -103,7 +125,14 @@
                                     {{ $relatedProduct->nombre }}
                                 </a>
                             </h3>
-                            <div class="product-price">{{ $relatedProduct->precio_formateado }}</div>
+                            @if($relatedProduct->precio_final < $relatedProduct->precio)
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="fw-bold text-danger">{{ number_format($relatedProduct->precio_final, 2, ',', '.') }} €</span>
+                                    <span class="text-muted text-decoration-line-through x-small" style="font-size: 0.75rem;">{{ $relatedProduct->precio_formateado }}</span>
+                                </div>
+                            @else
+                                <div class="product-price">{{ $relatedProduct->precio_formateado }}</div>
+                            @endif
                         </div>
                     </article>
                 </div>

@@ -174,7 +174,22 @@
 
                         <div class="d-flex justify-content-between align-items-center gap-3 mt-4">
                             <div>
-                                <div class="product-price">{{ $product->precio_formateado }}</div>
+                                @if($product->precio_final < $product->precio)
+                                    {{-- Caso con Descuento --}}
+                                    <div class="d-flex flex-column">
+                                        <span class="text-muted text-decoration-line-through small" style="font-size: 0.85rem;">
+                                            {{ number_format($product->precio, 2, ',', '.') }} €
+                                        </span>
+                                        <div class="product-price text-danger fw-bold">
+                                            {{ number_format($product->precio_final, 2, ',', '.') }} €
+                                        </div>
+                                    </div>
+                                @else
+                                    {{-- Caso Precio Normal --}}
+                                    <div class="product-price">
+                                        {{ number_format($product->precio, 2, ',', '.') }} €
+                                    </div>
+                                @endif
                                 <small class="{{ $product->disponible ? 'text-success' : 'text-danger' }}">
                                     {{ $product->disponible ? $product->stock.' en stock' : 'Sin stock' }}
                                 </small>
