@@ -38,6 +38,16 @@ class LineaPedido extends Model
         return number_format((float) $this->subtotal, 2, ',', '.').' €';
     }
 
+    public function getPrecioOriginalFormateadoAttribute(): string
+    {
+        return number_format((float) $this->precio_original, 2, ',', '.').' €';
+    }
+
+    public function getDescuentoTotalFormateadoAttribute(): string
+    {
+        return number_format((float) $this->descuento_total, 2, ',', '.').' €';
+    }
+
     public function pedido(): BelongsTo
     {
         return $this->belongsTo(Pedido::class, 'pedido_id');

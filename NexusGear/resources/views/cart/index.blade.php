@@ -26,9 +26,18 @@
     <section class="cart-layout">
         <div class="cart-items">
             @foreach ($cart->items as $item)
+                @php
+                    $producto = $item->producto;
+                    $tieneDescuento = $producto->precio_final < $producto->precio;
+                    $ahorroUnitario = $producto->precio - $producto->precio_final;
+                @endphp
                 <article class="cart-item">
                     <a href="{{ route('products.show', $item->producto) }}" class="cart-item__media">
+                        @if ($item->producto->imagen)
+                        <img src="{{ asset('storage/' . $item->producto->imagen) }}" alt="{{ $item->producto->nombre }}" class="w-100 h-100" style="object-fit: cover; border-radius: inherit;">
+                    @else
                         <i class="bi {{ $item->producto->icono }}"></i>
+                    @endif
                     </a>
 
                     <div class="cart-item__content">
@@ -39,7 +48,20 @@
                                     {{ $item->producto->nombre }}
                                 </a>
                             </h2>
-                            <p class="text-muted mb-0">{{ $item->precio_actual_formateado }} unidad</p>
+                            {{-- <p class="text-muted mb-0">{{ $item->precio_actual_formateado }} unidad</p> --}}
+                            <p class="mb-0">
+                                @if($tieneDescuento)
+                                    <span class="text-muted text-decoration-line-through small me-1">
+                                        {{ number_format($producto->precio, 2, ',', '.') }} €
+                                    </span>
+                                    <span class="fw-bold text-success">
+                                        {{ number_format($producto->precio_final, 2, ',', '.') }} €
+                                    </span>
+                                @else
+                                    <span class="text-muted">{{ $item->precio_actual_formateado }}</span>
+                                @endif
+                                <small class="text-muted">/ unidad</small>
+                            </p>
                         </div>
 
                         <div class="cart-item__actions">
@@ -73,6 +95,11 @@
                         <div class="cart-item__subtotal">
                             <span>Subtotal</span>
                             <strong>{{ $item->subtotal_formateado }}</strong>
+                            @if($tieneDescuento)
+                                <small class="text-success fw-medium">
+                                    ¡Ahorras {{ number_format($ahorroUnitario * $item->cantidad, 2, ',', '.') }} €!
+                                </small>
+                            @endif
                         </div>
                     </div>
                 </article>
@@ -89,6 +116,19 @@
                 <span>Subtotal</span>
                 <strong>{{ $cart->total_formateado }}</strong>
             </div>
+            @php
+                $ahorroTotal = $cart->items->reduce(function($carry, $item) {
+                    $ahorro = $item->producto->precio - $item->producto->precio_final;
+                    return $carry + ($ahorro * $item->cantidad);
+                }, 0);
+            @endphp
+
+            @if($ahorroTotal > 0)
+                <div class="cart-summary__line text-success">
+                    <span>Descuentos aplicados</span>
+                    <strong>- {{ number_format($ahorroTotal, 2, ',', '.') }} €</strong>
+                </div>
+            @endif
             <div class="cart-summary__line text-muted">
                 <span>Envío</span>
                 <span>Se calcula al tramitar</span>

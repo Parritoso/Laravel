@@ -26,7 +26,7 @@ class ItemCarrito extends Model
 
     public function getSubtotalAttribute(): float
     {
-        return $this->cantidad * (float) $this->precio_actual;
+        return $this->cantidad * (float) $this->producto->precio_final;
     }
 
     public function getSubtotalFormateadoAttribute(): string
@@ -36,7 +36,7 @@ class ItemCarrito extends Model
 
     public function getPrecioActualFormateadoAttribute(): string
     {
-        return number_format((float) $this->precio_actual, 2, ',', '.').' €';
+        return number_format((float) $this->producto->precio_final, 2, ',', '.').' €';
     }
 
     public function carrito(): BelongsTo
