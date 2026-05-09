@@ -6,6 +6,7 @@ return [
     'email'             => 'メールアドレス',
     'email_placeholder' => 'name@example.com',
     'password'          => 'パスワード',
+    'password_placeholder' => 'パスワード',
     'forgot_password'   => 'パスワードをお忘れですか？',
     'submit'            => 'ログイン',
     'no_account'        => 'アカウントをお持ちではありませんか？',

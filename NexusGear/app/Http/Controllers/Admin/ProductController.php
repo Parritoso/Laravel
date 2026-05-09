@@ -66,7 +66,7 @@ class ProductController extends Controller
 
         return redirect()
             ->route('admin.products.edit', $product)
-            ->with('success', 'Producto creado correctamente.');
+            ->with('success', __('messages.admin_product_created'));
     }
 
     public function show(Producto $producto): View
@@ -135,13 +135,13 @@ class ProductController extends Controller
 
         return redirect()
             ->route('admin.products.edit', $producto)
-            ->with('success', 'Producto actualizado correctamente.');
+            ->with('success', __('messages.admin_product_updated'));
     }
 
     public function destroy(Producto $producto): RedirectResponse
     {
         if ($producto->lineasPedido()->exists()) {
-            return back()->with('error', 'No se puede eliminar un producto que ya aparece en pedidos.');
+            return back()->with('error', __('messages.admin_product_in_use'));
         }
 
         if ($producto->imagen) {
@@ -152,7 +152,7 @@ class ProductController extends Controller
 
         return redirect()
             ->route('admin.products.index')
-            ->with('success', 'Producto eliminado correctamente.');
+            ->with('success', __('messages.admin_product_deleted'));
     }
 
     private function validatedData(Request $request): array

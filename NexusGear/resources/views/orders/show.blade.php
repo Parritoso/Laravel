@@ -3,7 +3,7 @@
 @section('title', '#'.$order->id)
 
 @section('content')
-<nav aria-label="breadcrumb" class="mb-4">
+<nav aria-label="{{ __('common.breadcrumb') }}" class="mb-4">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('orders.index') }}">{{ __('orders/show.breadcrumb') }}</a></li>
         <li class="breadcrumb-item active" aria-current="page">#{{ $order->id }}</li>

@@ -31,10 +31,10 @@
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold text-muted text-uppercase">{{ __('auth/perfil/edit.preferred_language') }}</label>
                                 <select name="language" class="form-select">
-                                    <option value="es" {{ $user->language == 'es' ? 'selected' : '' }}>Español</option>
-                                    <option value="en" {{ $user->language == 'en' ? 'selected' : '' }}>English</option>
-                                    <option value="pt" {{ $user->language == 'pt' ? 'selected' : '' }}>Português</option>
-                                    <option value="ja" {{ $user->language == 'ja' ? 'selected' : '' }}>日本語</option>
+                                    <option value="es" {{ $user->language == 'es' ? 'selected' : '' }}>{{ __('auth/perfil/edit.language_es') }}</option>
+                                    <option value="en" {{ $user->language == 'en' ? 'selected' : '' }}>{{ __('auth/perfil/edit.language_en') }}</option>
+                                    <option value="pt" {{ $user->language == 'pt' ? 'selected' : '' }}>{{ __('auth/perfil/edit.language_pt') }}</option>
+                                    <option value="ja" {{ $user->language == 'ja' ? 'selected' : '' }}>{{ __('auth/perfil/edit.language_ja') }}</option>
                                 </select>
                             </div>
                             <div class="col-12">

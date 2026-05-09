@@ -7,7 +7,7 @@
     <div>
         <span class="catalog-kicker text-primary">{{ __('cart/index.title') }}</span>
         <h1 class="h2 fw-bold mb-1">{{ __('cart/index.heading') }}</h1>
-        <p class="text-muted mb-0">{{ $cart->cantidad_total }} producto{{ $cart->cantidad_total === 1 ? '' : 's' }} en el carrito</p>
+        <p class="text-muted mb-0">{{ trans_choice('cart/index.count', $cart->cantidad_total, ['count' => $cart->cantidad_total]) }}</p>
     </div>
 
     <a href="{{ route('products.index') }}" class="btn btn-outline-dark">

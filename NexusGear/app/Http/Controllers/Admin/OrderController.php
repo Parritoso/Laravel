@@ -45,17 +45,17 @@ class OrderController extends Controller
 
         $pedido->update($data);
 
-        return back()->with('success', 'Estado del pedido actualizado.');
+        return back()->with('success', __('messages.admin_order_updated'));
     }
 
     private function statuses(): array
     {
         return [
-            'pendiente' => 'Pendiente',
-            'procesando' => 'Procesando',
-            'enviado' => 'Enviado',
-            'entregado' => 'Entregado',
-            'cancelado' => 'Cancelado',
+            'pendiente' => __('statuses.pendiente'),
+            'procesando' => __('statuses.procesando'),
+            'enviado' => __('statuses.enviado'),
+            'entregado' => __('statuses.entregado'),
+            'cancelado' => __('statuses.cancelado'),
         ];
     }
 }

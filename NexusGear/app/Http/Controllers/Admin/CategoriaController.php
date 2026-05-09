@@ -28,7 +28,7 @@ class CategoriaController extends Controller
 
         return redirect()
             ->route('admin.categorias.index')
-            ->with('success', 'Categoría creada correctamente.');
+            ->with('success', __('messages.admin_category_created'));
     }
 
     public function edit(Categoria $categoria): View
@@ -42,20 +42,20 @@ class CategoriaController extends Controller
 
         return redirect()
             ->route('admin.categorias.index')
-            ->with('success', 'Categoría actualizada correctamente.');
+            ->with('success', __('messages.admin_category_updated'));
     }
 
     public function destroy(Categoria $categoria): RedirectResponse
     {
         if ($categoria->productos()->exists()) {
-            return back()->with('error', 'No se puede eliminar una categoría que tiene productos asignados.');
+            return back()->with('error', __('messages.admin_category_in_use'));
         }
 
         $categoria->delete();
 
         return redirect()
             ->route('admin.categorias.index')
-            ->with('success', 'Categoría eliminada correctamente.');
+            ->with('success', __('messages.admin_category_deleted'));
     }
 
     private function validatedData(Request $request, ?int $ignoreId = null): array

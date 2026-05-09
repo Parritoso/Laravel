@@ -23,4 +23,7 @@ return [
     'zip_code' => 'C.P.',
     'cancel' => 'Cancelar',
     'save_address' => 'Guardar Endereço',
+    'edit_address' => 'Editar Endereço',
+    'update_changes' => 'Atualizar Alterações',
+    'close' => 'Fechar',
 ];

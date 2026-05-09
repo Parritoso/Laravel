@@ -6,6 +6,7 @@ return [
     'email'             => 'E-mail',
     'email_placeholder' => 'nome@exemplo.com',
     'password'          => 'Senha',
+    'password_placeholder' => 'Senha',
     'forgot_password'   => 'Esqueceu a sua senha?',
     'submit'            => 'Entrar',
     'no_account'        => 'Não tem uma conta?',

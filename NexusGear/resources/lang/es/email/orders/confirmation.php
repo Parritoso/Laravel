@@ -1,6 +1,7 @@
 <?php
 return [
     'title'           => 'Confirmación de pedido',
+    'subject'         => 'Confirmación de pedido :invoice',
     'heading'         => 'Pedido confirmado',
     'greeting'        => 'Hola :name, hemos recibido tu pedido #:id.',
     'invoice_label'   => 'Factura:',

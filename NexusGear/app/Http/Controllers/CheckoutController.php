@@ -10,7 +10,7 @@ class checkoutController extends Controller
         $cart = Carrito::where('usuario_id', $user->id)->with('items.producto')->first();
 
         if (!$cart || $cart->items->isEmpty()) {
-            return redirect()->route('cart.index')->with('error', 'Tu carrito está vacío.');
+            return redirect()->route('cart.index')->with('error', __('messages.checkout_empty_cart'));
         }
 
         return view('auth.checkout.index', [

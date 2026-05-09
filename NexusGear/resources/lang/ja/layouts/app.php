@@ -2,6 +2,9 @@
 return[
     'catalog' => 'カタログ',
     'favorites' => 'お気に入り',
+    'cart' => 'カート',
+    'login' => 'ログイン',
+    'close' => '閉じる',
     'title' => 'エルゴノミック Eコマース',
     'profile' => 'マイプロフィール',
     'orders' => '注文履歴',

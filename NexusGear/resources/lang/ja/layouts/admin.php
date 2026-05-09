@@ -9,4 +9,5 @@ return[
     'go_to_store' => 'ストアへ戻る',
     'logout' => 'ログアウト',
     'discounts'=> '割引',
+    'close' => '閉じる',
 ];

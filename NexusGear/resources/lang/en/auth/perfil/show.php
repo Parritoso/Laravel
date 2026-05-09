@@ -23,4 +23,7 @@ return [
     'zip_code' => 'Zip Code',
     'cancel' => 'Cancel',
     'save_address' => 'Save Address',
+    'edit_address' => 'Edit Address',
+    'update_changes' => 'Update Changes',
+    'close' => 'Close',
 ];

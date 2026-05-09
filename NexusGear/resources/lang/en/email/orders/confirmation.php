@@ -1,6 +1,7 @@
 <?php
 return [
     'title'            => 'Order confirmation',
+    'subject'          => 'Order confirmation :invoice',
     'heading'          => 'Order confirmed',
     'greeting'         => 'Hi :name, we have received your order #:id.',
     'invoice_label'    => 'Invoice:',

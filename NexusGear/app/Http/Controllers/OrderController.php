@@ -35,14 +35,14 @@ class OrderController extends Controller
         if ($cart->items->isEmpty()) {
             return redirect()
                 ->route('cart.index')
-                ->with('error', 'El carrito está vacío.');
+                ->with('error', __('messages.cart_empty'));
         }
 
         foreach ($cart->items as $item) {
             if ($item->cantidad > $item->producto->stock) {
                 return redirect()
                     ->route('cart.index')
-                    ->with('error', "No hay suficiente stock de {$item->producto->nombre}.");
+                    ->with('error', __('messages.order_stock_product', ['product' => $item->producto->nombre]));
             }
         }
 
@@ -99,7 +99,7 @@ class OrderController extends Controller
                     $producto = Producto::whereKey($item->producto_id)->lockForUpdate()->firstOrFail();
 
                     if ($item->cantidad > $producto->stock) {
-                        throw new \RuntimeException("No hay suficiente stock de {$producto->nombre}.");
+                        throw new \RuntimeException(__('messages.order_stock_product', ['product' => $producto->nombre]));
                     }
 
                     $precioOriginal = (float) $producto->precio;
@@ -145,7 +145,7 @@ class OrderController extends Controller
 
         return redirect()
             ->route('orders.show', $pedido)
-            ->with('success', 'Pedido realizado correctamente. Te hemos enviado la confirmación por correo.');
+            ->with('success', __('messages.order_completed'));
     }
 
     public function show(Pedido $pedido): View

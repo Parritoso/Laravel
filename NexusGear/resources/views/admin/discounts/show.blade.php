@@ -7,10 +7,10 @@
 
 {{-- Cabecera: breadcrumb + botones --}}
 <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
-    <nav aria-label="breadcrumb">
+    <nav aria-label="{{ __('common.breadcrumb') }}">
         <ol class="breadcrumb mb-0">
             <li class="breadcrumb-item">
-                <a href="{{ route('admin.dashboard') }}" class="text-decoration-none">Admin</a>
+                <a href="{{ route('admin.dashboard') }}" class="text-decoration-none">{{ __('common.admin') }}</a>
             </li>
             <li class="breadcrumb-item">
                 <a href="{{ route('admin.discounts.index') }}" class="text-decoration-none">{{ __('admin/discounts/show.breadcrumb') }}</a>

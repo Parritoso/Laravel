@@ -35,13 +35,9 @@ class Pedido extends Model
 
     public function getEstadoLabelAttribute(): string
     {
-        return match ($this->estado) {
-            'procesando' => 'Procesando',
-            'enviado' => 'Enviado',
-            'entregado' => 'Entregado',
-            'cancelado' => 'Cancelado',
-            default => 'Pendiente',
-        };
+        $key = 'statuses.'.$this->estado;
+
+        return trans()->has($key) ? __($key) : __('statuses.pendiente');
     }
 
     public function getEstadoBadgeAttribute(): string

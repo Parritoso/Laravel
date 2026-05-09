@@ -107,7 +107,7 @@
     <div class="d-flex justify-content-between align-items-end gap-3 mb-3">
         <div>
             <h2 class="h4 fw-bold mb-1">{{ __('products/index.available_title') }}</h2>
-            <p class="text-muted mb-0">{{ $products->total() }} resultado{{ $products->total() === 1 ? '' : 's' }}</p>
+            <p class="text-muted mb-0">{{ trans_choice('products/index.results_count', $products->total(), ['count' => $products->total()]) }}</p>
         </div>
     </div>
 
@@ -198,7 +198,7 @@
                                 <form method="POST" action="{{ route('cart.store', $product) }}">
                                     @csrf
                                     <input type="hidden" name="cantidad" value="1">
-                                    <button class="btn btn-primary" type="submit" @disabled(! $product->disponible) aria-label="Añadir {{ $product->nombre }} al carrito">
+                                    <button class="btn btn-primary" type="submit" @disabled(! $product->disponible) aria-label="{{ __('products/index.add_to_cart_label', ['product' => $product->nombre]) }}">
                                         <i class="bi bi-cart-plus"></i>
                                     </button>
                                 </form>

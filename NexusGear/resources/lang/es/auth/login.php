@@ -6,6 +6,7 @@ return [
     'email'             => 'Correo Electrónico',
     'email_placeholder' => 'nombre@ejemplo.com',
     'password'          => 'Contraseña',
+    'password_placeholder' => 'Contraseña',
     'forgot_password'   => '¿Olvidaste tu contraseña?',
     'submit'            => 'Entrar',
     'no_account'        => '¿No tienes cuenta?',

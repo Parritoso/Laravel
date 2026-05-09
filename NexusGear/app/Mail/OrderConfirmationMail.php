@@ -24,7 +24,9 @@ class OrderConfirmationMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Confirmación de pedido '.$this->pedido->factura->numero_factura,
+            subject: __('email/orders/confirmation.subject', [
+                'invoice' => $this->pedido->factura->numero_factura,
+            ]),
         );
     }
 
