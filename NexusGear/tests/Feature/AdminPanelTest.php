@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Mail\OrderConfirmationMail;
+use App\Models\Categoria;
 use App\Models\Pedido;
 use App\Models\Producto;
 use App\Models\Rol;
@@ -28,13 +29,17 @@ class AdminPanelTest extends TestCase
     public function test_admin_can_create_update_and_delete_product(): void
     {
         $admin = $this->adminUser();
+        $category = Categoria::updateOrCreate(
+            ['slug' => 'office'],
+            ['nombre' => 'Office & Focus', 'slug' => 'office']
+        );
 
         $payload = [
             'nombre' => 'Ergo Test',
             'precio' => 49.95,
             'descripcion' => 'Producto preparado para pruebas de administración.',
             'stock' => 11,
-            'perfil' => 'office',
+            'categorias' => [$category->id],
             'destacado' => '1',
         ];
 
@@ -80,7 +85,7 @@ class AdminPanelTest extends TestCase
         $product = Producto::where('stock', '>', 0)->firstOrFail();
 
         $this->actingAs($customer)->post(route('cart.store', $product), ['cantidad' => 1]);
-        $this->actingAs($customer)->post(route('checkout.store'));
+        $this->actingAs($customer)->post(route('checkout.store'), $this->newAddressPayload());
 
         $order = Pedido::with('factura')->firstOrFail();
 
@@ -109,5 +114,16 @@ class AdminPanelTest extends TestCase
         $admin->roles()->attach($role->id, ['asignado_el' => now()]);
 
         return $admin;
+    }
+
+    private function newAddressPayload(): array
+    {
+        return [
+            'direccion_id' => 'new',
+            'address' => 'Calle Test',
+            'number' => '12',
+            'city' => 'Madrid',
+            'zip_code' => '28001',
+        ];
     }
 }

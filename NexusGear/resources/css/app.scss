@@ -1,9 +1,11 @@
+@use "sass:color";
+
 $verde-agua: #4FD1C5;
 $dark-gear: #2D3748;
 
 $primary: $verde-agua;
 $body-bg: #f8fafc;
-$link-color: darken($verde-agua, 15%);
+$link-color: color.adjust($verde-agua, $lightness: -15%);
 $font-family-sans-serif: 'Inter', system-ui, -apple-system, sans-serif;
 
 @import 'bootstrap/scss/bootstrap';
@@ -17,8 +19,8 @@ $font-family-sans-serif: 'Inter', system-ui, -apple-system, sans-serif;
 .btn-primary {
     color: white;
     &:hover {
-        background-color: darken($primary, 10%);
-        border-color: darken($primary, 10%);
+        background-color: color.adjust($primary, $lightness: -10%);
+        border-color: color.adjust($primary, $lightness: -10%);
     }
 }
 
@@ -116,7 +118,7 @@ $font-family-sans-serif: 'Inter', system-ui, -apple-system, sans-serif;
     min-height: 210px;
     display: grid;
     place-items: center;
-    color: darken($primary, 18%);
+    color: color.adjust($primary, $lightness: -18%);
     text-decoration: none;
     background:
         linear-gradient(145deg, rgba(79, 209, 197, .16), rgba(45, 55, 72, .07)),
@@ -221,7 +223,7 @@ $font-family-sans-serif: 'Inter', system-ui, -apple-system, sans-serif;
     }
 
     &:hover {
-        color: darken($primary, 20%);
+        color: color.adjust($primary, $lightness: -20%);
         background: rgba(79, 209, 197, .12);
     }
 }
@@ -238,7 +240,7 @@ $font-family-sans-serif: 'Inter', system-ui, -apple-system, sans-serif;
     display: grid;
     place-items: center;
     border-radius: 1.25rem;
-    color: darken($primary, 18%);
+    color: color.adjust($primary, $lightness: -18%);
     background:
         radial-gradient(circle at 30% 30%, rgba(79, 209, 197, .34), transparent 20rem),
         linear-gradient(145deg, #ffffff, #e8f4f2);
@@ -338,7 +340,7 @@ $font-family-sans-serif: 'Inter', system-ui, -apple-system, sans-serif;
     place-items: center;
     min-height: 140px;
     border-radius: .85rem;
-    color: darken($primary, 18%);
+    color: color.adjust($primary, $lightness: -18%);
     text-decoration: none;
     background: linear-gradient(145deg, rgba(79, 209, 197, .16), rgba(45, 55, 72, .07));
 
@@ -447,7 +449,7 @@ $font-family-sans-serif: 'Inter', system-ui, -apple-system, sans-serif;
     flex: 0 0 auto;
     place-items: center;
     border-radius: .75rem;
-    color: darken($primary, 18%);
+    color: color.adjust($primary, $lightness: -18%);
     background: rgba(79, 209, 197, .14);
 }
 

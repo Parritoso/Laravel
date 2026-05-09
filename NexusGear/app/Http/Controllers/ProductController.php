@@ -13,6 +13,7 @@ class ProductController extends Controller
     {
         $filters = $request->validate([
             'q'          => ['nullable', 'string', 'max:80'],
+            'profile'    => ['nullable', 'string', 'exists:categorias,slug'],
             'profiles'   => ['nullable', 'array'],
             'profiles.*' => ['nullable', 'string', 'exists:categorias,slug'],
             'sort'       => ['nullable', 'in:featured,price_asc,price_desc,name'],

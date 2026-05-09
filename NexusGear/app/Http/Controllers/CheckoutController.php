@@ -1,8 +1,10 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use App\Models\Carrito;
-use App\Models\Producto;
-class checkoutController extends Controller
+
+class CheckoutController extends Controller
 {
     public function index()
     {

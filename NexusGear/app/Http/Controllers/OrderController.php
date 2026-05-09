@@ -49,6 +49,7 @@ class OrderController extends Controller
         $request->validate([
             'direccion_id' => 'required',
             'address' => 'required_if:direccion_id,new|nullable|string|max:255',
+            'number' => 'required_if:direccion_id,new|nullable|string|max:20',
             'city' => 'required_if:direccion_id,new|nullable|string|max:100',
             'zip_code' => 'required_if:direccion_id,new|nullable|string|max:10',
         ]);
