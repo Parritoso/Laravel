@@ -30,7 +30,7 @@
                     @csrf
 
                     <div class="form-floating mb-3">
-                        <input type="email" name="email" class="form-control" id="email" placeholder="nombre@ejemplo.com" value="{{ old('email') }}" required autofocus>
+                        <input type="email" name="email" class="form-control" id="email" placeholder="{{ __('auth/login.email_placeholder') }}" value="{{ old('email') }}" required autofocus>
                         <label for="email">{{__('auth/login.email')}}</label>
                     </div>
 

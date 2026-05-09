@@ -72,7 +72,7 @@
                 <p class="text-muted mb-0">{{ __('home.initial_desc') }}</p>
             </div>
             <a href="{{ route('products.index') }}" class="text-primary fw-bold text-decoration-none">
-                Ver catálogo <i class="bi bi-arrow-right"></i>
+                {{ __('home.view_catalog') }} <i class="bi bi-arrow-right"></i>
             </a>
         </div>
 

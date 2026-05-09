@@ -70,9 +70,9 @@
                         <td>{{ $product->precio_formateado }}</td>
                         <td>
                             @if ($product->destacado)
-                                <span class="badge bg-primary">Sí</span>
+                                <span class="badge bg-primary">{{ __('admin/products/index.yes') }}</span>
                             @else
-                                <span class="badge text-bg-light">No</span>
+                                <span class="badge text-bg-light">{{ __('admin/products/index.no') }}</span>
                             @endif
                         </td>
                         <td class="text-end">

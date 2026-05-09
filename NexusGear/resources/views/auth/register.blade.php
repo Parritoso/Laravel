@@ -32,7 +32,7 @@
                             <label class="form-label fw-semibold">{{__('auth/register.full_name')}}</label>
                             <div class="input-group">
                                 <span class="input-group-text bg-light border-end-0"><i class="bi bi-person"></i></span>
-                                <input type="text" name="name" class="form-control border-start-0" value="{{ old('name') }}" required placeholder="Ej. Juan Pérez">
+                                <input type="text" name="name" class="form-control border-start-0" value="{{ old('name') }}" required placeholder="{{ __('auth/register.name_placeholder') }}">
                             </div>
                         </div>
 
@@ -40,19 +40,19 @@
                             <label class="form-label fw-semibold">{{__('auth/register.email')}}</label>
                             <div class="input-group">
                                 <span class="input-group-text bg-light border-end-0"><i class="bi bi-envelope"></i></span>
-                                <input type="email" name="email" class="form-control border-start-0" value="{{ old('email') }}" required placeholder="juan@ejemplo.com">
+                                <input type="email" name="email" class="form-control border-start-0" value="{{ old('email') }}" required placeholder="{{ __('auth/register.email_placeholder') }}">
                             </div>
                         </div>
 
                         <div class="col-md-6 mb-3 password-container">
                             <label class="form-label fw-semibold">{{__('auth/register.password')}}</label>
-                            <input type="password" name="password" class="form-control" required placeholder="Mín. 8 caracteres">
+                            <input type="password" name="password" class="form-control" required placeholder="{{ __('auth/register.password_placeholder') }}">
                             <i class="bi bi-eye toggle-password"></i>
                         </div>
 
                         <div class="col-md-6 mb-4 password-container">
                             <label class="form-label fw-semibold">{{__('auth/register.confirm_password')}}</label>
-                            <input type="password" name="password_confirmation" class="form-control" required placeholder="Repite la clave">
+                            <input type="password" name="password_confirmation" class="form-control" required placeholder="{{ __('auth/register.confirm_placeholder') }}">
                             <i class="bi bi-eye toggle-password"></i>
                         </div>
                     </div>

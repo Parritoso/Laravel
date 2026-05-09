@@ -17,7 +17,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="imagen" class="form-label fw-semibold">Imagen del producto</label>
+                    <label for="imagen" class="form-label fw-semibold">{{ __('admin/products/_form.image') }}</label>
 
                     @if ($product->imagen)
                         <div class="mb-2">
@@ -31,8 +31,8 @@
                     <input id="imagen" type="file" name="imagen" accept="image/jpeg,image/png"
                            class="form-control @error('imagen') is-invalid @enderror">
                     <div class="form-text">
-                        JPG o PNG · máx. 2 MB
-                        @if ($product->imagen) · Deja en blanco para conservar la imagen actual @endif
+                        {{ __('admin/products/_form.image_hint') }}
+                        @if ($product->imagen) · {{ __('admin/products/_form.image_keep') }} @endif
                     </div>
                     @error('imagen') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>
@@ -59,7 +59,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="categorias" class="form-label fw-semibold">Categorías / Perfiles</label>
+                    <label for="categorias" class="form-label fw-semibold">{{ __('admin/products/_form.categories') }}</label>
                     {{--  <select id="categoria_id" name="categoria_id" class="form-select @error('categoria_id') is-invalid @enderror" required>
                         <option value="">{{ __('admin/products/_form.select_profile') }}</option>
                         @foreach ($categorias as $cat)
@@ -86,9 +86,9 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="descuento_id" class="form-label fw-semibold text-primary">Descuento Aplicado (Opcional)</label>
+                    <label for="descuento_id" class="form-label fw-semibold text-primary">{{ __('admin/products/_form.discount_label') }}</label>
                     <select id="descuento_id" name="descuento_id" class="form-select border-primary-subtle @error('descuento_id') is-invalid @enderror">
-                        <option value="">Sin descuento</option>
+                        <option value="">{{ __('admin/products/_form.no_discount') }}</option>
                         @foreach ($descuentos as $desc)
                             <option value="{{ $desc->id }}" 
                                 @selected(old('descuento_id', $product->descuentos->first()?->id) == $desc->id)>
@@ -96,7 +96,7 @@
                             </option>
                         @endforeach
                     </select>
-                    <div class="form-text">Solo aparecen descuentos que no han caducado.</div>
+                    <div class="form-text">{{ __('admin/products/_form.discount_hint') }}</div>
                     @error('descuento_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>
 

@@ -21,6 +21,8 @@ return [
     'delete'=> 'Eliminar',
     'delete_confirm'=> '¿Eliminar «:name»?',
     'no_results'=> 'No hay productos con esos filtros.',
+    'yes'       => 'Sí',
+    'no'        => 'No',
     'delete_confirm_title'=>'Confirmar eliminación',
     'delete_confirm_msg'=>'Estás a punto de eliminar permanentemente:',
 ];

@@ -8,5 +8,5 @@ return[
     'close_session' => 'Log Out',
     'footer' => 'NexusGear - Health and Ergonomic Technology',
     'terms' => 'Terms',
-    'contact' => 'Contac',
+    'contact' => 'Contact',
 ];

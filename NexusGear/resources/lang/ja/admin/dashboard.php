@@ -1,10 +1,10 @@
 <?php
 return [
     'summary'=>'概要',
-    'dashboard'=> '',
-    'products' => '',
+    'dashboard'=> 'ダッシュボード',
+    'products' => '商品',
     'low_stock'=> '在庫少',
-    'orders'=> '',
+    'orders'=> '注文',
     'in_progress'=> '進行中',
     'recent_orders'=> '最近の注文',
     'view_all'=> 'すべて表示',

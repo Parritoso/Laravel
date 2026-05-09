@@ -1,6 +1,27 @@
 <?php
-    return [
-        'delete_confirm_title'=>'Confirmar eliminación',
-        'delete_confirm_msg'=>'¿Estás seguro de que deseas eliminar el descuento?',
-        'delete_btn'=> 'Eliminar permanentemente',
-    ];
+return [
+    'title'               => 'Descuentos',
+    'management'          => 'Gestión de descuentos',
+    'card_title'          => 'Listado de Descuentos',
+    'new_discount'        => 'Nuevo descuento',
+    'col_code'            => 'Código',
+    'col_type'            => 'Tipo',
+    'col_value'           => 'Valor',
+    'col_status'          => 'Estado / Expira',
+    'col_products'        => 'Productos',
+    'col_actions'         => 'Acciones',
+    'type_percentage'     => 'Porcentaje',
+    'type_fixed'          => 'Fijo',
+    'expires'             => 'Vence el :date',
+    'active'              => 'Activo',
+    'expired_on'          => 'Expiró el :date',
+    'expired'             => 'Caducado',
+    'products_count'      => ':count prod.',
+    'view'                => 'Ver',
+    'edit'                => 'Editar',
+    'delete'              => 'Eliminar',
+    'empty'               => 'No hay descuentos configurados actualmente.',
+    'delete_confirm_title'=> 'Confirmar eliminación',
+    'delete_confirm_msg'  => '¿Estás seguro de que deseas eliminar el descuento?',
+    'delete_btn'          => 'Eliminar permanentemente',
+];
