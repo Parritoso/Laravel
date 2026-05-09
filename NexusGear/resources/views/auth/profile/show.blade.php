@@ -34,7 +34,7 @@
                 <a href="{{ route('orders.index') }}" class="list-group-item list-group-item-action border-0 py-3">
                     <i class="bi bi-bag-check text-primary me-3"></i> {{__('auth/perfil/show.my_orders')}}
                 </a>
-                <a href="#" class="list-group-item list-group-item-action border-0 py-3">
+                <a href="{{ route('favorites.index') }}" class="list-group-item list-group-item-action border-0 py-3">
                     <i class="bi bi-heart text-danger me-3"></i> {{__('auth/perfil/show.my_favorites')}}
                 </a>
             </div>

@@ -25,7 +25,7 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item"><a class="nav-link" href="{{ route('products.index') }}">{{__('layouts/app.catalog')}}</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">{{__('layouts/app.favorites')}}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('favorites.index') }}">{{__('layouts/app.favorites')}}</a></li>
                     </ul>
 
                     <ul class="navbar-nav ms-auto align-items-center">

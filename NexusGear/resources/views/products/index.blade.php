@@ -113,6 +113,7 @@
 
     <div class="row g-4">
         @forelse ($products as $product)
+            @php($isFavorite = in_array($product->id, $favoriteProductIds ?? [], true))
             <div class="col-md-6 col-xl-4">
                 <article class="product-card h-100">
                     <a href="{{ route('products.show', $product) }}" class="product-card__media">
@@ -166,6 +167,31 @@
                                 </small>
                             </div>
                             <div class="d-flex gap-2">
+                                @auth
+                                    <form method="POST" action="{{ $isFavorite ? route('favorites.destroy', $product) : route('favorites.store', $product) }}" class="m-0">
+                                        @csrf
+                                        @if ($isFavorite)
+                                            @method('DELETE')
+                                        @endif
+                                        <button
+                                            class="btn {{ $isFavorite ? 'btn-danger' : 'btn-outline-secondary' }} favorite-action"
+                                            type="submit"
+                                            title="{{ $isFavorite ? __('products/index.remove_favorite') : __('products/index.add_favorite') }}"
+                                            aria-label="{{ $isFavorite ? __('products/index.remove_favorite') : __('products/index.add_favorite') }}"
+                                        >
+                                            <i class="bi {{ $isFavorite ? 'bi-heart-fill' : 'bi-heart' }}"></i>
+                                        </button>
+                                    </form>
+                                @else
+                                    <a
+                                        href="{{ route('login') }}"
+                                        class="btn btn-outline-secondary favorite-action"
+                                        title="{{ __('products/index.login_to_favorite') }}"
+                                        aria-label="{{ __('products/index.login_to_favorite') }}"
+                                    >
+                                        <i class="bi bi-heart"></i>
+                                    </a>
+                                @endauth
                                 <a href="{{ route('products.show', $product) }}" class="btn btn-outline-primary">
                                     {{ __('products/index.view_detail') }}
                                 </a>

@@ -1,0 +1,20 @@
+<?php
+return [
+    'title'          => 'お気に入り',
+    'kicker'         => 'あなたのセレクション',
+    'hero_title'     => 'あとでゆっくり確認できる保存済み製品。',
+    'hero_subtitle'  => 'マークした周辺機器をいつでも見直せます。',
+    'list_title'     => 'お気に入り',
+    'count'          => '{0} 保存済み製品はありません|{1} :count 件の保存済み製品|[2,*] :count 件の保存済み製品',
+    'browse_catalog' => 'カタログを見る',
+    'featured_badge' => 'おすすめ',
+    'added_on'       => ':date に保存',
+    'in_stock'       => '在庫あり',
+    'out_of_stock'   => '在庫なし',
+    'remove'         => 'お気に入りから削除',
+    'add_to_cart'    => 'カートに追加',
+    'empty_title'    => 'お気に入りはまだありません',
+    'empty_desc'     => 'カタログから製品をマークすると、ここに表示されます。',
+    'added'          => ':product をお気に入りに追加しました。',
+    'removed'        => ':product をお気に入りから削除しました。',
+];

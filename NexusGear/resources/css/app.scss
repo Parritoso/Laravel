@@ -164,6 +164,14 @@ $font-family-sans-serif: 'Inter', system-ui, -apple-system, sans-serif;
     font-weight: 800;
 }
 
+.favorite-action {
+    display: inline-grid;
+    width: 42px;
+    min-width: 42px;
+    padding-inline: 0;
+    place-items: center;
+}
+
 .empty-state {
     display: grid;
     place-items: center;
@@ -256,6 +264,13 @@ $font-family-sans-serif: 'Inter', system-ui, -apple-system, sans-serif;
     display: grid;
     grid-template-columns: 96px auto;
     gap: .75rem;
+}
+
+.product-detail__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .75rem;
+    justify-content: flex-end;
 }
 
 .product-detail__price {
@@ -485,6 +500,13 @@ $font-family-sans-serif: 'Inter', system-ui, -apple-system, sans-serif;
 
     .add-to-cart-form {
         grid-template-columns: 1fr;
+        width: 100%;
+    }
+
+    .product-detail__actions,
+    .product-detail__actions > form,
+    .product-detail__actions > a,
+    .product-detail__actions button {
         width: 100%;
     }
 }
