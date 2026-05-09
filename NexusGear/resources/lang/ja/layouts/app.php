@@ -9,4 +9,5 @@ return[
     'footer' => 'NexusGear - 健康とエルゴノミクス技術',
     'terms' => '利用規約',
     'contact' => 'お問い合わせ',
+    'dashboard' => 'ダッシュボード',
 ];

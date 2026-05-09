@@ -47,7 +47,7 @@
                                 @if (Auth::user()->isAdmin())
                                 <li>
                                     <a class="dropdown-item fw-semibold text-primary" href="{{ route('admin.dashboard') }}">
-                                        <i class="bi bi-speedometer2 me-1"></i> Panel de control
+                                        <i class="bi bi-speedometer2 me-1"></i> {{__('layouts/app.dashboard')}}
                                     </a>
                                 </li>
                                 <li><hr class="dropdown-divider"></li>
