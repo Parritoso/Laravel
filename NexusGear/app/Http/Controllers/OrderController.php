@@ -62,13 +62,19 @@ class OrderController extends Controller
                         throw new \RuntimeException("No hay suficiente stock de {$producto->nombre}.");
                     }
 
-                    $lineSubtotal = round($item->cantidad * (float) $producto->precio, 2);
+                    $precioOriginal = (float) $producto->precio;
+                    $precioFinalUnitario = (float) $producto->precio_final;
+                    $descuentoPorUnidad = $precioOriginal - $precioFinalUnitario;    
+
+                    $lineSubtotal = round($item->cantidad * (float) $precioFinalUnitario, 2);
                     $subtotal += $lineSubtotal;
 
                     $pedido->lineas()->create([
                         'producto_id' => $producto->id,
                         'cantidad' => $item->cantidad,
-                        'precio_unitario' => $producto->precio,
+                        'precio_original' => $precioOriginal,
+                        'precio_unitario' => $precioFinalUnitario,
+                        'descuento_total' => $descuentoPorUnidad * $item->cantidad,
                         'subtotal' => $lineSubtotal,
                     ]);
 
