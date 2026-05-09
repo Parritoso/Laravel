@@ -13,21 +13,21 @@
                 <a href="{{ route('admin.dashboard') }}" class="text-decoration-none">Admin</a>
             </li>
             <li class="breadcrumb-item">
-                <a href="{{ route('admin.products.index') }}" class="text-decoration-none">Productos</a>
+                <a href="{{ route('admin.products.index') }}" class="text-decoration-none">{{ __('admin/products/show.breadcrumb') }}</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">{{ $producto->nombre }}</li>
         </ol>
     </nav>
     <div class="d-flex gap-2">
         <a href="{{ route('admin.products.edit', $producto) }}" class="btn btn-primary fw-bold shadow-sm">
-            <i class="bi bi-pencil me-1"></i> Editar
+            <i class="bi bi-pencil me-1"></i> {{ __('admin/products/show.edit') }}
         </a>
         <button class="btn btn-danger fw-bold shadow-sm"
                 data-bs-toggle="modal"
                 data-bs-target="#deleteProductShowModal"
                 data-nombre="{{ $producto->nombre }}"
                 data-action="{{ route('admin.products.destroy', $producto) }}">
-            <i class="bi bi-trash me-1"></i> Eliminar
+            <i class="bi bi-trash me-1"></i> {{ __('admin/products/show.delete') }}
         </button>
     </div>
 </div>
@@ -41,7 +41,7 @@
                     <i class="bi bi-bag-check fs-3"></i>
                 </div>
                 <div>
-                    <h6 class="text-muted mb-0">Unidades vendidas</h6>
+                    <h6 class="text-muted mb-0">{{ __('admin/products/show.stat_sold') }}</h6>
                     <h4 class="fw-bold mb-0">{{ $totalVendidas }}</h4>
                 </div>
             </div>
@@ -54,7 +54,7 @@
                     <i class="bi bi-cash-stack fs-3"></i>
                 </div>
                 <div>
-                    <h6 class="text-muted mb-0">Ingresos generados</h6>
+                    <h6 class="text-muted mb-0">{{ __('admin/products/show.stat_revenue') }}</h6>
                     <h4 class="fw-bold mb-0">{{ $ingresosFormateados }}</h4>
                 </div>
             </div>
@@ -67,7 +67,7 @@
                     <i class="bi bi-heart fs-3"></i>
                 </div>
                 <div>
-                    <h6 class="text-muted mb-0">En favoritos</h6>
+                    <h6 class="text-muted mb-0">{{ __('admin/products/show.stat_favorites') }}</h6>
                     <h4 class="fw-bold mb-0">{{ $totalFavoritos }}</h4>
                 </div>
             </div>
@@ -80,7 +80,7 @@
                     <i class="bi bi-cart3 fs-3"></i>
                 </div>
                 <div>
-                    <h6 class="text-muted mb-0">En carritos ahora</h6>
+                    <h6 class="text-muted mb-0">{{ __('admin/products/show.stat_carts') }}</h6>
                     <h4 class="fw-bold mb-0">{{ $totalCarrito }}</h4>
                 </div>
             </div>
@@ -97,9 +97,9 @@
         {{-- Información del producto --}}
         <div class="card border-0 shadow-sm mb-4">
             <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
-                <h5 class="fw-bold mb-0">Información del producto</h5>
+                <h5 class="fw-bold mb-0">{{ __('admin/products/show.product_info') }}</h5>
                 @if ($producto->destacado)
-                    <span class="badge bg-primary">Destacado</span>
+                    <span class="badge bg-primary">{{ __('admin/products/show.badge_featured') }}</span>
                 @endif
             </div>
             <div class="card-body p-4">
@@ -122,14 +122,14 @@
                 <div class="row g-3">
                     <div class="col-sm-4">
                         <div class="border rounded-3 p-3 text-center">
-                            <div class="text-muted small mb-1">Precio base</div>
+                            <div class="text-muted small mb-1">{{ __('admin/products/show.base_price') }}</div>
                             <div class="fw-bold fs-5">{{ $producto->precio_formateado }}</div>
                         </div>
                     </div>
                     @if ($precioFinal !== null)
                         <div class="col-sm-4">
                             <div class="border border-success rounded-3 p-3 text-center">
-                                <div class="text-success small mb-1">Precio con descuento</div>
+                                <div class="text-success small mb-1">{{ __('admin/products/show.discounted_price') }}</div>
                                 <div class="fw-bold fs-5 text-success">
                                     {{ number_format($precioFinal, 2, ',', '.') }} €
                                 </div>
@@ -138,11 +138,11 @@
                     @endif
                     <div class="col-sm-4">
                         <div class="border rounded-3 p-3 text-center">
-                            <div class="text-muted small mb-1">Stock</div>
+                            <div class="text-muted small mb-1">{{ __('admin/products/show.stock_label') }}</div>
                             <div class="fw-bold fs-5 {{ $producto->stock <= 5 ? 'text-danger' : 'text-success' }}">
-                                {{ $producto->stock }} uds
+                                {{ $producto->stock }} {{ __('admin/products/show.units_short') }}
                                 @if ($producto->stock <= 5)
-                                    <span class="badge text-bg-danger ms-1">Bajo</span>
+                                    <span class="badge text-bg-danger ms-1">{{ __('admin/products/show.low_stock') }}</span>
                                 @endif
                             </div>
                         </div>
@@ -151,15 +151,15 @@
 
                 <div class="mt-3 pt-3 border-top">
                     <div class="d-flex justify-content-between mb-2">
-                        <span class="text-muted">Categoría</span>
+                        <span class="text-muted">{{ __('admin/products/show.category_label') }}</span>
                         <strong>{{ $producto->perfil_nombre }}</strong>
                     </div>
                     <div class="d-flex justify-content-between">
-                        <span class="text-muted">Disponible en tienda</span>
+                        <span class="text-muted">{{ __('admin/products/show.available_label') }}</span>
                         @if ($producto->disponible)
-                            <span class="badge text-bg-success">Sí</span>
+                            <span class="badge text-bg-success">{{ __('admin/products/index.yes') }}</span>
                         @else
-                            <span class="badge text-bg-danger">Sin stock</span>
+                            <span class="badge text-bg-danger">{{ __('admin/products/show.out_of_stock') }}</span>
                         @endif
                     </div>
                 </div>
@@ -169,17 +169,17 @@
         {{-- Últimas ventas --}}
         <div class="card border-0 shadow-sm">
             <div class="card-header bg-white border-0 py-3">
-                <h5 class="fw-bold mb-0">Últimas ventas</h5>
+                <h5 class="fw-bold mb-0">{{ __('admin/products/show.recent_sales') }}</h5>
             </div>
             <div class="table-responsive p-3">
                 <table class="table align-middle">
                     <thead class="table-light">
                         <tr>
-                            <th>Pedido</th>
-                            <th>Fecha</th>
-                            <th>Cantidad</th>
-                            <th>Precio ud.</th>
-                            <th class="text-end">Subtotal</th>
+                            <th>{{ __('admin/products/show.col_order') }}</th>
+                            <th>{{ __('admin/products/show.col_date') }}</th>
+                            <th>{{ __('admin/products/show.col_qty') }}</th>
+                            <th>{{ __('admin/products/show.col_unit_price') }}</th>
+                            <th class="text-end">{{ __('admin/products/show.col_subtotal') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -200,7 +200,7 @@
                             <tr>
                                 <td colspan="5" class="text-center py-4 text-muted">
                                     <i class="bi bi-inbox fs-3 d-block mb-2"></i>
-                                    Este producto aún no tiene ventas.
+                                    {{ __('admin/products/show.no_sales') }}
                                 </td>
                             </tr>
                         @endforelse
@@ -217,7 +217,7 @@
         {{-- Descuentos asociados --}}
         <div class="card border-0 shadow-sm mb-4">
             <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
-                <h5 class="fw-bold mb-0">Descuentos</h5>
+                <h5 class="fw-bold mb-0">{{ __('admin/products/show.discounts_title') }}</h5>
                 <span class="badge text-bg-secondary">{{ $producto->descuentos->count() }}</span>
             </div>
             <div class="card-body p-4">
@@ -227,30 +227,30 @@
                             <div class="fw-bold">{{ $desc->codigo }}</div>
                             <small class="text-muted">
                                 @if ($desc->tipo === 'porcentaje')
-                                    {{ $desc->valor }}% de descuento
+                                    {{ __('admin/products/show.discount_pct', ['value' => $desc->valor]) }}
                                 @else
-                                    {{ number_format($desc->valor, 2, ',', '.') }} € de descuento
+                                    {{ __('admin/products/show.discount_fixed', ['value' => number_format($desc->valor, 2, ',', '.')]) }}
                                 @endif
                             </small>
                             <div class="text-muted small mt-1">
-                                Caduca: {{ $desc->fecha_fin->format('d/m/Y') }}
+                                {{ __('admin/products/show.expires_label') }} {{ $desc->fecha_fin->format('d/m/Y') }}
                             </div>
                         </div>
                         @if ($desc->esValido())
-                            <span class="badge text-bg-success">Activo</span>
+                            <span class="badge text-bg-success">{{ __('admin/products/show.badge_active') }}</span>
                         @else
-                            <span class="badge text-bg-danger">Caducado</span>
+                            <span class="badge text-bg-danger">{{ __('admin/products/show.badge_expired') }}</span>
                         @endif
                     </div>
                 @empty
-                    <p class="text-muted mb-0">No hay descuentos asociados.</p>
+                    <p class="text-muted mb-0">{{ __('admin/products/show.no_discounts') }}</p>
                 @endforelse
             </div>
         </div>
 
         {{-- Volver --}}
         <a href="{{ route('admin.products.index') }}" class="btn btn-outline-dark w-100 fw-semibold">
-            <i class="bi bi-arrow-left me-1"></i> Volver al listado
+            <i class="bi bi-arrow-left me-1"></i> {{ __('admin/products/show.back') }}
         </a>
 
     </div>

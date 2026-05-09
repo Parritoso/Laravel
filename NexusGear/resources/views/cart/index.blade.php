@@ -1,26 +1,26 @@
 @extends('layouts.app')
 
-@section('title', 'Carrito')
+@section('title', __('cart/index.title'))
 
 @section('content')
 <section class="cart-header mb-4">
     <div>
-        <span class="catalog-kicker text-primary">Carrito</span>
-        <h1 class="h2 fw-bold mb-1">Tu selección</h1>
+        <span class="catalog-kicker text-primary">{{ __('cart/index.title') }}</span>
+        <h1 class="h2 fw-bold mb-1">{{ __('cart/index.heading') }}</h1>
         <p class="text-muted mb-0">{{ $cart->cantidad_total }} producto{{ $cart->cantidad_total === 1 ? '' : 's' }} en el carrito</p>
     </div>
 
     <a href="{{ route('products.index') }}" class="btn btn-outline-dark">
-        <i class="bi bi-arrow-left me-1"></i> Seguir comprando
+        <i class="bi bi-arrow-left me-1"></i> {{ __('cart/index.continue_shopping') }}
     </a>
 </section>
 
 @if ($cart->items->isEmpty())
     <section class="empty-state">
         <i class="bi bi-cart3"></i>
-        <h2 class="h4 fw-bold">El carrito está vacío</h2>
-        <p class="text-muted mb-3">Añade algún periférico del catálogo para preparar tu pedido.</p>
-        <a href="{{ route('products.index') }}" class="btn btn-primary">Ver catálogo</a>
+        <h2 class="h4 fw-bold">{{ __('cart/index.empty_title') }}</h2>
+        <p class="text-muted mb-3">{{ __('cart/index.empty_desc') }}</p>
+        <a href="{{ route('products.index') }}" class="btn btn-primary">{{ __('cart/index.view_catalog') }}</a>
     </section>
 @else
     <section class="cart-layout">
@@ -48,7 +48,6 @@
                                     {{ $item->producto->nombre }}
                                 </a>
                             </h2>
-                            {{-- <p class="text-muted mb-0">{{ $item->precio_actual_formateado }} unidad</p> --}}
                             <p class="mb-0">
                                 @if($tieneDescuento)
                                     <span class="text-muted text-decoration-line-through small me-1">
@@ -60,7 +59,7 @@
                                 @else
                                     <span class="text-muted">{{ $item->precio_actual_formateado }}</span>
                                 @endif
-                                <small class="text-muted">/ unidad</small>
+                                <small class="text-muted">{{ __('cart/index.per_unit') }}</small>
                             </p>
                         </div>
 
@@ -68,7 +67,7 @@
                             <form method="POST" action="{{ route('cart.update', $item->producto) }}" class="cart-quantity-form">
                                 @csrf
                                 @method('PATCH')
-                                <label for="cantidad-{{ $item->producto_id }}" class="form-label small text-muted mb-1">Cantidad</label>
+                                <label for="cantidad-{{ $item->producto_id }}" class="form-label small text-muted mb-1">{{ __('cart/index.quantity') }}</label>
                                 <div class="input-group">
                                     <input
                                         id="cantidad-{{ $item->producto_id }}"
@@ -79,7 +78,7 @@
                                         max="{{ max($item->producto->stock, 1) }}"
                                         class="form-control"
                                     >
-                                    <button class="btn btn-outline-primary" type="submit">Actualizar</button>
+                                    <button class="btn btn-outline-primary" type="submit">{{ __('cart/index.update') }}</button>
                                 </div>
                             </form>
 
@@ -87,17 +86,17 @@
                                 @csrf
                                 @method('DELETE')
                                 <button class="btn btn-link text-danger text-decoration-none px-0" type="submit">
-                                    <i class="bi bi-trash me-1"></i> Eliminar
+                                    <i class="bi bi-trash me-1"></i> {{ __('cart/index.remove') }}
                                 </button>
                             </form>
                         </div>
 
                         <div class="cart-item__subtotal">
-                            <span>Subtotal</span>
+                            <span>{{ __('cart/index.subtotal') }}</span>
                             <strong>{{ $item->subtotal_formateado }}</strong>
                             @if($tieneDescuento)
                                 <small class="text-success fw-medium">
-                                    ¡Ahorras {{ number_format($ahorroUnitario * $item->cantidad, 2, ',', '.') }} €!
+                                    {{ __('cart/index.savings', ['amount' => number_format($ahorroUnitario * $item->cantidad, 2, ',', '.')]) }}
                                 </small>
                             @endif
                         </div>
@@ -107,13 +106,13 @@
         </div>
 
         <aside class="cart-summary">
-            <h2 class="h5 fw-bold mb-3">Resumen</h2>
+            <h2 class="h5 fw-bold mb-3">{{ __('cart/index.summary') }}</h2>
             <div class="cart-summary__line">
-                <span>Productos</span>
+                <span>{{ __('cart/index.items_count') }}</span>
                 <strong>{{ $cart->cantidad_total }}</strong>
             </div>
             <div class="cart-summary__line">
-                <span>Subtotal</span>
+                <span>{{ __('cart/index.subtotal') }}</span>
                 <strong>{{ $cart->total_formateado }}</strong>
             </div>
             @php
@@ -125,17 +124,17 @@
 
             @if($ahorroTotal > 0)
                 <div class="cart-summary__line text-success">
-                    <span>Descuentos aplicados</span>
+                    <span>{{ __('cart/index.discounts') }}</span>
                     <strong>- {{ number_format($ahorroTotal, 2, ',', '.') }} €</strong>
                 </div>
             @endif
             <div class="cart-summary__line text-muted">
-                <span>Envío</span>
-                <span>Se calcula al tramitar</span>
+                <span>{{ __('cart/index.shipping') }}</span>
+                <span>{{ __('cart/index.shipping_calc') }}</span>
             </div>
             <hr>
             <div class="cart-summary__total">
-                <span>Total estimado</span>
+                <span>{{ __('cart/index.estimated_total') }}</span>
                 <strong>{{ $cart->total_formateado }}</strong>
             </div>
 
@@ -143,22 +142,22 @@
                 <form method="GET" action="{{ route('checkout.index') }}">
                     @csrf
                     <button class="btn btn-primary btn-lg w-100 mt-3" type="submit">
-                        Tramitar pedido
+                        {{ __('cart/index.checkout') }}
                     </button>
                 </form>
             @else
                 <a href="{{ route('login') }}" class="btn btn-primary btn-lg w-100 mt-3">
-                    <i class="bi bi-box-arrow-in-right me-1"></i> Inicia sesión para tramitar
+                    <i class="bi bi-box-arrow-in-right me-1"></i> {{ __('cart/index.login_to_checkout') }}
                 </a>
-                <p class="text-muted small text-center mt-2 mb-0">Tu carrito se conservará al iniciar sesión.</p>
+                <p class="text-muted small text-center mt-2 mb-0">{{ __('cart/index.cart_persist') }}</p>
             @endauth
-            <a href="{{ route('products.index') }}" class="btn btn-outline-dark w-100 mt-2">Añadir más productos</a>
+            <a href="{{ route('products.index') }}" class="btn btn-outline-dark w-100 mt-2">{{ __('cart/index.add_more') }}</a>
 
             <form method="POST" action="{{ route('cart.clear') }}" class="mt-3">
                 @csrf
                 @method('DELETE')
                 <button class="btn btn-link text-danger text-decoration-none w-100" type="submit">
-                    Vaciar carrito
+                    {{ __('cart/index.clear') }}
                 </button>
             </form>
         </aside>

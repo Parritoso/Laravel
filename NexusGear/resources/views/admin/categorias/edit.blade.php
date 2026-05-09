@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
-@section('title', 'Editar categoría')
-@section('page-title', 'Editar categoría')
+@section('title', __('admin/categorias/edit.title'))
+@section('page-title', __('admin/categorias/edit.title'))
 
 @section('content')
 <form method="POST" action="{{ route('admin.categorias.update', $categoria) }}">

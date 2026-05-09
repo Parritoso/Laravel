@@ -1,21 +1,21 @@
 @extends('layouts.admin')
 
-@section('title', 'Pedidos')
-@section('page-title', 'Pedidos')
+@section('title', __('admin/orders/index.title'))
+@section('page-title', __('admin/orders/index.title'))
 
 @section('content')
 <div class="card border-0 shadow-sm">
     <div class="card-header bg-white border-0 py-3">
         <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
-            <h5 class="fw-bold mb-0">Pedidos de clientes</h5>
+            <h5 class="fw-bold mb-0">{{ __('admin/orders/index.card_title') }}</h5>
             <form method="GET" action="{{ route('admin.orders.index') }}" class="d-flex gap-2">
                 <select name="estado" class="form-select">
-                    <option value="">Todos los estados</option>
+                    <option value="">{{ __('admin/orders/index.all_statuses') }}</option>
                     @foreach ($statuses as $value => $label)
                         <option value="{{ $value }}" @selected(($filters['estado'] ?? '') === $value)>{{ $label }}</option>
                     @endforeach
                 </select>
-                <button class="btn btn-dark" type="submit">Filtrar</button>
+                <button class="btn btn-dark" type="submit">{{ __('admin/orders/index.filter') }}</button>
             </form>
         </div>
     </div>
@@ -24,13 +24,13 @@
         <table class="table table-hover align-middle">
             <thead>
                 <tr>
-                    <th>Pedido</th>
-                    <th>Cliente</th>
-                    <th>Factura</th>
-                    <th>Fecha</th>
-                    <th>Estado</th>
-                    <th>Total</th>
-                    <th class="text-end">Acciones</th>
+                    <th>{{ __('admin/orders/index.col_order') }}</th>
+                    <th>{{ __('admin/orders/index.col_client') }}</th>
+                    <th>{{ __('admin/orders/index.col_invoice') }}</th>
+                    <th>{{ __('admin/orders/index.col_date') }}</th>
+                    <th>{{ __('admin/orders/index.col_status') }}</th>
+                    <th>{{ __('admin/orders/index.col_total') }}</th>
+                    <th class="text-end">{{ __('admin/orders/index.col_actions') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -47,13 +47,13 @@
                         <td class="fw-bold">{{ $order->factura->total_formateado }}</td>
                         <td class="text-end">
                             <a href="{{ route('admin.orders.show', $order) }}" class="btn btn-sm btn-outline-primary">
-                                Ver detalle
+                                {{ __('admin/orders/index.view') }}
                             </a>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" class="text-center py-5 text-muted">No hay pedidos para mostrar.</td>
+                        <td colspan="7" class="text-center py-5 text-muted">{{ __('admin/orders/index.empty') }}</td>
                     </tr>
                 @endforelse
             </tbody>

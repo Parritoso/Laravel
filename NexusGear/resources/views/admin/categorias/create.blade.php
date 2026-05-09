@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
-@section('title', 'Nueva categoría')
-@section('page-title', 'Nueva categoría')
+@section('title', __('admin/categorias/create.title'))
+@section('page-title', __('admin/categorias/create.title'))
 
 @section('content')
 <form method="POST" action="{{ route('admin.categorias.store') }}">

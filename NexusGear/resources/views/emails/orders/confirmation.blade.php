@@ -2,25 +2,25 @@
 <html lang="es">
 <head>
     <meta charset="utf-8">
-    <title>Confirmación de pedido</title>
+    <title>{{ __('email/orders/confirmation.title') }}</title>
 </head>
 <body style="font-family: Arial, sans-serif; color: #2D3748; line-height: 1.5;">
-    <h1 style="color: #117864;">Pedido confirmado</h1>
-    <p>Hola {{ $order->usuario->name }}, hemos recibido tu pedido #{{ $order->id }}.</p>
+    <h1 style="color: #117864;">{{ __('email/orders/confirmation.heading') }}</h1>
+    <p>{{ __('email/orders/confirmation.greeting', ['name' => $order->usuario->name, 'id' => $order->id]) }}</p>
 
     <p>
-        <strong>Factura:</strong> {{ $order->factura->numero_factura }}<br>
-        <strong>Estado:</strong> {{ $order->estado_label }}<br>
-        <strong>Fecha:</strong> {{ $order->fecha_formateada }}
+        <strong>{{ __('email/orders/confirmation.invoice_label') }}</strong> {{ $order->factura->numero_factura }}<br>
+        <strong>{{ __('email/orders/confirmation.status_label') }}</strong> {{ $order->estado_label }}<br>
+        <strong>{{ __('email/orders/confirmation.date_label') }}</strong> {{ $order->fecha_formateada }}
     </p>
 
     <table width="100%" cellpadding="8" cellspacing="0" style="border-collapse: collapse;">
         <thead>
             <tr style="background: #f8fafc;">
-                <th align="left">Producto</th>
-                <th align="right">Cantidad</th>
-                <th align="right">Precio</th>
-                <th align="right">Subtotal</th>
+                <th align="left">{{ __('email/orders/confirmation.col_product') }}</th>
+                <th align="right">{{ __('email/orders/confirmation.col_qty') }}</th>
+                <th align="right">{{ __('email/orders/confirmation.col_price') }}</th>
+                <th align="right">{{ __('email/orders/confirmation.col_subtotal') }}</th>
             </tr>
         </thead>
         <tbody>
@@ -36,9 +36,9 @@
     </table>
 
     <p align="right">
-        Subtotal: <strong>{{ $order->factura->subtotal_formateado }}</strong><br>
-        IVA: <strong>{{ $order->factura->iva_formateado }}</strong><br>
-        Total: <strong>{{ $order->factura->total_formateado }}</strong>
+        {{ __('email/orders/confirmation.summary_subtotal') }} <strong>{{ $order->factura->subtotal_formateado }}</strong><br>
+        {{ __('email/orders/confirmation.summary_iva') }} <strong>{{ $order->factura->iva_formateado }}</strong><br>
+        {{ __('email/orders/confirmation.summary_total') }} <strong>{{ $order->factura->total_formateado }}</strong>
     </p>
 </body>
 </html>
