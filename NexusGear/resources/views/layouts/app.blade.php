@@ -52,7 +52,7 @@
                                 </li>
                                 <li><hr class="dropdown-divider"></li>
                                 @endif
-                                <li><a class="dropdown-item" href="#">{{__('layouts/app.profile')}}</a></li>
+                                <li><a class="dropdown-item" href="{{ route('profile') }}">{{__('layouts/app.profile')}}</a></li>
                                 <li><a class="dropdown-item" href="{{ route('orders.index') }}">{{__('layouts/app.orders')}}</a></li>
                                 <li>
                                     <hr class="dropdown-divider">

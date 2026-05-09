@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\DiscountController as AdminDiscountController;
 use App\Http\Controllers\OnboardingController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\DireccionController;
 use App\Models\Pedido;
@@ -67,7 +68,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/onboarding', [OnboardingController::class, 'index'])->name('onboarding.index');
     Route::post('/onboarding', [OnboardingController::class, 'store'])->name('onboarding.store');
+    Route::get('/profile', [ProfileController::class,'show'])->name('profile');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/direcciones', [DireccionController::class, 'store'])->name('direcciones.store');
     Route::delete('/direcciones/{direccion}', [DireccionController::class, 'destroy'])->name('direcciones.destroy');
     Route::put('/direcciones/{direccion}', [DireccionController::class, 'update'])->name('direcciones.update');
+});
+
+Route::middleware(['auth', 'verified', 'password.confirm'])->group(function () {
+    Route::get('/profile/password', [ProfileController::class, 'editPassword'])->name('profile.password.edit');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
 });
