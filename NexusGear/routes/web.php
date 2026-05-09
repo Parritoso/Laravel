@@ -8,6 +8,8 @@ use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\DiscountController as AdminDiscountController;
 use App\Http\Controllers\OnboardingController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\DireccionController;
 use App\Models\Pedido;
 use App\Models\Producto;
 use Illuminate\Support\Facades\Route;
@@ -58,10 +60,14 @@ Route::delete('/carrito/productos/{producto}', [CartController::class, 'destroy'
 Route::delete('/carrito', [CartController::class, 'clear'])->name('cart.clear');
 
 Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout', [OrderController::class, 'store'])->name('checkout.store');
     Route::get('/pedidos', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/pedidos/{pedido}', [OrderController::class, 'show'])->name('orders.show');
 
     Route::get('/onboarding', [OnboardingController::class, 'index'])->name('onboarding.index');
     Route::post('/onboarding', [OnboardingController::class, 'store'])->name('onboarding.store');
+    Route::post('/direcciones', [DireccionController::class, 'store'])->name('direcciones.store');
+    Route::delete('/direcciones/{direccion}', [DireccionController::class, 'destroy'])->name('direcciones.destroy');
+    Route::put('/direcciones/{direccion}', [DireccionController::class, 'update'])->name('direcciones.update');
 });

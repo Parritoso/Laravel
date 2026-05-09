@@ -17,6 +17,11 @@ class Pedido extends Model
         'usuario_id',
         'estado',
         'fecha',
+        'envio_calle',
+        'envio_numero',
+        'envio_ciudad',
+        'envio_codigo_postal',
+        'direccion_id',
     ];
 
     protected $casts = [
@@ -63,5 +68,9 @@ class Pedido extends Model
     public function lineas(): HasMany
     {
         return $this->hasMany(LineaPedido::class, 'pedido_id');
+    }
+
+    public function getDireccionCompletaAttribute() {
+        return "{$this->envio_calle}, {$this->envio_ciudad} ({$this->envio_codigo_postal})";
     }
 }

@@ -7,6 +7,7 @@ use App\Models\Carrito;
 use App\Models\Pedido;
 use App\Models\Producto;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -27,7 +28,7 @@ class OrderController extends Controller
         ]);
     }
 
-    public function store(): RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         $cart = $this->currentCart()->load('items.producto');
 
@@ -45,12 +46,51 @@ class OrderController extends Controller
             }
         }
 
+        $request->validate([
+            'direccion_id' => 'required',
+            'address' => 'required_if:direccion_id,new|nullable|string|max:255',
+            'city' => 'required_if:direccion_id,new|nullable|string|max:100',
+            'zip_code' => 'required_if:direccion_id,new|nullable|string|max:10',
+        ]);
+
         try {
-            $pedido = DB::transaction(function () use ($cart) {
+            $pedido = DB::transaction(function () use ($cart, $request) {
+                $user = Auth::user();
+
+                $dir = null;
+                if ($request->direccion_id === 'new') {
+                    $finalAddress = $request->address;
+                    $finalCity = $request->city;
+                    $finalZip = $request->zip_code;
+                    $finalNumber = $request->number;
+
+                    if ($request->has('save_address')) {
+                        $dir = $user->direcciones()->create([
+                            'calle' => $finalAddress,
+                            'numero' => $finalNumber,
+                            'ciudad' => $finalCity,
+                            'codigo_postal' => $finalZip,
+                        ]);
+                        $dir = $dir->id;
+                    }
+                } else {
+                    $dir = $user->direcciones()->findOrFail($request->direccion_id);
+                    $finalAddress = $dir->calle;
+                    $finalNumber = $dir->numero;
+                    $finalCity = $dir->ciudad;
+                    $finalZip = $dir->codigo_postal;
+                    $dir = $dir->id;
+                }
+
                 $pedido = Pedido::create([
                     'usuario_id' => Auth::id(),
                     'estado' => 'pendiente',
                     'fecha' => now(),
+                    'envio_calle' => $finalAddress,
+                    'envio_numero' => $finalNumber,
+                    'envio_ciudad' => $finalCity,
+                    'envio_codigo_postal' => $finalZip,
+                    'direccion_id' => $dir,
                 ]);
 
                 $subtotal = 0.0;

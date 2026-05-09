@@ -140,7 +140,7 @@
             </div>
 
             @auth
-                <form method="POST" action="{{ route('checkout.store') }}">
+                <form method="GET" action="{{ route('checkout.index') }}">
                     @csrf
                     <button class="btn btn-primary btn-lg w-100 mt-3" type="submit">
                         Tramitar pedido
