@@ -1,0 +1,21 @@
+<?php
+return [
+    'heading'        => '注文を完了',
+    'shipping_title' => 'どこに配送しますか？',
+    'address_default'=> '住所',
+    'new_address'    => '新しい住所',
+    'street_label'   => '通り',
+    'number_label'   => '番号',
+    'city_label'     => '市区町村',
+    'zip_label'      => '郵便番号',
+    'save_address'   => 'アドレス帳に保存',
+    'payment_title'  => '支払い方法',
+    'payment_card'   => 'クレジット / デビットカード',
+    'summary_title'  => '注文概要',
+    'subtotal'       => '小計',
+    'shipping_label' => 'NexusGear 配送',
+    'free'           => '無料',
+    'total_label'    => '合計',
+    'submit'         => '確認して支払う',
+    'secure_payment' => '暗号化された安全な支払い',
+];

@@ -1,0 +1,21 @@
+<?php
+return [
+    'heading'        => 'Finalizar Encomenda',
+    'shipping_title' => 'Para onde enviamos o teu equipamento?',
+    'address_default'=> 'Morada',
+    'new_address'    => 'Nova Morada',
+    'street_label'   => 'Rua',
+    'number_label'   => 'Número',
+    'city_label'     => 'Cidade',
+    'zip_label'      => 'C.P.',
+    'save_address'   => 'Guardar na minha lista de moradas',
+    'payment_title'  => 'Método de Pagamento',
+    'payment_card'   => 'Cartão de Crédito / Débito',
+    'summary_title'  => 'Resumo da Encomenda',
+    'subtotal'       => 'Subtotal',
+    'shipping_label' => 'Envio NexusGear',
+    'free'           => 'Grátis',
+    'total_label'    => 'Total',
+    'submit'         => 'Confirmar e Pagar',
+    'secure_payment' => 'Pagamento seguro encriptado',
+];

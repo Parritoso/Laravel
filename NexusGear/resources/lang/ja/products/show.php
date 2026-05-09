@@ -1,0 +1,18 @@
+<?php
+return [
+    'breadcrumb'       => 'カタログ',
+    'badge_featured'   => 'おすすめ',
+    'badge_offer'      => 'オファー',
+    'units_available'  => ':stock 個利用可能',
+    'out_of_stock'     => '製品在庫なし',
+    'qty_label'        => '数量',
+    'add_to_cart'      => '追加',
+    'use_label'        => 'おすすめの使用',
+    'shipping_label'   => '配送',
+    'shipping_time'    => '24-48 時間',
+    'warranty_label'   => '保証',
+    'warranty_time'    => '2 年',
+    'related_kicker'   => 'また適合',
+    'related_title'    => '同じプロファイルの製品',
+    'view_profile'     => 'プロファイルを見る',
+];

@@ -1,0 +1,21 @@
+<?php
+return [
+    'heading'        => 'Complete Order',
+    'shipping_title' => 'Where should we ship your gear?',
+    'address_default'=> 'Address',
+    'new_address'    => 'New Address',
+    'street_label'   => 'Street',
+    'number_label'   => 'Number',
+    'city_label'     => 'City',
+    'zip_label'      => 'ZIP',
+    'save_address'   => 'Save to my address book',
+    'payment_title'  => 'Payment Method',
+    'payment_card'   => 'Credit / Debit Card',
+    'summary_title'  => 'Order Summary',
+    'subtotal'       => 'Subtotal',
+    'shipping_label' => 'NexusGear Shipping',
+    'free'           => 'Free',
+    'total_label'    => 'Total',
+    'submit'         => 'Confirm & Pay',
+    'secure_payment' => 'Encrypted secure payment',
+];
