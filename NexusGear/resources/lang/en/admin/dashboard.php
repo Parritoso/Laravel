@@ -17,4 +17,5 @@ return [
     'manage'=> 'Manage',
     'units'=> ':count units',
     'no_products'=> 'No products registered.',
+    'most_wanted'=> 'Top Favorites',
 ];

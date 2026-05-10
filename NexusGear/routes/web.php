@@ -41,6 +41,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
             'pendingOrderCount' => Pedido::whereIn('estado', ['pendiente', 'procesando'])->count(),
             'recentOrders' => Pedido::with('usuario', 'factura')->latest('fecha')->take(5)->get(),
             'lowStockProducts' => Producto::orderBy('stock')->take(5)->get(),
+            'topFavorites' => Producto::has('favoritos') ->withCount('favoritos')->orderBy('favoritos_count', 'desc')->take(5)->get(),
         ]);
     })->name('dashboard');
 
