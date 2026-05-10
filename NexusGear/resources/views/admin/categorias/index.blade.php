@@ -32,6 +32,9 @@
                         </td>
                         <td class="text-end">
                             <div class="d-flex gap-1 justify-content-end">
+                                <a href="{{ route('admin.categorias.show', $categoria) }}" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-eye me-1"></i> {{ __('admin/categorias/index.view') }}
+                                </a>
                                 <a href="{{ route('admin.categorias.edit', $categoria) }}" class="btn btn-sm btn-outline-secondary">
                                     <i class="bi bi-pencil me-1"></i> {{ __('admin/categorias/index.edit') }}
                                 </a>

@@ -107,6 +107,24 @@ class AdminPanelTest extends TestCase
         Mail::assertSent(OrderConfirmationMail::class);
     }
 
+    public function test_admin_can_view_category_detail_with_products(): void
+    {
+        $this->seed(ProductSeeder::class);
+
+        $admin = $this->adminUser();
+        $category = Categoria::where('slug', 'gamer')->firstOrFail();
+        $product = Producto::where('nombre', 'Aqua Keys 60')->firstOrFail();
+
+        $this->actingAs($admin)
+            ->get(route('admin.categorias.show', $category))
+            ->assertOk()
+            ->assertSee($category->nombre)
+            ->assertSee($category->slug)
+            ->assertSee($product->nombre)
+            ->assertSee(__('admin/categorias/show.stat_products'))
+            ->assertSee(__('admin/categorias/show.products_title'));
+    }
+
     private function adminUser(): User
     {
         $admin = User::factory()->create();

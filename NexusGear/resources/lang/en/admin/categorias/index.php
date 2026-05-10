@@ -7,6 +7,7 @@ return [
     'col_slug'            => 'Slug',
     'col_products'        => 'Products',
     'col_actions'         => 'Actions',
+    'view'                => 'View',
     'edit'                => 'Edit',
     'delete'              => 'Delete',
     'empty'               => 'No categories created.',

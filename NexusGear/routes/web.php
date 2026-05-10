@@ -45,7 +45,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     })->name('dashboard');
 
     Route::resource('products', AdminProductController::class)->parameters(['products' => 'producto']);
-    Route::resource('categorias', AdminCategoriaController::class)->except('show');
+    Route::resource('categorias', AdminCategoriaController::class);
     Route::resource('discounts', AdminDiscountController::class);
     Route::get('orders', [AdminOrderController::class, 'index'])->name('orders.index');
     Route::get('orders/{pedido}', [AdminOrderController::class, 'show'])->name('orders.show');
