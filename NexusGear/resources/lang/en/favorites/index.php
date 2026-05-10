@@ -1,0 +1,20 @@
+<?php
+return [
+    'title'          => 'Favorites',
+    'kicker'         => 'Your selection',
+    'hero_title'     => 'Saved products to review at your own pace.',
+    'hero_subtitle'  => 'Check the peripherals you marked and come back to them whenever you want.',
+    'list_title'     => 'My favorites',
+    'count'          => '{0} No saved products|{1} :count saved product|[2,*] :count saved products',
+    'browse_catalog' => 'View catalog',
+    'featured_badge' => 'Featured',
+    'added_on'       => 'Saved on :date',
+    'in_stock'       => 'in stock',
+    'out_of_stock'   => 'Out of stock',
+    'remove'         => 'Remove from favorites',
+    'add_to_cart'    => 'Add to cart',
+    'empty_title'    => 'You do not have favorites yet',
+    'empty_desc'     => 'Mark products from the catalog to keep them close.',
+    'added'          => ':product added to favorites.',
+    'removed'        => ':product removed from favorites.',
+];

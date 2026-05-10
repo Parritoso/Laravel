@@ -7,6 +7,7 @@ return [
     'col_slug'            => 'Slug',
     'col_products'        => 'Productos',
     'col_actions'         => 'Acciones',
+    'view'                => 'Ver',
     'edit'                => 'Editar',
     'delete'              => 'Eliminar',
     'empty'               => 'No hay categorías creadas.',

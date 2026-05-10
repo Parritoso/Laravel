@@ -8,5 +8,6 @@ return[
     'orders' => 'Orders',
     'go_to_store' => 'Go to store',
     'logout' => 'Logout',
-    'discounts'=> 'Descuentos',
+    'discounts'=> 'Discounts',
+    'close' => 'Close',
 ];

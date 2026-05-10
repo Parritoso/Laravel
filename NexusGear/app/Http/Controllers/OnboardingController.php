@@ -34,6 +34,6 @@ class OnboardingController extends Controller
         ]);
 
         // Una vez completado, al Home
-        return redirect()->route('home')->with('success', '¡Perfil configurado correctamente!');
+        return redirect()->route('home')->with('success', __('messages.onboarding_completed'));
     }
 }

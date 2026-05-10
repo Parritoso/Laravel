@@ -4,6 +4,12 @@
 @section('page-title', __('admin/dashboard.dashboard'))
 
 @section('content')
+<style>
+    .hover-primary:hover {
+        color: #0d6efd !important;
+        text-decoration: underline !important;
+    }
+</style>
 <div class="row g-4 mb-4">
     <div class="col-md-3">
         <div class="card border-0 shadow-sm p-3">
@@ -118,6 +124,61 @@
                 @endforelse
             </div>
         </div>
+    </div>
+    <div class="card border-0 shadow-sm h-100">
+        <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
+            <h5 class="fw-bold mb-0">
+                <i class="bi bi-heart-fill text-danger me-2"></i>{{ __('admin/dashboard.most_wanted') }}
+            </h5>
+            <span class="badge rounded-pill bg-light text-dark border">Top 5</span>
+        </div>
+        <div class="card-body">
+        @php
+            // Obtenemos el valor máximo de favoritos para calcular el porcentaje relativo
+            $maxFavorites = $topFavorites->first()->favoritos_count ?? 1;
+        @endphp
+
+        @forelse ($topFavorites as $product)
+            @php
+                $percentage = ($product->favoritos_count / $maxFavorites) * 100;
+            @endphp
+            <div class="mb-4">
+                <div class="d-flex justify-content-between align-items-start mb-1">
+                    <div class="me-2 text-truncate">
+                        <!-- Enlace en el nombre para acceso rápido -->
+                        <a href="{{ route('admin.products.edit', $product) }}" class="fw-bold small text-decoration-none text-dark hover-primary">
+                            {{ $product->nombre }}
+                        </a>
+                        <div class="text-muted" style="font-size: 0.7rem;">{{ $product->perfil_nombre }}</div>
+                    </div>
+                    
+                    <div class="d-flex align-items-center">
+                        <span class="badge bg-danger bg-opacity-10 text-danger small me-2">
+                            {{ $product->favoritos_count }} <i class="bi bi-heart-fill ms-1" style="font-size: 0.7rem;"></i>
+                        </span>
+                        <!-- Botón de edición tipo icono -->
+                        <a href="{{ route('admin.products.edit', $product) }}" class="btn btn-sm btn-light p-1 lh-1 rounded-circle" title="{{ __('admin/dashboard.manage') }}">
+                            <i class="bi bi-pencil-square text-primary" style="font-size: 0.85rem;"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="progress mt-2" style="height: 6px;">
+                    <div class="progress-bar bg-danger rounded-pill" 
+                        role="progressbar" 
+                        style="width: {{ $percentage }}%" 
+                        aria-valuenow="{{ $percentage }}" 
+                        aria-valuemin="0" 
+                        aria-valuemax="100">
+                    </div>
+                </div>
+            </div>
+        @empty
+            <div class="text-center py-5">
+                <i class="bi bi-heartbreak text-muted display-4"></i>
+                <p class="text-muted mt-2">{{ __('admin/dashboard.no_favorites_yet') }}</p>
+            </div>
+        @endforelse
     </div>
 </div>
 @endsection

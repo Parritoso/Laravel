@@ -107,12 +107,13 @@
     <div class="d-flex justify-content-between align-items-end gap-3 mb-3">
         <div>
             <h2 class="h4 fw-bold mb-1">{{ __('products/index.available_title') }}</h2>
-            <p class="text-muted mb-0">{{ $products->total() }} resultado{{ $products->total() === 1 ? '' : 's' }}</p>
+            <p class="text-muted mb-0">{{ trans_choice('products/index.results_count', $products->total(), ['count' => $products->total()]) }}</p>
         </div>
     </div>
 
     <div class="row g-4">
         @forelse ($products as $product)
+            @php($isFavorite = in_array($product->id, $favoriteProductIds ?? [], true))
             <div class="col-md-6 col-xl-4">
                 <article class="product-card h-100">
                     <a href="{{ route('products.show', $product) }}" class="product-card__media">
@@ -166,13 +167,38 @@
                                 </small>
                             </div>
                             <div class="d-flex gap-2">
+                                @auth
+                                    <form method="POST" action="{{ $isFavorite ? route('favorites.destroy', $product) : route('favorites.store', $product) }}" class="m-0">
+                                        @csrf
+                                        @if ($isFavorite)
+                                            @method('DELETE')
+                                        @endif
+                                        <button
+                                            class="btn {{ $isFavorite ? 'btn-danger' : 'btn-outline-secondary' }} favorite-action"
+                                            type="submit"
+                                            title="{{ $isFavorite ? __('products/index.remove_favorite') : __('products/index.add_favorite') }}"
+                                            aria-label="{{ $isFavorite ? __('products/index.remove_favorite') : __('products/index.add_favorite') }}"
+                                        >
+                                            <i class="bi {{ $isFavorite ? 'bi-heart-fill' : 'bi-heart' }}"></i>
+                                        </button>
+                                    </form>
+                                @else
+                                    <a
+                                        href="{{ route('login') }}"
+                                        class="btn btn-outline-secondary favorite-action"
+                                        title="{{ __('products/index.login_to_favorite') }}"
+                                        aria-label="{{ __('products/index.login_to_favorite') }}"
+                                    >
+                                        <i class="bi bi-heart"></i>
+                                    </a>
+                                @endauth
                                 <a href="{{ route('products.show', $product) }}" class="btn btn-outline-primary">
                                     {{ __('products/index.view_detail') }}
                                 </a>
                                 <form method="POST" action="{{ route('cart.store', $product) }}">
                                     @csrf
                                     <input type="hidden" name="cantidad" value="1">
-                                    <button class="btn btn-primary" type="submit" @disabled(! $product->disponible) aria-label="Añadir {{ $product->nombre }} al carrito">
+                                    <button class="btn btn-primary" type="submit" @disabled(! $product->disponible) aria-label="{{ __('products/index.add_to_cart_label', ['product' => $product->nombre]) }}">
                                         <i class="bi bi-cart-plus"></i>
                                     </button>
                                 </form>

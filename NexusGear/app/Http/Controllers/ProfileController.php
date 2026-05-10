@@ -32,7 +32,7 @@ class ProfileController extends Controller
 
         $user->update($validated);
 
-        return redirect()->route('profile')->with('success', 'Perfil actualizado con éxito.');
+        return redirect()->route('profile')->with('success', __('messages.profile_updated'));
     }
 
     public function editPassword(){

@@ -7,6 +7,7 @@ return [
     'col_slug'            => 'スラッグ',
     'col_products'        => '商品数',
     'col_actions'         => '操作',
+    'view'                => '表示',
     'edit'                => '編集',
     'delete'              => '削除',
     'empty'               => 'カテゴリがまだありません。',

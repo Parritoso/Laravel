@@ -2,6 +2,9 @@
 return[
     'catalog' => 'Catalog',
     'favorites' => 'Favorites',
+    'cart' => 'Cart',
+    'login' => 'Log in',
+    'close' => 'Close',
     'title' => 'Ergonomic E-commerce',
     'profile' => 'Profile',
     'orders' => 'Orders',

@@ -17,4 +17,5 @@ return [
     'manage'=> 'Gestionar',
     'units'=> ':count uds.',
     'no_products'=> 'No hay productos registrados.',
+    'most_wanted'=> 'Top Favoritos',
 ];

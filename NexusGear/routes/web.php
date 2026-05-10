@@ -11,6 +11,7 @@ use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\DireccionController;
+use App\Http\Controllers\FavoriteController;
 use App\Models\Pedido;
 use App\Models\Producto;
 use Illuminate\Support\Facades\Route;
@@ -40,11 +41,12 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
             'pendingOrderCount' => Pedido::whereIn('estado', ['pendiente', 'procesando'])->count(),
             'recentOrders' => Pedido::with('usuario', 'factura')->latest('fecha')->take(5)->get(),
             'lowStockProducts' => Producto::orderBy('stock')->take(5)->get(),
+            'topFavorites' => Producto::has('favoritos') ->withCount('favoritos')->orderBy('favoritos_count', 'desc')->take(5)->get(),
         ]);
     })->name('dashboard');
 
     Route::resource('products', AdminProductController::class)->parameters(['products' => 'producto']);
-    Route::resource('categorias', AdminCategoriaController::class)->except('show');
+    Route::resource('categorias', AdminCategoriaController::class);
     Route::resource('discounts', AdminDiscountController::class);
     Route::get('orders', [AdminOrderController::class, 'index'])->name('orders.index');
     Route::get('orders/{pedido}', [AdminOrderController::class, 'show'])->name('orders.show');
@@ -65,6 +67,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/checkout', [OrderController::class, 'store'])->name('checkout.store');
     Route::get('/pedidos', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/pedidos/{pedido}', [OrderController::class, 'show'])->name('orders.show');
+    Route::get('/favoritos', [FavoriteController::class, 'index'])->name('favorites.index');
+    Route::post('/favoritos/productos/{producto}', [FavoriteController::class, 'store'])->name('favorites.store');
+    Route::delete('/favoritos/productos/{producto}', [FavoriteController::class, 'destroy'])->name('favorites.destroy');
 
     Route::get('/onboarding', [OnboardingController::class, 'index'])->name('onboarding.index');
     Route::post('/onboarding', [OnboardingController::class, 'store'])->name('onboarding.store');

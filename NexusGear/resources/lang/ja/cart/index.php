@@ -2,6 +2,7 @@
 return [
     'title'             => 'カート',
     'heading'           => 'あなたの選択',
+    'count'             => '{0} カートに製品はありません|{1} カートに :count 件の製品|[2,*] カートに :count 件の製品',
     'continue_shopping' => '買い物を続ける',
     'empty_title'       => 'カートは空です',
     'empty_desc'        => 'カタログから周辺機器を追加して注文を準備しましょう。',

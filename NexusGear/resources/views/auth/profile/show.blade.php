@@ -34,7 +34,7 @@
                 <a href="{{ route('orders.index') }}" class="list-group-item list-group-item-action border-0 py-3">
                     <i class="bi bi-bag-check text-primary me-3"></i> {{__('auth/perfil/show.my_orders')}}
                 </a>
-                <a href="#" class="list-group-item list-group-item-action border-0 py-3">
+                <a href="{{ route('favorites.index') }}" class="list-group-item list-group-item-action border-0 py-3">
                     <i class="bi bi-heart text-danger me-3"></i> {{__('auth/perfil/show.my_favorites')}}
                 </a>
             </div>
@@ -121,7 +121,7 @@
             <div class="modal-header">
                 <!-- ID para cambiar el título dinámicamente -->
                 <h5 class="modal-title fw-bold" id="modalDireccionTitle">{{__('auth/perfil/show.new_addresses')}}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('auth/perfil/show.close') }}"></button>
             </div>
             <!-- ID para el formulario -->
             <form id="formDireccion" action="{{ route('direcciones.store') }}" method="POST">
@@ -165,6 +165,12 @@
     const formDireccion = document.getElementById('formDireccion');
     const methodField = document.getElementById('methodField');
     const btnSubmit = document.getElementById('btnDireccionSubmit');
+    const addressText = {
+        createTitle: @json(__('auth/perfil/show.new_addresses')),
+        createButton: @json(__('auth/perfil/show.save_address')),
+        editTitle: @json(__('auth/perfil/show.edit_address')),
+        editButton: @json(__('auth/perfil/show.update_changes')),
+    };
     
     // Inputs
     const inCalle = document.getElementById('in_calle');
@@ -174,8 +180,8 @@
 
     // Función 1: Prepara el modal para CREAR una nueva dirección
     function prepareModalForCreate() {
-        modalTitle.innerText = "Nueva Dirección";
-        btnSubmit.innerText = "Guardar Dirección";
+        modalTitle.innerText = addressText.createTitle;
+        btnSubmit.innerText = addressText.createButton;
         btnSubmit.className = "btn btn-primary px-4";
         
         // Configurar formulario para POST
@@ -191,8 +197,8 @@
 
     // Función 2: Prepara el modal para EDITAR rellenando los campos
     function prepareModalForEdit(direccion) {
-        modalTitle.innerText = "Editar Dirección";
-        btnSubmit.innerText = "Actualizar Cambios";
+        modalTitle.innerText = addressText.editTitle;
+        btnSubmit.innerText = addressText.editButton;
         btnSubmit.className = "btn btn-success px-4"; // Cambiamos color a verde para distinguir
         
         // Configurar formulario para PUT (Actualizar)

@@ -23,4 +23,7 @@ return [
     'zip_code' => '郵便番号',
     'cancel' => 'キャンセル',
     'save_address' => '住所を保存',
+    'edit_address' => '住所を編集',
+    'update_changes' => '変更を更新',
+    'close' => '閉じる',
 ];

@@ -1,8 +1,10 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use App\Models\Carrito;
-use App\Models\Producto;
-class checkoutController extends Controller
+
+class CheckoutController extends Controller
 {
     public function index()
     {
@@ -10,7 +12,7 @@ class checkoutController extends Controller
         $cart = Carrito::where('usuario_id', $user->id)->with('items.producto')->first();
 
         if (!$cart || $cart->items->isEmpty()) {
-            return redirect()->route('cart.index')->with('error', 'Tu carrito está vacío.');
+            return redirect()->route('cart.index')->with('error', __('messages.checkout_empty_cart'));
         }
 
         return view('auth.checkout.index', [

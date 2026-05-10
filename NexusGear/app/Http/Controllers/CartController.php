@@ -28,7 +28,7 @@ class CartController extends Controller
         $data = $request->validate(['cantidad' => ['required', 'integer', 'min:1']]);
 
         if (!$producto->disponible) {
-            return back()->with('error', 'Este producto no tiene stock disponible.');
+            return back()->with('error', __('messages.cart_out_of_stock'));
         }
 
         if (Auth::check()) {
@@ -37,7 +37,7 @@ class CartController extends Controller
             $newQuantity = ($item?->cantidad ?? 0) + $data['cantidad'];
 
             if ($newQuantity > $producto->stock) {
-                return back()->with('error', 'No hay suficiente stock para añadir esa cantidad.');
+                return back()->with('error', __('messages.cart_not_enough_stock'));
             }
 
             if ($item) {
@@ -58,13 +58,13 @@ class CartController extends Controller
             $newQuantity = ($existing['cantidad'] ?? 0) + $data['cantidad'];
 
             if ($newQuantity > $producto->stock) {
-                return back()->with('error', 'No hay suficiente stock para añadir esa cantidad.');
+                return back()->with('error', __('messages.cart_not_enough_stock'));
             }
 
             $guest->add($producto->id, $data['cantidad'], (float) $producto->precio);
         }
 
-        return redirect()->route('cart.index')->with('success', 'Producto añadido al carrito.');
+        return redirect()->route('cart.index')->with('success', __('messages.cart_added'));
     }
 
     public function update(Request $request, Producto $producto): RedirectResponse
@@ -72,7 +72,7 @@ class CartController extends Controller
         $data = $request->validate(['cantidad' => ['required', 'integer', 'min:1']]);
 
         if ($data['cantidad'] > $producto->stock) {
-            return back()->with('error', 'La cantidad solicitada supera el stock disponible.');
+            return back()->with('error', __('messages.cart_quantity_stock'));
         }
 
         if (Auth::check()) {
@@ -85,7 +85,7 @@ class CartController extends Controller
             app(GuestCartService::class)->update($producto->id, $data['cantidad'], (float) $producto->precio);
         }
 
-        return back()->with('success', 'Carrito actualizado.');
+        return back()->with('success', __('messages.cart_updated'));
     }
 
     public function destroy(Producto $producto): RedirectResponse
@@ -96,7 +96,7 @@ class CartController extends Controller
             app(GuestCartService::class)->remove($producto->id);
         }
 
-        return back()->with('success', 'Producto eliminado del carrito.');
+        return back()->with('success', __('messages.cart_removed'));
     }
 
     public function clear(): RedirectResponse
@@ -107,7 +107,7 @@ class CartController extends Controller
             app(GuestCartService::class)->clear();
         }
 
-        return back()->with('success', 'Carrito vaciado.');
+        return back()->with('success', __('messages.cart_cleared'));
     }
 
     private function currentCart(): Carrito

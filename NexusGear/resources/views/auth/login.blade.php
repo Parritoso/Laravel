@@ -36,7 +36,7 @@
 
                     <div class="password-wrapper mb-2">
                         <div class="form-floating mb-2">
-                            <input type="password" name="password" class="form-control" id="password" placeholder="Contraseña" required>
+                            <input type="password" name="password" class="form-control" id="password" placeholder="{{ __('auth/login.password_placeholder') }}" required>
                             <label for="password">{{__('auth/login.password')}}</label>
                         </div>
                         <i class="bi bi-eye toggle-password" id="togglePasswordIcon"></i>

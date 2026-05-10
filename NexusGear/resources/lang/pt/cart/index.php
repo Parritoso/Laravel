@@ -2,6 +2,7 @@
 return [
     'title'             => 'Carrinho',
     'heading'           => 'A tua seleção',
+    'count'             => '{0} Sem produtos no carrinho|{1} :count produto no carrinho|[2,*] :count produtos no carrinho',
     'continue_shopping' => 'Continuar a comprar',
     'empty_title'       => 'O carrinho está vazio',
     'empty_desc'        => 'Adiciona periféricos do catálogo para preparar a tua encomenda.',

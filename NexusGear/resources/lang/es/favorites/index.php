@@ -1,0 +1,20 @@
+<?php
+return [
+    'title'          => 'Favoritos',
+    'kicker'         => 'Tu selección',
+    'hero_title'     => 'Productos guardados para decidir con calma.',
+    'hero_subtitle'  => 'Revisa los periféricos que has marcado y vuelve a ellos cuando quieras.',
+    'list_title'     => 'Mis favoritos',
+    'count'          => '{0} Sin productos guardados|{1} :count producto guardado|[2,*] :count productos guardados',
+    'browse_catalog' => 'Ver catálogo',
+    'featured_badge' => 'Destacado',
+    'added_on'       => 'Guardado el :date',
+    'in_stock'       => 'en stock',
+    'out_of_stock'   => 'Sin stock',
+    'remove'         => 'Quitar de favoritos',
+    'add_to_cart'    => 'Añadir al carrito',
+    'empty_title'    => 'Todavía no tienes favoritos',
+    'empty_desc'     => 'Marca productos desde el catálogo para tenerlos siempre a mano.',
+    'added'          => ':product añadido a favoritos.',
+    'removed'        => ':product eliminado de favoritos.',
+];

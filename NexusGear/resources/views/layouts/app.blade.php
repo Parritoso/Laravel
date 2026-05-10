@@ -25,19 +25,19 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item"><a class="nav-link" href="{{ route('products.index') }}">{{__('layouts/app.catalog')}}</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">{{__('layouts/app.favorites')}}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('favorites.index') }}">{{__('layouts/app.favorites')}}</a></li>
                     </ul>
 
                     <ul class="navbar-nav ms-auto align-items-center">
                         <li class="nav-item me-3">
-                            <a href="{{ route('cart.index') }}" class="position-relative text-dark text-decoration-none" aria-label="Carrito">
+                            <a href="{{ route('cart.index') }}" class="position-relative text-dark text-decoration-none" aria-label="{{ __('layouts/app.cart') }}">
                                 <i class="bi bi-cart3 fs-5"></i>
                                 <span
                                     class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">{{ $cartCount ?? 0 }}</span>
                             </a>
                         </li>
                         @guest
-                        <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">{{ __('layouts/app.login') }}</a></li>
                         @else
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
@@ -75,14 +75,14 @@
             @if (session('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{{ __('layouts/app.close') }}"></button>
                 </div>
             @endif
 
             @if (session('error'))
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     {{ session('error') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{{ __('layouts/app.close') }}"></button>
                 </div>
             @endif
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Producto;
 use App\Models\Categoria;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -12,6 +13,7 @@ class ProductController extends Controller
     {
         $filters = $request->validate([
             'q'          => ['nullable', 'string', 'max:80'],
+            'profile'    => ['nullable', 'string', 'exists:categorias,slug'],
             'profiles'   => ['nullable', 'array'],
             'profiles.*' => ['nullable', 'string', 'exists:categorias,slug'],
             'sort'       => ['nullable', 'in:featured,price_asc,price_desc,name'],
@@ -75,10 +77,11 @@ class ProductController extends Controller
         }
 
         return view('products.index', [
-            'products'         => $query->paginate(9)->withQueryString(),
-            'featuredProducts' => $featuredQuery->get(),
-            'filters'          => $filters,
-            'categories'       => Categoria::orderBy('nombre')->get(),
+            'products'           => $query->paginate(9)->withQueryString(),
+            'featuredProducts'   => $featuredQuery->get(),
+            'filters'            => $filters,
+            'categories'         => Categoria::orderBy('nombre')->get(),
+            'favoriteProductIds' => $this->favoriteProductIds(),
         ]);
     }
 
@@ -95,8 +98,21 @@ class ProductController extends Controller
             ->get();
 
         return view('products.show', [
-            'product'         => $producto,
-            'relatedProducts' => $relatedProducts,
+            'product'            => $producto,
+            'relatedProducts'    => $relatedProducts,
+            'favoriteProductIds' => $this->favoriteProductIds(),
         ]);
+    }
+
+    private function favoriteProductIds(): array
+    {
+        if (! Auth::check()) {
+            return [];
+        }
+
+        return Auth::user()
+            ->favoritos()
+            ->pluck('producto_id')
+            ->all();
     }
 }

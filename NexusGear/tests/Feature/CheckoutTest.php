@@ -28,7 +28,7 @@ class CheckoutTest extends TestCase
             ->post(route('cart.store', $product), ['cantidad' => 2]);
 
         $this->actingAs($user)
-            ->post(route('checkout.store'))
+            ->post(route('checkout.store'), $this->newAddressPayload())
             ->assertRedirect();
 
         $pedido = Pedido::with('factura', 'lineas')->firstOrFail();
@@ -82,7 +82,7 @@ class CheckoutTest extends TestCase
         $this->actingAs($user)
             ->post(route('cart.store', $product), ['cantidad' => 1]);
 
-        $this->actingAs($user)->post(route('checkout.store'));
+        $this->actingAs($user)->post(route('checkout.store'), $this->newAddressPayload());
 
         $pedido = Pedido::with('factura')->firstOrFail();
 
@@ -110,12 +110,23 @@ class CheckoutTest extends TestCase
         $this->actingAs($owner)
             ->post(route('cart.store', $product), ['cantidad' => 1]);
 
-        $this->actingAs($owner)->post(route('checkout.store'));
+        $this->actingAs($owner)->post(route('checkout.store'), $this->newAddressPayload());
 
         $pedido = Pedido::firstOrFail();
 
         $this->actingAs($otherUser)
             ->get(route('orders.show', $pedido))
             ->assertForbidden();
+    }
+
+    private function newAddressPayload(): array
+    {
+        return [
+            'direccion_id' => 'new',
+            'address' => 'Calle Test',
+            'number' => '12',
+            'city' => 'Madrid',
+            'zip_code' => '28001',
+        ];
     }
 }

@@ -3,12 +3,14 @@
 @section('title', $product->nombre)
 
 @section('content')
-<nav aria-label="breadcrumb" class="mb-4">
+<nav aria-label="{{ __('common.breadcrumb') }}" class="mb-4">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('products.index') }}">{{ __('products/show.breadcrumb') }}</a></li>
         <li class="breadcrumb-item active" aria-current="page">{{ $product->nombre }}</li>
     </ol>
 </nav>
+
+@php($isFavorite = in_array($product->id, $favoriteProductIds ?? [], true))
 
 <section class="product-detail mb-5">
     <div class="product-detail__visual">
@@ -54,23 +56,42 @@
                 </div>
             </div>
 
-            <form method="POST" action="{{ route('cart.store', $product) }}" class="add-to-cart-form">
-                @csrf
-                <label for="cantidad" class="visually-hidden">{{ __('products/show.qty_label') }}</label>
-                <input
-                    id="cantidad"
-                    type="number"
-                    name="cantidad"
-                    value="1"
-                    min="1"
-                    max="{{ max($product->stock, 1) }}"
-                    class="form-control form-control-lg"
-                    @disabled(! $product->disponible)
-                >
-                <button class="btn btn-primary btn-lg" type="submit" @disabled(! $product->disponible)>
-                    <i class="bi bi-cart-plus me-1"></i> {{ __('products/show.add_to_cart') }}
-                </button>
-            </form>
+            <div class="product-detail__actions">
+                <form method="POST" action="{{ route('cart.store', $product) }}" class="add-to-cart-form">
+                    @csrf
+                    <label for="cantidad" class="visually-hidden">{{ __('products/show.qty_label') }}</label>
+                    <input
+                        id="cantidad"
+                        type="number"
+                        name="cantidad"
+                        value="1"
+                        min="1"
+                        max="{{ max($product->stock, 1) }}"
+                        class="form-control form-control-lg"
+                        @disabled(! $product->disponible)
+                    >
+                    <button class="btn btn-primary btn-lg" type="submit" @disabled(! $product->disponible)>
+                        <i class="bi bi-cart-plus me-1"></i> {{ __('products/show.add_to_cart') }}
+                    </button>
+                </form>
+
+                @auth
+                    <form method="POST" action="{{ $isFavorite ? route('favorites.destroy', $product) : route('favorites.store', $product) }}" class="m-0">
+                        @csrf
+                        @if ($isFavorite)
+                            @method('DELETE')
+                        @endif
+                        <button class="btn {{ $isFavorite ? 'btn-danger' : 'btn-outline-secondary' }} btn-lg" type="submit">
+                            <i class="bi {{ $isFavorite ? 'bi-heart-fill' : 'bi-heart' }} me-1"></i>
+                            {{ $isFavorite ? __('products/show.remove_favorite') : __('products/show.add_favorite') }}
+                        </button>
+                    </form>
+                @else
+                    <a href="{{ route('login') }}" class="btn btn-outline-secondary btn-lg">
+                        <i class="bi bi-heart me-1"></i> {{ __('products/show.login_to_favorite') }}
+                    </a>
+                @endauth
+            </div>
         </div>
 
         <div class="product-detail__facts">

@@ -1,6 +1,7 @@
 <?php
 return [
     'title'            => '注文確認',
+    'subject'          => '注文確認 :invoice',
     'heading'          => '注文が確定しました',
     'greeting'         => ':name 様、注文 #:id を受け付けました。',
     'invoice_label'    => '請求書：',

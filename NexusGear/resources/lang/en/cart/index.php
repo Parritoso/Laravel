@@ -2,6 +2,7 @@
 return [
     'title'             => 'Cart',
     'heading'           => 'Your selection',
+    'count'             => '{0} No products in the cart|{1} :count product in the cart|[2,*] :count products in the cart',
     'continue_shopping' => 'Continue shopping',
     'empty_title'       => 'Your cart is empty',
     'empty_desc'        => 'Add some peripherals from the catalogue to prepare your order.',

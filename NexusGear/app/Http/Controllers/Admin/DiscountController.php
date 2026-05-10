@@ -36,7 +36,7 @@ class DiscountController extends Controller {
 
         Descuento::create($validated);
 
-        return redirect()->route('admin.discounts.index')->with('success', 'Descuento creado correctamente.');
+        return redirect()->route('admin.discounts.index')->with('success', __('messages.admin_discount_created'));
     }
 
     /**
@@ -67,7 +67,7 @@ class DiscountController extends Controller {
 
         $discount->update($validated);
 
-        return redirect()->route('admin.discounts.index')->with('success', 'Descuento actualizado.');
+        return redirect()->route('admin.discounts.index')->with('success', __('messages.admin_discount_updated'));
     }
 
     /**
@@ -75,6 +75,6 @@ class DiscountController extends Controller {
      */
     public function destroy(Descuento $discount){
         $discount->delete();
-        return redirect()->route('admin.discounts.index')->with('success', 'Descuento eliminado.');
+        return redirect()->route('admin.discounts.index')->with('success', __('messages.admin_discount_deleted'));
     }
 }

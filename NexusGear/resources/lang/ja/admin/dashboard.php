@@ -17,4 +17,5 @@ return [
     'manage'=> '管理する',
     'units'=> ':count 個',
     'no_products'=> '登録されている商品はありません。',
+    'most_wanted'=> '人気ランキング',
 ];

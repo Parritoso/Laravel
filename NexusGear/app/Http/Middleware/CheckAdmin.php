@@ -22,6 +22,6 @@ class CheckAdmin
         }
 
         // Si no es admin, lo redirigimos o lanzamos un error 403 (Prohibido)
-        return redirect('/')->with('error', 'No tienes permisos de administrador.');
+        return redirect('/')->with('error', __('messages.admin_forbidden'));
     }
 }

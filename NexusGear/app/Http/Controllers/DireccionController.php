@@ -27,7 +27,7 @@ class DireccionController extends Controller
             'es_predeterminada' => $user->direcciones()->count() === 0
         ]);
 
-        return back()->with('success', 'Dirección añadida correctamente.');
+        return back()->with('success', __('messages.address_added'));
     }
 
     public function destroy(Direccion $direccion)
@@ -35,7 +35,7 @@ class DireccionController extends Controller
         if ($direccion->usuario_id !== auth()->id()) abort(403);
         
         $direccion->delete();
-        return back()->with('success', 'Dirección eliminada.');
+        return back()->with('success', __('messages.address_deleted'));
     }
 
     public function update(Request $request, Direccion $direccion)
@@ -56,6 +56,6 @@ class DireccionController extends Controller
         // 3. Actualizar
         $direccion->update($validated);
 
-        return back()->with('success', 'Dirección actualizada correctamente.');
+        return back()->with('success', __('messages.address_updated'));
     }
 }

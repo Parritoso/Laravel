@@ -28,7 +28,45 @@ class CategoriaController extends Controller
 
         return redirect()
             ->route('admin.categorias.index')
-            ->with('success', 'Categoría creada correctamente.');
+            ->with('success', __('messages.admin_category_created'));
+    }
+
+    public function show(Categoria $categoria): View
+    {
+        $categoria->load([
+            'productos.descuentos',
+            'productos.favoritos',
+            'productos.itemsCarrito',
+            'productos.lineasPedido.pedido',
+        ]);
+
+        $productos = $categoria->productos->sortBy('nombre')->values();
+
+        $totalProductos = $productos->count();
+        $stockTotal = $productos->sum('stock');
+        $stockBajo = $productos->where('stock', '<=', 5)->count();
+        $productosDestacados = $productos->where('destacado', true)->count();
+        $unidadesVendidas = $productos->sum(fn ($producto) => $producto->lineasPedido->sum('cantidad'));
+        $ingresosTotales = $productos->sum(fn ($producto) => $producto->lineasPedido->sum('subtotal'));
+        $productosConDescuento = $productos->filter(fn ($producto) => $producto->descuentos->contains(fn ($descuento) => $descuento->esValido()))->count();
+        $precioMedio = $totalProductos > 0 ? $productos->avg(fn ($producto) => (float) $producto->precio) : 0;
+        $productoMasVendido = $productos
+            ->sortByDesc(fn ($producto) => $producto->lineasPedido->sum('cantidad'))
+            ->first();
+
+        return view('admin.categorias.show', [
+            'categoria' => $categoria,
+            'productos' => $productos,
+            'totalProductos' => $totalProductos,
+            'stockTotal' => $stockTotal,
+            'stockBajo' => $stockBajo,
+            'productosDestacados' => $productosDestacados,
+            'unidadesVendidas' => $unidadesVendidas,
+            'ingresosFormateados' => number_format((float) $ingresosTotales, 2, ',', '.') . ' €',
+            'productosConDescuento' => $productosConDescuento,
+            'precioMedioFormateado' => number_format((float) $precioMedio, 2, ',', '.') . ' €',
+            'productoMasVendido' => $productoMasVendido,
+        ]);
     }
 
     public function edit(Categoria $categoria): View
@@ -42,20 +80,20 @@ class CategoriaController extends Controller
 
         return redirect()
             ->route('admin.categorias.index')
-            ->with('success', 'Categoría actualizada correctamente.');
+            ->with('success', __('messages.admin_category_updated'));
     }
 
     public function destroy(Categoria $categoria): RedirectResponse
     {
         if ($categoria->productos()->exists()) {
-            return back()->with('error', 'No se puede eliminar una categoría que tiene productos asignados.');
+            return back()->with('error', __('messages.admin_category_in_use'));
         }
 
         $categoria->delete();
 
         return redirect()
             ->route('admin.categorias.index')
-            ->with('success', 'Categoría eliminada correctamente.');
+            ->with('success', __('messages.admin_category_deleted'));
     }
 
     private function validatedData(Request $request, ?int $ignoreId = null): array

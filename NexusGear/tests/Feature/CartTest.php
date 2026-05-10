@@ -12,13 +12,18 @@ class CartTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_guest_must_login_to_add_products_to_cart(): void
+    public function test_guest_can_add_products_to_session_cart(): void
     {
         $this->seed(ProductSeeder::class);
         $product = Producto::where('stock', '>', 0)->firstOrFail();
 
         $this->post(route('cart.store', $product), ['cantidad' => 1])
-            ->assertRedirect(route('login'));
+            ->assertRedirect(route('cart.index'));
+
+        $this->get(route('cart.index'))
+            ->assertOk()
+            ->assertSee($product->nombre)
+            ->assertSee(trans_choice('cart/index.count', 1, ['count' => 1]));
     }
 
     public function test_user_can_add_product_to_cart(): void
