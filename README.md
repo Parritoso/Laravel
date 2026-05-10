@@ -7,7 +7,7 @@ NexusGear es un comercio electrónico desarrollado con Laravel para la venta de 
 - **Office & Focus:** usuarios que buscan comodidad, productividad y salud postural durante largas jornadas de trabajo.
 - **Gamer Pro:** usuarios que buscan periféricos de alto rendimiento sin renunciar a la ergonomía.
 
-El catálogo incluye productos como ratones verticales, teclados compactos, reposamuñecas y soportes para portátiles. La versión 1.0 se centra en el caso de uso principal pedido en la EPD 3: permitir que un usuario registrado compre productos, consulte sus pedidos y reciba confirmación por correo, mientras que el administrador puede gestionar productos y pedidos.
+El catálogo incluye productos como ratones verticales, teclados compactos, reposamuñecas y soportes para portátiles. La versión 1.0 se centra en el caso de uso principal pedido en la EPD 3: permitir que un usuario registrado compre productos, consulte sus pedidos y reciba confirmación por correo, mientras que el administrador puede gestionar productos y pedidos. La entrega 2.0 amplía el alcance con categorías N:M, gestión de perfil (idioma, direcciones y contraseña), favoritos y métricas de popularidad en administración.
 
 ## 2. Objetivos del Proyecto
 
@@ -19,6 +19,9 @@ El desarrollo se fundamenta en los siguientes pilares:
 - **Identidad de marca:** diseño visual propio basado en la psicología del color asignado al grupo.
 - **Comunicación:** configuración SMTP para recuperación de contraseñas y confirmación de pedidos.
 - **Persistencia:** diseño relacional con relaciones 1:1, 1:N y N:M, seeders y control transaccional en el checkout.
+- **Categorías:** gestión N:M con CRUD en administración y filtros avanzados en el catálogo.
+- **Perfil e idioma:** edición del perfil, direcciones y preferencia de idioma aplicada en la interfaz.
+- **Favoritos:** listado personal y panel administrativo con ranking de productos más guardados.
 - **Gestión del proyecto:** uso de Git, GitHub y tablero Kanban para organizar el trabajo.
 
 Repositorio público: <https://github.com/Parritoso/Laravel>
@@ -33,13 +36,13 @@ Siguiendo las directrices del proyecto, se ha establecido el **verde agua** como
 
 ### 3.1 Guía de Estilo Técnica (Paleta de Colores)
 
-| Uso | Nombre | Código HEX |
-| :--- | :--- | :--- |
-| **Color primario real en SASS** | Verde agua | `#4FD1C5` |
-| **Variación oscura / precio** | Verde profundo | `#117864` |
-| **Texto principal / panel admin** | Dark Gear | `#2D3748` |
-| **Fondo de interfaz** | Gris claro | `#F8FAFC` |
-| **Superficies** | Blanco | `#FFFFFF` |
+| Uso                               | Nombre         | Código HEX |
+| :-------------------------------- | :------------- | :--------- |
+| **Color primario real en SASS**   | Verde agua     | `#4FD1C5`  |
+| **Variación oscura / precio**     | Verde profundo | `#117864`  |
+| **Texto principal / panel admin** | Dark Gear      | `#2D3748`  |
+| **Fondo de interfaz**             | Gris claro     | `#F8FAFC`  |
+| **Superficies**                   | Blanco         | `#FFFFFF`  |
 
 ### 3.2 Mockups de la Aplicación
 
@@ -67,6 +70,22 @@ Los mockups se encuentran en la carpeta `docs/` y sirven como referencia visual 
 **Inicio de sesión**
 
 ![Mockup de login](./docs/content4.png)
+
+**Perfil de usuario**
+
+![Mockup de perfil](./docs/perfil.png)
+
+**Edición de perfil**
+
+![Mockup de edición de perfil](./docs/editarPerfil.png)
+
+**Área segura (cambio de contraseña)**
+
+![Mockup de cambio de contraseña](./docs/contrasenya1.png)
+
+**Lista de favoritos**
+
+![Mockup de favoritos](./docs/favoritos.png)
 
 </details>
 
@@ -109,6 +128,12 @@ Los mockups se encuentran en la carpeta `docs/` y sirven como referencia visual 
 - El administrador debe poder crear, editar, listar y eliminar productos.
 - El administrador debe poder consultar todos los pedidos y actualizar su estado.
 - Un usuario estándar no debe poder acceder a rutas de administración.
+- El sistema debe permitir asignar una o varias categorías a cada producto y filtrar por categorías múltiples.
+- El administrador debe poder gestionar categorías (CRUD) y asociarlas a productos en altas y ediciones.
+- El usuario debe poder gestionar su perfil (nombre, idioma, direcciones) y cambiar la contraseña desde un área segura.
+- La plataforma debe mostrar la interfaz en español o inglés según el idioma del usuario.
+- El usuario debe poder marcar y desmarcar favoritos y consultarlos desde su perfil.
+- El administrador debe poder consultar los productos más marcados como favoritos.
 
 ### 4.2 Requisitos No Funcionales y Técnicos
 
@@ -119,6 +144,8 @@ Los mockups se encuentran en la carpeta `docs/` y sirven como referencia visual 
 - Código gestionado con Git y alojado en GitHub.
 - Proyecto funcional sin pasarela de pago real.
 - Configuración SMTP mediante variables de entorno.
+- Internacionalización basada en ficheros de idioma y middleware de selección de idioma.
+- Relación N:M gestionada con tabla pivote y migraciones de sincronización.
 
 ## 5. Diseño de la Base de Datos
 
@@ -135,7 +162,7 @@ Entidades principales:
 - **Usuario:** cuenta registrada en el sistema.
 - **Rol:** define permisos de administración o cliente.
 - **Producto:** artículo vendible del catálogo.
-- **Categoría:** clasificación del producto. En la versión actual funciona como perfil principal (`Office & Focus` o `Gamer Pro`).
+- **Categoría:** clasificación del producto. En la entrega 2.0 se permite asignar una o varias categorías por producto mediante tabla pivote.
 - **Carrito:** carrito activo del usuario.
 - **Pedido:** compra realizada por un usuario.
 - **Factura:** documento asociado a un pedido.
@@ -145,7 +172,7 @@ Entidades principales:
 
 ### 5.2. Diagrama de Implementación (Mermaid - Crow's Foot)
 
-El siguiente diagrama refleja el esquema físico actual. La relación activa entre producto y categoría en v1.0 se realiza mediante `productos.categoria_id`. Además, el esquema incluye la tabla `producto_categoria` para contemplar asociaciones múltiples de categorías en ampliaciones posteriores.
+El siguiente diagrama refleja el esquema físico actual. La relación activa entre producto y categoría en v2.0 se realiza mediante la tabla pivote `producto_categoria`, lo que permite asociaciones múltiples por producto.
 
 ```mermaid
 erDiagram
@@ -156,9 +183,8 @@ erDiagram
     USERS ||--o{ ROL_USUARIO : "tiene"
     ROLES ||--o{ ROL_USUARIO : "asigna"
 
-    CATEGORIAS ||--o{ PRODUCTOS : "clasifica_v1"
-    PRODUCTOS ||--o{ PRODUCTO_CATEGORIA : "asociacion_multiple"
-    CATEGORIAS ||--o{ PRODUCTO_CATEGORIA : "asociacion_multiple"
+    PRODUCTOS ||--o{ PRODUCTO_CATEGORIA : "clasifica"
+    CATEGORIAS ||--o{ PRODUCTO_CATEGORIA : "clasifica"
 
     CARRITOS ||--o{ ITEM_CARRITO : "contiene"
     PRODUCTOS ||--o{ ITEM_CARRITO : "anadido_a"
@@ -197,7 +223,6 @@ erDiagram
         float precio
         text descripcion
         string imagen
-        bigint categoria_id FK
         integer stock
         boolean destacado
     }
@@ -287,13 +312,12 @@ erDiagram
 - **1:1:** `pedidos` ↔ `facturas`.
 - **1:N:** `users` → `pedidos`.
 - **1:N:** `users` → `direcciones`.
-- **1:N:** `categorias` → `productos` en la implementación activa de v1.0.
 - **1:N:** `carritos` → `item_carrito`.
 - **1:N:** `pedidos` → `linea_pedido`.
 - **N:M:** `users` ↔ `roles` mediante `rol_usuario`.
 - **N:M:** `users` ↔ `productos` mediante `favoritos`.
 - **N:M:** `productos` ↔ `descuentos` mediante `descuento_producto`.
-- **N:M:** `productos` ↔ `categorias` mediante `producto_categoria` como estructura disponible para asociación múltiple.
+- **N:M:** `productos` ↔ `categorias` mediante `producto_categoria` (relación activa en v2.0).
 
 ## 6. Decisiones de Diseño y Ajustes
 
@@ -304,8 +328,9 @@ erDiagram
 - **Carrito por usuario:** se crea automáticamente o bajo demanda mediante `firstOrCreate()`.
 - **Roles:** el middleware `admin` evita que usuarios estándar entren en el panel de administración.
 - **Formato monetario:** los modelos exponen accessors para mostrar precios con formato europeo.
-- **Categoría/perfil:** en v1.0 el campo `categoria_id` sustituye al antiguo campo `perfil`; las categorías sembradas son `office` y `gamer`.
-- **Internacionalización inicial:** existen ficheros de idioma para español, inglés, portugués y japonés en varias vistas.
+- **Categorías N:M:** la relación se mueve a `producto_categoria`, con migración que elimina `categoria_id` y sincronización desde formularios y seeders.
+- **Internacionalización:** el idioma se guarda en `users.language` y `SetLocale` lo aplica en cada petición; hay ficheros para español, inglés, portugués y japonés.
+- **Favoritos:** se modelan como tabla pivote con alta/baja instantánea y ranking de popularidad en el dashboard.
 - **Descuentos:** existe CRUD de descuentos en administración y asignación opcional a productos, aunque no forma parte del alcance mínimo de v1.0.
 
 ## 7. Casos de Uso
@@ -318,7 +343,7 @@ erDiagram
   1. El actor accede a la página de productos.
   2. El sistema muestra productos con nombre, descripción, precio, stock y categoría/perfil.
   3. El actor puede buscar por nombre o descripción.
-  4. El actor puede filtrar por `Office & Focus` o `Gamer Pro`.
+  4. El actor puede filtrar por una o varias categorías (`Office & Focus`, `Gamer Pro`, etc.).
   5. El actor puede ordenar por destacados, precio o nombre.
   6. El actor puede abrir el detalle de un producto.
 
@@ -477,6 +502,55 @@ erDiagram
   4. Al guardar, el sistema sincroniza la relación entre producto y descuento.
   5. El producto queda asociado al descuento elegido.
 
+### CU-16: Gestionar perfil e idioma
+
+- **Actor:** usuario registrado y verificado.
+- **Precondición:** sesión iniciada.
+- **Flujo principal:**
+  1. El usuario accede a su perfil.
+  2. Edita su nombre e idioma preferido.
+  3. Guarda los cambios.
+  4. El sistema actualiza el perfil y aplica el idioma seleccionado.
+
+### CU-17: Gestionar direcciones de envío
+
+- **Actor:** usuario registrado y verificado.
+- **Precondición:** sesión iniciada.
+- **Flujo principal:**
+  1. El usuario abre la sección de direcciones en su perfil.
+  2. Añade una nueva dirección con calle, número, ciudad y código postal.
+  3. Edita o elimina direcciones existentes.
+  4. El sistema guarda los cambios y muestra confirmación.
+
+### CU-18: Cambiar contraseña desde área segura
+
+- **Actor:** usuario registrado y verificado.
+- **Precondición:** sesión iniciada y confirmación de contraseña actual.
+- **Flujo principal:**
+  1. El usuario accede a la pantalla de cambio de contraseña.
+  2. Introduce su contraseña actual y la nueva contraseña.
+  3. El sistema valida y actualiza el hash.
+  4. El usuario mantiene la sesión activa con la nueva credencial.
+
+### CU-19: Gestionar favoritos
+
+- **Actor:** usuario registrado y verificado.
+- **Precondición:** sesión iniciada.
+- **Flujo principal:**
+  1. El usuario marca o desmarca un producto desde el catálogo o el detalle.
+  2. El sistema actualiza la lista de favoritos.
+  3. El usuario consulta su listado de favoritos desde el perfil.
+  4. Desde la lista puede eliminar favoritos o añadir productos al carrito.
+
+### CU-20: Consultar productos más favoritos
+
+- **Actor:** administrador.
+- **Precondición:** sesión iniciada con rol `admin`.
+- **Flujo principal:**
+  1. El administrador accede al dashboard.
+  2. El sistema muestra el ranking de productos más marcados como favoritos.
+  3. El administrador puede acceder al producto para su gestión.
+
 ## 8. Estructura del Código
 
 La aplicación Laravel se encuentra en la carpeta `NexusGear/`.
@@ -485,7 +559,11 @@ La aplicación Laravel se encuentra en la carpeta `NexusGear/`.
 
 - `app/Http/Controllers/ProductController.php`: catálogo público, búsqueda, filtro y detalle de producto.
 - `app/Http/Controllers/CartController.php`: alta, actualización, eliminación y vaciado del carrito.
+- `app/Http/Controllers/CheckoutController.php`: vista de checkout.
 - `app/Http/Controllers/OrderController.php`: checkout, historial y detalle de pedidos del usuario.
+- `app/Http/Controllers/FavoriteController.php`: alta/baja y listado de favoritos.
+- `app/Http/Controllers/ProfileController.php`: vista y edición de perfil, idioma y contraseña.
+- `app/Http/Controllers/DireccionController.php`: CRUD de direcciones de envío.
 - `app/Http/Controllers/Admin/ProductController.php`: CRUD de productos para administración.
 - `app/Http/Controllers/Admin/OrderController.php`: gestión de pedidos en administración.
 - `app/Http/Controllers/Admin/CategoriaController.php`: CRUD de categorías.
@@ -495,8 +573,9 @@ La aplicación Laravel se encuentra en la carpeta `NexusGear/`.
 ### 8.2 Modelos
 
 - `User`: autenticación, roles, carrito, pedidos, direcciones y favoritos.
-- `Producto`: catálogo, categoría principal, descuentos, favoritos, carrito y líneas de pedido.
-- `Categoria`: categorías/perfiles del catálogo.
+- `Producto`: catálogo, categorías N:M, descuentos, favoritos, carrito y líneas de pedido.
+- `Categoria`: categorías del catálogo con relación N:M.
+- `ProductoCategoria`: tabla pivote de categorías de producto.
 - `Carrito` e `ItemCarrito`: carrito y líneas.
 - `Pedido` y `LineaPedido`: pedidos y detalle de compra.
 - `Factura`: factura asociada a pedido.
@@ -513,6 +592,8 @@ La aplicación Laravel se encuentra en la carpeta `NexusGear/`.
 - `resources/views/orders/*.blade.php`: pedidos del usuario.
 - `resources/views/admin/*.blade.php`: panel de administración.
 - `resources/views/auth/*.blade.php`: vistas de Fortify.
+- `resources/views/auth/profile/*.blade.php`: perfil, edición y cambio de contraseña.
+- `resources/views/favorites/index.blade.php`: listado de favoritos.
 - `resources/views/emails/orders/confirmation.blade.php`: correo de confirmación de pedido.
 
 ### 8.4 Middleware
@@ -524,45 +605,57 @@ La aplicación Laravel se encuentra en la carpeta `NexusGear/`.
 
 ### 9.1 Rutas Públicas
 
-| Método | URI | Descripción |
-| :--- | :--- | :--- |
-| GET | `/` | Página principal |
-| GET | `/productos` | Catálogo público |
-| GET | `/productos/{producto}` | Detalle de producto |
-| GET/POST | `/login` | Inicio de sesión |
-| GET/POST | `/register` | Registro |
-| GET/POST | `/forgot-password` | Recuperación de contraseña |
-| GET/POST | `/reset-password` | Restablecimiento de contraseña |
-| GET | `/email/verify` | Aviso de verificación de correo |
+| Método   | URI                     | Descripción                     |
+| :------- | :---------------------- | :------------------------------ |
+| GET      | `/`                     | Página principal                |
+| GET      | `/productos`            | Catálogo público                |
+| GET      | `/productos/{producto}` | Detalle de producto             |
+| GET/POST | `/login`                | Inicio de sesión                |
+| GET/POST | `/register`             | Registro                        |
+| GET/POST | `/forgot-password`      | Recuperación de contraseña      |
+| GET/POST | `/reset-password`       | Restablecimiento de contraseña  |
+| GET      | `/email/verify`         | Aviso de verificación de correo |
 
 ### 9.2 Rutas de Usuario Autenticado y Verificado
 
-| Método | URI | Descripción |
-| :--- | :--- | :--- |
-| GET | `/home` | Redirección según rol |
-| GET | `/carrito` | Ver carrito |
-| POST | `/carrito/productos/{producto}` | Añadir producto |
-| PATCH | `/carrito/productos/{producto}` | Actualizar cantidad |
-| DELETE | `/carrito/productos/{producto}` | Eliminar línea |
-| DELETE | `/carrito` | Vaciar carrito |
-| POST | `/checkout` | Finalizar compra |
-| GET | `/pedidos` | Historial de pedidos |
-| GET | `/pedidos/{pedido}` | Detalle de pedido |
-| GET/POST | `/onboarding` | Configuración inicial |
+| Método   | URI                               | Descripción                        |
+| :------- | :-------------------------------- | :--------------------------------- |
+| GET      | `/home`                           | Redirección según rol              |
+| GET      | `/carrito`                        | Ver carrito                        |
+| POST     | `/carrito/productos/{producto}`   | Añadir producto                    |
+| PATCH    | `/carrito/productos/{producto}`   | Actualizar cantidad                |
+| DELETE   | `/carrito/productos/{producto}`   | Eliminar línea                     |
+| DELETE   | `/carrito`                        | Vaciar carrito                     |
+| GET      | `/checkout`                       | Vista de checkout                  |
+| POST     | `/checkout`                       | Finalizar compra                   |
+| GET      | `/pedidos`                        | Historial de pedidos               |
+| GET      | `/pedidos/{pedido}`               | Detalle de pedido                  |
+| GET      | `/favoritos`                      | Listado de favoritos               |
+| POST     | `/favoritos/productos/{producto}` | Añadir favorito                    |
+| DELETE   | `/favoritos/productos/{producto}` | Eliminar favorito                  |
+| GET/POST | `/onboarding`                     | Configuración inicial              |
+| GET      | `/profile`                        | Perfil del usuario                 |
+| GET      | `/profile/edit`                   | Editar perfil                      |
+| PATCH    | `/profile`                        | Actualizar perfil                  |
+| POST     | `/direcciones`                    | Crear dirección                    |
+| PUT      | `/direcciones/{direccion}`        | Editar dirección                   |
+| DELETE   | `/direcciones/{direccion}`        | Eliminar dirección                 |
+| GET      | `/profile/password`               | Formulario de cambio de contraseña |
+| PUT      | `/profile/password`               | Actualizar contraseña              |
 
 ### 9.3 Rutas de Administración
 
 Todas usan middleware `auth`, `verified` y `admin`.
 
-| Método | URI | Descripción |
-| :--- | :--- | :--- |
-| GET | `/admin/dashboard` | Dashboard |
-| RESOURCE | `/admin/products` | CRUD de productos |
-| RESOURCE | `/admin/categorias` | CRUD de categorías |
-| RESOURCE | `/admin/discounts` | CRUD de descuentos |
-| GET | `/admin/orders` | Listado de pedidos |
-| GET | `/admin/orders/{pedido}` | Detalle de pedido |
-| PATCH | `/admin/orders/{pedido}` | Actualizar estado |
+| Método   | URI                      | Descripción        |
+| :------- | :----------------------- | :----------------- |
+| GET      | `/admin/dashboard`       | Dashboard          |
+| RESOURCE | `/admin/products`        | CRUD de productos  |
+| RESOURCE | `/admin/categorias`      | CRUD de categorías |
+| RESOURCE | `/admin/discounts`       | CRUD de descuentos |
+| GET      | `/admin/orders`          | Listado de pedidos |
+| GET      | `/admin/orders/{pedido}` | Detalle de pedido  |
+| PATCH    | `/admin/orders/{pedido}` | Actualizar estado  |
 
 ## 10. Seeders y Datos Iniciales
 
@@ -577,14 +670,15 @@ Seeders ejecutados:
 1. `RolSeeder`: crea los roles `admin` y `customer`.
 2. `CategoriaSeeder`: crea `Office & Focus` (`office`) y `Gamer Pro` (`gamer`).
 3. `ProductSeeder`: crea productos iniciales.
-4. `UserSeeder`: crea usuarios iniciales.
+4. `ProductoCategoriaSeeder`: asigna categorías iniciales a productos.
+5. `UserSeeder`: crea usuarios iniciales.
 
 Credenciales iniciales:
 
-| Rol | Email | Contraseña |
-| :--- | :--- | :--- |
-| Admin | `admin@nexusgear.com` | `admin123` |
-| Cliente | `juan@example.com` | `user123` |
+| Rol     | Email                 | Contraseña |
+| :------ | :-------------------- | :--------- |
+| Admin   | `admin@nexusgear.com` | `admin123` |
+| Cliente | `juan@example.com`    | `user123`  |
 
 Productos iniciales:
 
@@ -650,17 +744,30 @@ El correo de pedido se envía después de confirmar la transacción del checkout
 
 ## 13. Alcance de la Entrega 1.0
 
-| Bloque | Estado | Observaciones |
-| :--- | :--- | :--- |
-| Catálogo público | Completado | Búsqueda, filtro por perfil/categoría principal, ordenación y detalle |
-| Autenticación Fortify | Completado | Registro, login, logout, verificación y recuperación |
-| Carrito | Completado | Añadir, modificar, eliminar, vaciar y validar stock |
-| Checkout | Completado | Transacción, factura, stock y correo |
-| Pedidos de usuario | Completado | Historial y detalle protegido |
-| Admin productos | Completado | CRUD con categoría principal y descuento opcional |
-| Admin pedidos | Completado | Listado, detalle y cambio de estado |
-| Admin categorías | Implementado | CRUD disponible y categorías integradas en productos |
-| Admin descuentos | Implementado | CRUD y asignación opcional a productos |
-| Internacionalización base | Implementado | Middleware de idioma y ficheros de traducción iniciales |
-| Onboarding | Implementado | Selección inicial de idioma y preferencias |
-| Imágenes de producto | Implementado | Campo `imagen` y recurso por defecto en almacenamiento público |
+| Bloque                    | Estado       | Observaciones                                                         |
+| :------------------------ | :----------- | :-------------------------------------------------------------------- |
+| Catálogo público          | Completado   | Búsqueda, filtro por perfil/categoría principal, ordenación y detalle |
+| Autenticación Fortify     | Completado   | Registro, login, logout, verificación y recuperación                  |
+| Carrito                   | Completado   | Añadir, modificar, eliminar, vaciar y validar stock                   |
+| Checkout                  | Completado   | Transacción, factura, stock y correo                                  |
+| Pedidos de usuario        | Completado   | Historial y detalle protegido                                         |
+| Admin productos           | Completado   | CRUD con categoría principal y descuento opcional                     |
+| Admin pedidos             | Completado   | Listado, detalle y cambio de estado                                   |
+| Admin categorías          | Implementado | CRUD disponible y categorías integradas en productos                  |
+| Admin descuentos          | Implementado | CRUD y asignación opcional a productos                                |
+| Internacionalización base | Implementado | Middleware de idioma y ficheros de traducción iniciales               |
+| Onboarding                | Implementado | Selección inicial de idioma y preferencias                            |
+| Imágenes de producto      | Implementado | Campo `imagen` y recurso por defecto en almacenamiento público        |
+
+### 13.1 Alcance de la Entrega 2.0
+
+| Bloque               | Estado     | Observaciones                                                        |
+| :------------------- | :--------- | :------------------------------------------------------------------- |
+| Categorías N:M       | Completado | Asociación múltiple con `producto_categoria` y filtro por categorías |
+| CRUD de categorías   | Completado | Gestión completa en administración                                   |
+| Perfil de usuario    | Completado | Edición de nombre, idioma y acceso a direcciones                     |
+| Direcciones (CRUD)   | Completado | Alta, edición y eliminación desde perfil                             |
+| Cambio de contraseña | Completado | Área segura con confirmación de contraseña                           |
+| Internacionalización | Completado | Interfaz en ES/EN con soporte adicional PT/JA                        |
+| Favoritos            | Completado | Alta/baja y listado personal con acciones rápidas                    |
+| Ranking de favoritos | Completado | Top 5 en dashboard de administración                                 |
