@@ -18,7 +18,7 @@ class CheckoutController extends Controller
         if ($cart->hasStockIssues()) {
             return redirect()->route('cart.index')->with(
                 'error', 
-                __('Algunos artículos de tu carrito ya no disponen del stock suficiente. Por favor, revísalos.')
+                __('cart/index.checkout_stock_insufficient')
             );
         }
 

@@ -47,9 +47,9 @@
                             <span class="badge text-bg-light mb-2">{{ $item->producto->perfil_nombre }}</span>
 
                             @if($sinStock)
-                                <span class="badge text-bg-danger d-inline-block mb-2"><i class="bi bi-x-circle me-1"></i> {{ __('Agotado') }}</span>
+                                <span class="badge text-bg-danger d-inline-block mb-2"><i class="bi bi-x-circle me-1"></i> {{ __('cart/index.stock_out') }}</span>
                             @elseif($stockInsuficiente)
-                                <span class="badge text-bg-warning d-inline-block mb-2"><i class="bi bi-exclamation-triangle me-1"></i> {{ __('Stock insuficiente (Máx: ' . $producto->stock . ')') }}</span>
+                                <span class="badge text-bg-warning d-inline-block mb-2"><i class="bi bi-exclamation-triangle me-1"></i> {{ __('cart/index.stock_insufficient', ['max' => $producto->stock]) }}</span>
                             @endif
 
                             <h2 class="h5 fw-bold mb-1">
@@ -153,7 +153,7 @@
             @if($hasStockIssues)
                 <div class="alert alert-danger small mt-3 mb-0">
                     <i class="bi bi-exclamation-octagon-fill me-1"></i>
-                    {{ __('Por favor, ajusta las cantidades o elimina los productos sin stock para continuar.') }}
+                    {{ __('cart/index.cart_stock_error_notice') }}
                 </div>
                 <button class="btn btn-secondary btn-lg w-100 mt-2" disabled>
                     <i class="bi bi-lock-fill me-1"></i> {{ __('cart/index.checkout') }}

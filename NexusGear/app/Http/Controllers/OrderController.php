@@ -39,7 +39,7 @@ class OrderController extends Controller
         }
 
         if ($cart->hasStockIssues()) {
-            return redirect()->route('cart.index')->with('error', 'El stock cambió en el último segundo. Revisa tu carrito.');
+            return redirect()->route('cart.index')->with('error', __('cart/index.checkout_stock_changed'));
         }
 
         foreach ($cart->items as $item) {

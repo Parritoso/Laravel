@@ -24,4 +24,9 @@ return [
     'cart_persist'      => 'Tu carrito se conservará al iniciar sesión.',
     'add_more'          => 'Añadir más productos',
     'clear'             => 'Vaciar carrito',
+    'stock_out'         => 'Agotado',
+    'stock_insufficient'=> 'Stock insuficiente (Máx: :max)',
+    'cart_stock_error_notice'=> 'Por favor, ajusta las cantidades o elimina los productos sin stock para continuar.',
+    'checkout_stock_changed' => 'El stock cambió en el último segundo. Revisa tu carrito.',
+    'checkout_stock_insufficient' => 'Algunos artículos de tu carrito ya no disponen del stock suficiente. Por favor, revísalos.',
 ];
