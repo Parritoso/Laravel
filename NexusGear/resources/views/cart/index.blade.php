@@ -30,8 +30,10 @@
                     $producto = $item->producto;
                     $tieneDescuento = $producto->precio_final < $producto->precio;
                     $ahorroUnitario = $producto->precio - $producto->precio_final;
+                    $sinStock = $producto->stock <= 0;
+                    $stockInsuficiente = $item->cantidad > $producto->stock;
                 @endphp
-                <article class="cart-item">
+                <article class="cart-item {{ $sinStock || $stockInsuficiente ? 'border-danger bg-light bg-opacity-10' : '' }}">
                     <a href="{{ route('products.show', $item->producto) }}" class="cart-item__media">
                         @if ($item->producto->imagen)
                         <img src="{{ asset('storage/' . $item->producto->imagen) }}" alt="{{ $item->producto->nombre }}" class="w-100 h-100" style="object-fit: cover; border-radius: inherit;">
@@ -43,6 +45,13 @@
                     <div class="cart-item__content">
                         <div>
                             <span class="badge text-bg-light mb-2">{{ $item->producto->perfil_nombre }}</span>
+
+                            @if($sinStock)
+                                <span class="badge text-bg-danger d-inline-block mb-2"><i class="bi bi-x-circle me-1"></i> {{ __('Agotado') }}</span>
+                            @elseif($stockInsuficiente)
+                                <span class="badge text-bg-warning d-inline-block mb-2"><i class="bi bi-exclamation-triangle me-1"></i> {{ __('Stock insuficiente (Máx: ' . $producto->stock . ')') }}</span>
+                            @endif
+
                             <h2 class="h5 fw-bold mb-1">
                                 <a href="{{ route('products.show', $item->producto) }}" class="text-reset text-decoration-none">
                                     {{ $item->producto->nombre }}
@@ -77,8 +86,9 @@
                                         min="1"
                                         max="{{ max($item->producto->stock, 1) }}"
                                         class="form-control"
+                                        {{ $sinStock ? 'disabled' : '' }}
                                     >
-                                    <button class="btn btn-outline-primary" type="submit">{{ __('cart/index.update') }}</button>
+                                    <button class="btn btn-outline-primary" type="submit" {{ $sinStock ? 'disabled' : '' }}>{{ __('cart/index.update') }}</button>
                                 </div>
                             </form>
 
@@ -137,20 +147,32 @@
                 <span>{{ __('cart/index.estimated_total') }}</span>
                 <strong>{{ $cart->total_formateado }}</strong>
             </div>
-
-            @auth
-                <form method="GET" action="{{ route('checkout.index') }}">
-                    @csrf
-                    <button class="btn btn-primary btn-lg w-100 mt-3" type="submit">
-                        {{ __('cart/index.checkout') }}
-                    </button>
-                </form>
+            @php
+                $hasStockIssues = Auth::check() ? $cart->hasStockIssues() : $cart->has_stock_issues;
+            @endphp
+            @if($hasStockIssues)
+                <div class="alert alert-danger small mt-3 mb-0">
+                    <i class="bi bi-exclamation-octagon-fill me-1"></i>
+                    {{ __('Por favor, ajusta las cantidades o elimina los productos sin stock para continuar.') }}
+                </div>
+                <button class="btn btn-secondary btn-lg w-100 mt-2" disabled>
+                    <i class="bi bi-lock-fill me-1"></i> {{ __('cart/index.checkout') }}
+                </button>
             @else
-                <a href="{{ route('login') }}" class="btn btn-primary btn-lg w-100 mt-3">
-                    <i class="bi bi-box-arrow-in-right me-1"></i> {{ __('cart/index.login_to_checkout') }}
-                </a>
-                <p class="text-muted small text-center mt-2 mb-0">{{ __('cart/index.cart_persist') }}</p>
-            @endauth
+                @auth
+                    <form method="GET" action="{{ route('checkout.index') }}">
+                        @csrf
+                        <button class="btn btn-primary btn-lg w-100 mt-3" type="submit">
+                            {{ __('cart/index.checkout') }}
+                        </button>
+                    </form>
+                @else
+                    <a href="{{ route('login') }}" class="btn btn-primary btn-lg w-100 mt-3">
+                        <i class="bi bi-box-arrow-in-right me-1"></i> {{ __('cart/index.login_to_checkout') }}
+                    </a>
+                    <p class="text-muted small text-center mt-2 mb-0">{{ __('cart/index.cart_persist') }}</p>
+                @endauth
+            @endif
             <a href="{{ route('products.index') }}" class="btn btn-outline-dark w-100 mt-2">{{ __('cart/index.add_more') }}</a>
 
             <form method="POST" action="{{ route('cart.clear') }}" class="mt-3">

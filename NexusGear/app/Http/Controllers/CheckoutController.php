@@ -15,6 +15,13 @@ class CheckoutController extends Controller
             return redirect()->route('cart.index')->with('error', __('messages.checkout_empty_cart'));
         }
 
+        if ($cart->hasStockIssues()) {
+            return redirect()->route('cart.index')->with(
+                'error', 
+                __('Algunos artículos de tu carrito ya no disponen del stock suficiente. Por favor, revísalos.')
+            );
+        }
+
         return view('auth.checkout.index', [
             'user' => $user,
             'cart' => $cart

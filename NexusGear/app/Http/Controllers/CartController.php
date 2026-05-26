@@ -137,10 +137,13 @@ class CartController extends Controller
 
         $total = $items->sum(fn($i) => $i->cantidad * (float) $i->precio_actual);
 
+        $hasStockIssues = $items->contains(fn($i) => $i->cantidad > $i->producto->stock);
+
         return (object) [
             'items'            => $items,
             'cantidad_total'   => (int) $items->sum('cantidad'),
             'total_formateado' => number_format($total, 2, ',', '.') . ' €',
+            'has_stock_issues' => $hasStockIssues,
         ];
     }
 }

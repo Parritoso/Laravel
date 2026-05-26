@@ -38,4 +38,12 @@ class Carrito extends Model
     {
         return $this->hasMany(ItemCarrito::class, 'carrito_id');
     }
+
+    /**
+    * Determina si el carrito contiene productos con problemas de stock.
+    */
+    public function hasStockIssues(): bool
+    {
+        return $this->items->contains(fn ($item) => $item->cantidad > $item->producto->stock);
+    }
 }

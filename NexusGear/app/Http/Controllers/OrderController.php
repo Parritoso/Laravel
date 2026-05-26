@@ -38,6 +38,10 @@ class OrderController extends Controller
                 ->with('error', __('messages.cart_empty'));
         }
 
+        if ($cart->hasStockIssues()) {
+            return redirect()->route('cart.index')->with('error', 'El stock cambió en el último segundo. Revisa tu carrito.');
+        }
+
         foreach ($cart->items as $item) {
             if ($item->cantidad > $item->producto->stock) {
                 return redirect()
