@@ -24,4 +24,9 @@ return [
     'cart_persist'      => 'Your cart will be saved when you log in.',
     'add_more'          => 'Add more products',
     'clear'             => 'Clear cart',
+    'stock_out'                   => 'Out of stock',
+    'stock_insufficient'          => 'Insufficient stock (Max: :max)',
+    'cart_stock_error_notice'     => 'Please adjust the quantities or remove out-of-stock items to continue.',
+    'checkout_stock_changed'      => 'The stock changed at the last second. Please review your cart.',
+    'checkout_stock_insufficient' => 'Some items in your cart no longer have sufficient stock. Please review them.',
 ];

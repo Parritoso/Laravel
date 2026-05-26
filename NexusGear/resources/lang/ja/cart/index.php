@@ -24,4 +24,9 @@ return [
     'cart_persist'      => 'ログイン時にカートが保存されます。',
     'add_more'          => '商品を追加する',
     'clear'             => 'カートを空にする',
+    'stock_out'                   => '売り切れ',
+    'stock_insufficient'          => '在庫不足です（最大購入可能数: :max）',
+    'cart_stock_error_notice'     => '続けるには、数量を調整するか在庫切れの商品を削除してください。',
+    'checkout_stock_changed'      => '直前に在庫数が変更されました。カートの内容を確認してください。',
+    'checkout_stock_insufficient' => 'カート内の一部商品の在庫が不足しています。内容を確認してください。',
 ];

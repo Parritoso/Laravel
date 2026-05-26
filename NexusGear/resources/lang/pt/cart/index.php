@@ -24,4 +24,9 @@ return [
     'cart_persist'      => 'O teu carrinho será guardado ao iniciar sessão.',
     'add_more'          => 'Adicionar mais produtos',
     'clear'             => 'Esvaziar carrinho',
+    'stock_out'                   => 'Esgotado',
+    'stock_insufficient'          => 'Stock insuficiente (Máx: :max)',
+    'cart_stock_error_notice'     => 'Por favor, ajuste as quantidades ou remova os produtos esgotados para continuar.',
+    'checkout_stock_changed'      => 'O stock mudou no último segundo. Por favor, verifique o seu carrinho.',
+    'checkout_stock_insufficient' => 'Alguns artigos no seu carrinho já não têm stock suficiente. Por favor, verifique-os.',
 ];
