@@ -11,7 +11,11 @@ class ProfileController extends Controller
     public function show()
     {
         $user = Auth::user()->load('direcciones');
-        return view('auth.profile.show', compact('user'));
+        $misComentarios = $user->comentarios()->with('producto')->get();
+        return view('auth.profile.show', [
+            'user' => $user,
+            'misComentarios' => $misComentarios
+        ]);
     }
     public function edit()
     {

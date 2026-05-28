@@ -62,6 +62,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Favorito::class, 'usuario_id');
     }
 
+    public function comentarios(): HasMany
+    {
+        return $this->hasMany(Comentario::class, 'user_id')->latest();
+    }
+
     /**
     * Método auxiliar para verificar si es administrador
     */

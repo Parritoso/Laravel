@@ -97,10 +97,17 @@ class ProductController extends Controller
             ->take(3)
             ->get();
 
+        $comentarios = $producto->comentarios()->with('user')->latest()->paginate(5);
+        $userReview = Auth::check() 
+            ? $producto->comentarios()->where('user_id', Auth::id())->first() 
+            : null;
+
         return view('products.show', [
             'product'            => $producto,
             'relatedProducts'    => $relatedProducts,
             'favoriteProductIds' => $this->favoriteProductIds(),
+            'comentarios'        => $comentarios,
+            'userReview'         => $userReview,
         ]);
     }
 
