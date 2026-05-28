@@ -9,7 +9,7 @@
         <div class="col-md-8 col-lg-7">
             
             <div class="progress mb-5" style="height: 6px;">
-                <div id="onboarding-progress" class="progress-bar bg-primary" role="progressbar" style="width: 25%;"></div>
+                <div id="onboarding-progress" class="progress-bar bg-primary" role="progressbar" style="width: 20%;"></div>
             </div>
 
             <form action="{{ route('onboarding.store') }}" method="POST" id="onboarding-form">
@@ -116,14 +116,82 @@
                             </label>
                         </div>
                     </div>
-                    <div class="d-grid gap-2 mt-5">
-                        <button type="submit" class="btn btn-primary btn-lg fw-bold shadow">
-                            {{ __('auth/onboarding.finish') }} <i class="bi bi-rocket-takeoff ms-2"></i>
-                        </button>
+                    <div class="d-flex justify-content-between align-items-center mt-5">
                         <button type="button" class="btn btn-link text-muted" onclick="nextStep(3)">{{ __('auth/onboarding.back') }}</button>
+                        <!-- AHORA VA AL PASO 5 -->
+                        <button type="button" class="btn btn-primary px-5 fw-bold shadow-sm" onclick="nextStep(5)">
+                            {{ __('auth/onboarding.next') }}
+                        </button>
                     </div>
                 </div>
 
+                <div class="onboarding-step d-none" id="step-5">
+                    <div class="text-center mb-4">
+                        <h2 class="fw-bold">{{ __('auth/onboarding.step_2fa_title') }}</h2>
+                        <p class="text-muted">{{ __('auth/onboarding.step_2fa_desc') }}</p>
+                    </div>
+
+                    <div class="card border-0 shadow-sm p-4 text-center">
+                        {{-- SUB-ESTADO A: Pregunta inicial --}}
+                        <div id="2fa-init-section">
+                            <i class="bi bi-shield-lock text-primary display-3 d-block mb-3"></i>
+                            <h5>{{ __('auth/onboarding.2fa_prompt') }}</h5>
+                            <p class="small text-muted mb-4">{{ __('auth/onboarding.2fa_prompt_desc') }}</p>
+                            
+                            <div class="d-flex gap-3 justify-content-center">
+                                <button type="button" class="btn btn-outline-secondary px-4" onclick="skip2FAAndFinish()">
+                                    {{ __('auth/onboarding.2fa_skip_btn') }}
+                                </button>
+                                <button type="button" class="btn btn-primary px-4 fw-bold" onclick="initialize2FA()">
+                                    <span id="2fa-spinner" class="spinner-border spinner-border-sm d-none me-2" role="status"></span>
+                                    {{ __('auth/onboarding.2fa_enable_btn') }}
+                                </button>
+                            </div>
+                        </div>
+
+                        {{-- SUB-ESTADO B: Configuración activa (Oculto por defecto) --}}
+                        <div id="2fa-setup-section" class="d-none">
+                            <div class="row g-3 align-items-center text-start">
+                                <div class="col-md-5 text-center">
+                                    <div id="2fa-qr-container" class="bg-white p-2 border rounded d-inline-block">
+                                        <!-- Aquí se inyectará el SVG por JS -->
+                                    </div>
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="alert alert-warning py-2 px-3 small border-0 mb-3">
+                                        <i class="bi bi-info-circle-fill me-1"></i> {{ __('auth/onboarding.2fa_scan_notice') }}
+                                    </div>
+                                    <p class="small mb-3">
+                                        <strong>{{ __('auth/onboarding.2fa_manual_key') }}</strong> <code id="2fa-secret-key" class="d-block mt-1 fs-6 text-primary"></code>
+                                    </p>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label small fw-bold text-muted">{{ __('auth/onboarding.2fa_code_label') }}</label>
+                                        <div class="input-group">
+                                            <input type="text" id="2fa-verification-code" class="form-control" placeholder="123456" maxlength="6">
+                                            <button class="btn btn-success fw-bold" type="button" onclick="confirm2FA()">{{ __('auth/onboarding.2fa_verify_btn') }}</button>
+                                        </div>
+                                        <div id="2fa-error-msg" class="text-danger small mt-1 d-none"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- SUB-ESTADO C: Éxito total (Oculto por defecto) --}}
+                        <div id="2fa-success-section" class="d-none py-3">
+                            <i class="bi bi-check-circle-fill text-success display-4 d-block mb-2"></i>
+                            <h5 class="fw-bold text-success">{{ __('auth/onboarding.2fa_active_title') }}</h5>
+                            <p class="small text-muted">{{ __('auth/onboarding.2fa_active_desc') }}</p>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 mt-5">
+                        <button type="submit" id="btn-finish-onboarding" class="btn btn-primary btn-lg fw-bold shadow">
+                            {{ __('auth/onboarding.finish') }} <i class="bi bi-rocket-takeoff ms-2"></i>
+                        </button>
+                        <button type="button" id="btn-back-to-4" class="btn btn-link text-muted" onclick="nextStep(4)">{{ __('auth/onboarding.back') }}</button>
+                    </div>
+                </div>
             </form>
         </div>
     </div>

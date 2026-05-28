@@ -13,6 +13,20 @@ class OnboardingController extends Controller
         return view('auth.onboarding');
     }
 
+    public function getTwoFactorQr()
+    {
+        $user = auth()->user();
+
+        if (!$user->two_factor_secret) {
+            return response()->json(['error' => '2FA no inicializado'], 400);
+        }
+
+        return response()->json([
+            'svg' => $user->twoFactorQrCodeSvg(),
+            'secret' => decrypt($user->two_factor_secret)
+        ]);
+    }
+
     public function store(Request $request)
     {
         $user = Auth::user();

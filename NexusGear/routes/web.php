@@ -74,6 +74,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/onboarding', [OnboardingController::class, 'index'])->name('onboarding.index');
     Route::post('/onboarding', [OnboardingController::class, 'store'])->name('onboarding.store');
+    Route::get('/onboarding/2fa-qr', [OnboardingController::class, 'getTwoFactorQr'])->name('onboarding.2fa-qr');
     Route::get('/profile', [ProfileController::class,'show'])->name('profile');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

@@ -57,6 +57,112 @@
                 </div>
             </div>
 
+            <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
+                <h5 class="fw-bold mb-0">{{ __('auth/two-factor-challenge.2fa_title') }}</h5>
+                <i class="bi bi-shield-check text-primary fs-4"></i>
+            </div>
+            <div class="card-body">
+                
+                {{-- ESTADO 1: El usuario NO tiene configurado el 2FA --}}
+                @if(! auth()->user()->two_factor_secret)
+                    <p class="text-muted small">{{ __('auth/two-factor-challenge.2fa_disabled_desc') }}</p>
+                    <form method="POST" action="{{ url('/user/two-factor-authentication') }}">
+                        @csrf
+                        <button type="submit" class="btn btn-primary fw-bold shadow-sm">
+                            <i class="bi bi-shield-plus me-1"></i> {{ __('auth/two-factor-challenge.2fa_enable_btn') }}
+                        </button>
+                    </form>
+
+                {{-- ESTADO 2: 2FA generado pero PENDIENTE DE CONFIRMACIÓN --}}
+                @elseif(auth()->user()->two_factor_secret && ! auth()->user()->two_factor_confirmed_at)
+                    <div class="alert alert-warning border-0 shadow-sm mb-4">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        {{ __('auth/two-factor-challenge.2fa_confirm_notice') }}
+                    </div>
+
+                    <div class="row g-4 align-items-center">
+                        <div class="col-md-4 text-center">
+                            {{-- Renderiza el QR nativo de Fortify --}}
+                            {!! auth()->user()->twoFactorQrCodeSvg() !!}
+                            <p class="small text-muted mt-2 mb-0">{{ __('auth/two-factor-challenge.2fa_scan_qr') }}</p>
+                        </div>
+                        <div class="col-md-8">
+                            <p class="small fw-semibold mb-2">
+                                {{ __('auth/two-factor-challenge.2fa_setup_key') }} <code class="text-primary fs-6 d-block mt-1">{{ decrypt(auth()->user()->two_factor_secret) }}</code>
+                            </p>
+
+                            <form method="POST" action="{{ url('/user/confirmed-two-factor-authentication') }}" class="mt-3">
+                                @csrf
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold text-muted">{{ __('auth/two-factor-challenge.2fa_enter_code') }}</label>
+                                    <div class="input-group" style="max-width: 300px;">
+                                        <input type="text" name="code" class="form-control" placeholder="123456" required autocomplete="one-time-code" autofocus>
+                                        <button class="btn btn-success fw-bold" type="submit">{{ __('auth/two-factor-challenge.2fa_confirm_btn') }}</button>
+                                    </div>
+                                    @error('code', 'confirmTwoFactorAuthentication')
+                                        <div class="text-danger small mt-1">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </form>
+
+                            <form method="POST" action="{{ url('/user/two-factor-authentication') }}">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-link text-danger text-decoration-none p-0 small">
+                                    <i class="bi bi-x-circle me-1"></i> {{ __('auth/two-factor-challenge.2fa_cancel_setup') }}
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                {{-- ESTADO 3: 2FA TOTALMENTE ACTIVADO Y CONFIRMADO --}}
+                @else
+                    <div class="alert alert-success border-0 shadow-sm d-flex align-items-center mb-4">
+                        <i class="bi bi-check-circle-fill me-3 fs-4"></i>
+                        <div>
+                            <h6 class="fw-bold mb-0">{{ __('auth/two-factor-challenge.2fa_active_status') }}</h6>
+                            <p class="small mb-0 opacity-75">{{ __('auth/two-factor-challenge.2fa_active_desc') }}</p>
+                        </div>
+                    </div>
+
+                    {{-- Sección de Códigos de Recuperación --}}
+                    <div class="mb-4 bg-light p-3 rounded border">
+                        <h6 class="fw-bold small text-muted text-uppercase mb-3">
+                            <i class="bi bi-key-fill me-1 text-warning"></i> {{ __('auth/two-factor-challenge.2fa_recovery_title') }}
+                        </h6>
+                        <p class="small text-muted mb-3">{{ __('auth/two-factor-challenge.2fa_recovery_desc') }}</p>
+                        
+                        <div class="row g-2 font-monospace small mb-3">
+                            @foreach (json_decode(decrypt(auth()->user()->two_factor_recovery_codes), true) as $code)
+                                <div class="col-6 col-sm-4">
+                                    <span class="bg-white px-2 py-1 border rounded d-block text-center">{{ $code }}</span>
+                                </div>
+                            @endforeach
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <form method="POST" action="{{ url('/user/two-factor-recovery-codes') }}">
+                                @csrf
+                                <button type="submit" class="btn btn-sm btn-outline-secondary fw-semibold">
+                                    <i class="bi bi-arrow-clockwise me-1"></i> {{ __('auth/two-factor-challenge.2fa_regenerate_codes') }}
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    {{-- Botón para Desactivar por completo --}}
+                    <form method="POST" action="{{ url('/user/two-factor-authentication') }}">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger fw-bold shadow-sm">
+                            <i class="bi bi-shield-minus me-1"></i> {{ __('auth/two-factor-challenge.2fa_disable_btn') }}
+                        </button>
+                    </form>
+                @endif
+
+            </div>
+        </div>
             <div class="card border-0 shadow-sm p-4 mt-4">
                 <h3 class="h5 fw-bold mb-3"><i class="bi bi-chat-square-text me-2 text-primary"></i>{{__('auth/perfil/show.my_reviews')}}</h3>
                 
