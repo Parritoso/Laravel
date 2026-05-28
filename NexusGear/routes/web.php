@@ -13,10 +13,10 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\DireccionController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\ComentarioController;
+use App\Http\Controllers\NotificationController;
 use App\Models\Pedido;
 use App\Models\Producto;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\NotificationController;
 
 // Portada pública con una selección corta de productos destacados.
 Route::get('/', function () {
@@ -90,6 +90,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/direcciones/{direccion}', [DireccionController::class, 'update'])->name('direcciones.update');
     Route::post('/productos/{producto}/comentarios', [ComentarioController::class, 'store'])->name('comentarios.store');
     Route::delete('/comentarios/{comentario}', [ComentarioController::class, 'destroy'])->name('comentarios.destroy');
+    Route::get('/notificaciones/{id}/leer', [NotificationController::class, 'read'])->name('notifications.read');
+    Route::post('/notificaciones/marcar-todas', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
 });
 
 // Cambiar la contraseña exige confirmación previa para reducir el riesgo si la sesión queda abierta.

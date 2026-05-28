@@ -70,5 +70,6 @@ class AppServiceProvider extends ServiceProvider
 
             $guest->forget();
         });
+        Producto::observe(\App\Observers\ProductoObserver::class);
     }
 }

@@ -26,80 +26,111 @@
         @forelse ($favorites as $favorite)
             @php($product = $favorite->producto)
             <div class="col-md-6 col-xl-4">
-                <article class="product-card h-100">
-                    <a href="{{ route('products.show', $product) }}" class="product-card__media">
+                <article class="product-card h-100 border shadow-sm rounded position-relative d-flex flex-column bg-white">
+                    
+                    <a href="{{ route('products.show', $product) }}" class="product-card__media d-block overflow-hidden bg-light text-center py-4 text-secondary">
                         @if (!is_null($product->imagen))
-                            <img src="{{ asset('storage/' . $product->imagen) }}" alt="{{ $product->nombre }}">
+                            <img src="{{ asset('storage/' . $product->imagen) }}" alt="{{ $product->nombre }}" class="img-fluid" style="height: 200px; object-fit: contain;">
                         @else
-                            <i class="bi {{ $product->icono }}"></i>
+                            <i class="bi {{ $product->icono }} display-4"></i>
                         @endif
                     </a>
 
-                    <div class="product-card__body">
-                        <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
-                            <div class="d-flex flex-wrap gap-1">
-                                @foreach($product->categorias as $cat)
-                                    <span class="badge text-bg-light border" style="font-size: 0.7rem;">
-                                        {{ $cat->nombre }}
-                                    </span>
-                                @endforeach
-                            </div>
-                            @if ($product->destacado)
-                                <span class="badge bg-primary" style="font-size: 0.7rem;">{{ __('favorites/index.featured_badge') }}</span>
-                            @endif
+                    <div class="product-card__body p-3 flex-grow-1 d-flex flex-column justify-content-between">
+                        <div>
+                            <h3 class="h6 fw-bold mb-1">
+                                <a href="{{ route('products.show', $product) }}" class="text-reset text-decoration-none">
+                                    {{ $product->nombre }}
+                                </a>
+                            </h3>
+                            <p class="text-muted small text-truncate mb-2">{{ $product->descripcion }}</p>
                         </div>
 
-                        <h3 class="h5 fw-bold mb-2">
-                            <a href="{{ route('products.show', $product) }}" class="text-reset text-decoration-none">
-                                {{ $product->nombre }}
-                            </a>
-                        </h3>
+                        <div class="alert-config-zone border-top pt-2 mt-2 bg-light p-2 rounded">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="small fw-semibold text-dark"><i class="bi bi-bell me-1 text-primary"></i> {{ __('favorites/index.active_alerts') }}</span>
+                                <button class="btn btn-sm btn-link text-decoration-none p-0 x-small text-secondary" 
+                                        type="button" 
+                                        data-bs-toggle="collapse" 
+                                        data-bs-target="#alert-form-{{ $product->id }}" 
+                                        aria-expanded="false">
+                                    <i class="bi bi-gear-fill"></i> {{ __('favorites/index.config') }}
+                                </button>
+                            </div>
 
-                        <p class="product-card__description">{{ $product->descripcion }}</p>
+                            <div class="d-flex gap-2 mb-1">
+                                <span class="badge {{ $favorite->alerta_precio ? 'bg-success-subtle text-success' : 'bg-secondary-subtle text-secondary' }} rounded-pill" style="font-size: 0.7rem;">
+                                    <i class="bi bi-tag-fill"></i> {{ __('favorites/index.prices') }}
+                                </span>
+                                <span class="badge {{ $favorite->alerta_stock ? 'bg-warning-subtle text-warning-emphasis' : 'bg-secondary-subtle text-secondary' }} rounded-pill" style="font-size: 0.7rem;">
+                                    <i class="bi bi-box-seam-fill"></i> {{ __('favorites/index.stock_alert', ['threshold' => $favorite->umbral_stock]) }}
+                                </span>
+                            </div>
 
-                        <small class="text-muted mt-3">
-                            <i class="bi bi-heart-fill text-danger me-1"></i>
-                            {{ __('favorites/index.added_on', ['date' => $favorite->agregado_el->format('d/m/Y')]) }}
-                        </small>
+                            <div class="collapse mt-2" id="alert-form-{{ $product->id }}">
+                                <form action="{{ route('favorites.updateSettings', $product) }}" method="POST" class="m-0 bg-white p-3 border rounded shadow-sm">
+                                    @csrf
+                                    @method('PATCH')
+                                    
+                                    <div class="form-check form-switch mb-2">
+                                        <input class="form-check-input" type="checkbox" name="alerta_precio" id="price-{{ $product->id }}" value="1" {{ $favorite->alerta_precio ? 'checked' : '' }}>
+                                        <label class="form-check-label small text-secondary" for="price-{{ $product->id }}">{{ __('favorites/index.alerts.price_label') }}</label>
+                                    </div>
 
-                        <div class="d-flex justify-content-between align-items-center gap-3 mt-4">
-                            <div>
-                                @if($product->precio_final < $product->precio)
-                                    <div class="d-flex flex-column">
-                                        <span class="text-muted text-decoration-line-through small" style="font-size: 0.85rem;">
-                                            {{ number_format($product->precio, 2, ',', '.') }} €
-                                        </span>
-                                        <div class="product-price text-danger fw-bold">
-                                            {{ number_format($product->precio_final, 2, ',', '.') }} €
+                                    <div class="form-check form-switch mb-2">
+                                        <input class="form-check-input" type="checkbox" name="alerta_stock_bajo" id="low-{{ $product->id }}" value="1" {{ $favorite->alerta_stock_bajo ? 'checked' : '' }}>
+                                        <label class="form-check-label small text-secondary" for="low-{{ $product->id }}">{{ __('favorites/index.alerts.low_stock_label') }}</label>
+                                    </div>
+
+                                    <div class="form-check form-switch mb-2">
+                                        <input class="form-check-input" type="checkbox" name="alerta_stock_agotado" id="out-{{ $product->id }}" value="1" {{ $favorite->alerta_stock_agotado ? 'checked' : '' }}>
+                                        <label class="form-check-label small text-secondary" for="out-{{ $product->id }}">{{ __('favorites/index.alerts.out_of_stock_label') }}</label>
+                                    </div>
+
+                                    <div class="form-check form-switch mb-2">
+                                        <input class="form-check-input" type="checkbox" name="alerta_stock_disponible" id="back-{{ $product->id }}" value="1" {{ $favorite->alerta_stock_disponible ? 'checked' : '' }}>
+                                        <label class="form-check-label small text-secondary" for="back-{{ $product->id }}">{{ __('favorites/index.alerts.in_stock_label') }}</label>
+                                    </div>
+
+                                    <div class="mb-2 mt-2 pt-2 border-top">
+                                        <label for="umbral-{{ $product->id }}" class="form-label text-muted x-small mb-1 d-block" style="font-size: 0.75rem;">{{ __('favorites/index.alerts.define_threshold') }}</label>
+                                        <div class="input-group input-group-sm" style="max-width: 120px;">
+                                            <input type="number" name="umbral_stock" id="umbral-{{ $product->id }}" class="form-control form-control-sm" value="{{ $favorite->umbral_stock }}" min="1" max="50">
+                                            <span class="input-group-text text-muted" style="font-size: 0.7rem;">{{ __('favorites/index.alerts.units') }}</span>
                                         </div>
                                     </div>
-                                @else
-                                    <div class="product-price">
-                                        {{ number_format($product->precio, 2, ',', '.') }} €
-                                    </div>
-                                @endif
-                                <small class="{{ $product->disponible ? 'text-success' : 'text-danger' }}">
-                                    {{ $product->disponible ? $product->stock.' '.__('favorites/index.in_stock') : __('favorites/index.out_of_stock') }}
+
+                                    <button type="submit" class="btn btn-primary btn-sm w-100 fw-bold py-1 mt-2" style="font-size: 0.75rem;">{{ __('favorites/index.alerts.save_alerts') }}</button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center gap-2 mt-3 pt-2 border-top">
+                            <div>
+                                <span class="fw-bold text-dark d-block">{{ number_format($product->precio, 2, ',', '.') }} €</span>
+                                <small class="x-small {{ $product->stock > 0 ? 'text-success' : 'text-danger' }}">
+                                    {{ $product->stock > 0 ? $product->stock.' disponibles' : 'Agotado' }}
                                 </small>
                             </div>
 
-                            <div class="d-flex gap-2">
+                            <div class="d-flex gap-1">
                                 <form method="POST" action="{{ route('favorites.destroy', $product) }}" class="m-0">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-danger favorite-action" type="submit" title="{{ __('favorites/index.remove') }}" aria-label="{{ __('favorites/index.remove') }}">
+                                    <button class="btn btn-outline-danger btn-sm" type="submit" title="Quitar de seguimiento">
                                         <i class="bi bi-heart-fill"></i>
                                     </button>
                                 </form>
-                                <form method="POST" action="{{ route('cart.store', $product) }}">
+                                <form method="POST" action="{{ route('cart.store', $product) }}" class="m-0">
                                     @csrf
                                     <input type="hidden" name="cantidad" value="1">
-                                    <button class="btn btn-primary" type="submit" @disabled(! $product->disponible) aria-label="{{ __('favorites/index.add_to_cart') }}">
+                                    <button class="btn btn-primary btn-sm" type="submit" @disabled($product->stock <= 0)>
                                         <i class="bi bi-cart-plus"></i>
                                     </button>
                                 </form>
                             </div>
                         </div>
+
                     </div>
                 </article>
             </div>

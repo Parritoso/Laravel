@@ -117,4 +117,21 @@ class Producto extends Model
     {
         return $this->comentarios()->count();
     }
+
+    private function dispararAlerta(string $tipo, array $detalles = [])
+    {
+        $query = \App\Models\Favorito::where('producto_id', $this->id)->with('usuario');
+
+        // Mapeamos dinámicamente cada tipo con su respectiva configuración booleana
+        match ($tipo) {
+            'precio'           => $query->where('alerta_precio', true),
+            'stock_agotado'    => $query->where('alerta_stock_agotado', true),
+            'stock_disponible' => $query->where('alerta_stock_disponible', true),
+            'stock_bajo'       => $query->where('alerta_stock_bajo', true)->where('umbral_stock', '>=', $this->stock),
+        };
+
+        foreach ($query->get() as $favorito) {
+            $favorito->usuario->notify(new \App\Notifications\ProductAlertNotification($this, $tipo, $detalles));
+        }
+    }
 }
