@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('favoritos', function (Blueprint $table) {
             $table->boolean('alerta_precio')->default(true);
-            $table->boolean('alerta_stock')->default(true);
+            $table->boolean('alerta_stock_bajo')->default(true);
             $table->boolean('alerta_stock_agotado')->default(true);
             $table->boolean('alerta_stock_disponible')->default(true);
             $table->unsignedInteger('umbral_stock')->default(5);
@@ -26,7 +26,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('favoritos', function (Blueprint $table) {
-            $table->dropColumn(['alerta_precio', 'alerta_stock', 'alerta_stock_agotado', 'alerta_stock_disponible', 'umbral_stock']);
+            $table->dropColumn(['alerta_precio', 'alerta_stock_bajo', 'alerta_stock_agotado', 'alerta_stock_disponible', 'umbral_stock']);
         });
     }
 };

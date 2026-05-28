@@ -4,7 +4,6 @@ namespace App\Notifications;
 
 use App\Models\Producto;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -12,13 +11,10 @@ class ProductAlertNotification extends Notification
 {
     use Queueable;
 
-    protected $producto;
-    protected $tipo; // 'precio' o 'stock'
-    protected $detalles;
+    protected Producto $producto;
+    protected string $tipo;
+    protected array $detalles;
 
-    /**
-     * Create a new notification instance.
-     */
     public function __construct(Producto $producto, string $tipo, array $detalles = [])
     {
         $this->producto = $producto;
@@ -26,19 +22,11 @@ class ProductAlertNotification extends Notification
         $this->detalles = $detalles;
     }
 
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @return array<int, string>
-     */
     public function via(object $notifiable): array
     {
         return ['mail', 'database'];
     }
 
-    /**
-     * Get the mail representation of the notification.
-     */
     public function toMail(object $notifiable): MailMessage
     {
         $asunto = match($this->tipo) {
@@ -55,11 +43,6 @@ class ProductAlertNotification extends Notification
             ->action(__('notifications.view_product'), route('products.show', $this->producto));
     }
 
-    /**
-     * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
-     */
     public function toArray(object $notifiable): array
     {
         return [

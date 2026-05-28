@@ -13,4 +13,8 @@ return[
     'terms' => '利用規約',
     'contact' => 'お問い合わせ',
     'dashboard' => 'ダッシュボード',
+    'notifications_title' => '通知',
+    'mark_all_read' => 'すべて既読にする',
+    'no_notifications' => '未読の通知はありません。',
+    'notification_success' => '通知を既読にしました。',
 ];

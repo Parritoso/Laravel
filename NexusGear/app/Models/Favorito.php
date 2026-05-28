@@ -17,7 +17,7 @@ class Favorito extends Model
         'producto_id',
         'agregado_el',
         'alerta_precio',
-        'alerta_stock',
+        'alerta_stock_bajo',
         'alerta_stock_agotado',
         'alerta_stock_disponible',
         'umbral_stock',
@@ -26,7 +26,7 @@ class Favorito extends Model
     protected $casts = [
         'agregado_el' => 'datetime',
         'alerta_precio' => 'boolean',
-        'alerta_stock'  => 'boolean',
+        'alerta_stock_bajo'  => 'boolean',
         'alerta_stock_agotado' => 'boolean',
         'alerta_stock_disponible' => 'boolean',
         'umbral_stock'  => 'integer',

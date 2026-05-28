@@ -13,4 +13,8 @@ return[
     'terms' => 'Termos',
     'contact' => 'Contacto',
     'dashboard' => 'Painel de Controle',
+    'notifications_title' => 'Notificações',
+    'mark_all_read' => 'Marcar todas como lidas',
+    'no_notifications' => 'Não tens notificações pendentes.',
+    'notification_success' => 'Notificações marcadas como lidas.',
 ];

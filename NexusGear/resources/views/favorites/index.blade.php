@@ -62,7 +62,7 @@
                                 <span class="badge {{ $favorite->alerta_precio ? 'bg-success-subtle text-success' : 'bg-secondary-subtle text-secondary' }} rounded-pill" style="font-size: 0.7rem;">
                                     <i class="bi bi-tag-fill"></i> {{ __('favorites/index.prices') }}
                                 </span>
-                                <span class="badge {{ $favorite->alerta_stock ? 'bg-warning-subtle text-warning-emphasis' : 'bg-secondary-subtle text-secondary' }} rounded-pill" style="font-size: 0.7rem;">
+                                <span class="badge {{ $favorite->alerta_stock_bajo ? 'bg-warning-subtle text-warning-emphasis' : 'bg-secondary-subtle text-secondary' }} rounded-pill" style="font-size: 0.7rem;">
                                     <i class="bi bi-box-seam-fill"></i> {{ __('favorites/index.stock_alert', ['threshold' => $favorite->umbral_stock]) }}
                                 </span>
                             </div>

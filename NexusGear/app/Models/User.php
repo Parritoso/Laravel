@@ -15,8 +15,8 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
     use HasFactory, Notifiable, TwoFactorAuthenticatable;
+
     protected $table = 'users';
 
     protected $fillable = [
