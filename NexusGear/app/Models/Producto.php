@@ -83,6 +83,11 @@ class Producto extends Model
         return $this->hasMany(LineaPedido::class, 'producto_id');
     }
 
+    public function comentarios(): HasMany
+    {
+        return $this->hasMany(Comentario::class, 'producto_id');
+    }
+
     /**
     * Método extra para obtener el precio final ya rebajado
     */
@@ -94,5 +99,17 @@ class Producto extends Model
         return $descuento 
             ? $descuento->calcularPrecioDescontado($this->precio) 
             : $this->precio;
+    }
+
+    // Accessor para obtener la puntuación media (ej: 4.5)
+    public function getPuntuacionMediaAttribute(): float
+    {
+        return round($this->comentarios()->avg('puntuacion') ?? 0, 1);
+    }
+
+    // Accessor para saber el total de valoraciones
+    public function getTotalComentariosAttribute(): int
+    {
+        return $this->comentarios()->count();
     }
 }

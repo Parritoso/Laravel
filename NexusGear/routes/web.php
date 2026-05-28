@@ -12,6 +12,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\DireccionController;
 use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\ComentarioController;
 use App\Models\Pedido;
 use App\Models\Producto;
 use Illuminate\Support\Facades\Route;
@@ -80,6 +81,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/direcciones', [DireccionController::class, 'store'])->name('direcciones.store');
     Route::delete('/direcciones/{direccion}', [DireccionController::class, 'destroy'])->name('direcciones.destroy');
     Route::put('/direcciones/{direccion}', [DireccionController::class, 'update'])->name('direcciones.update');
+    Route::post('/productos/{producto}/comentarios', [ComentarioController::class, 'store'])->name('comentarios.store');
+    Route::delete('/comentarios/{comentario}', [ComentarioController::class, 'destroy'])->name('comentarios.destroy');
 });
 
 Route::middleware(['auth', 'verified', 'password.confirm'])->group(function () {

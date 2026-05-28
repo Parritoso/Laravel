@@ -111,6 +111,170 @@
     </div>
 </section>
 
+<section class="product-reviews mb-5">
+    <hr class="my-5">
+    <div class="row g-5">
+        
+        <div class="col-md-7">
+            <h3 class="h4 fw-bold mb-4">
+                {{ __('products/show.reviews_title', ['count' => $product->total_comentarios]) }} 
+                ({{ $product->puntuacion_media }} <i class="bi bi-star-fill text-warning fs-5"></i>)
+            </h3>
+
+            @if($comentarios->isEmpty())
+                <p class="text-muted">{{ __('products/show.no_reviews') }}</p>
+            @else
+                <div class="d-flex flex-column gap-3">
+                    @foreach($comentarios as $comentario)
+                        <div class="card border-0 shadow-sm p-3 position-relative">
+                            
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <strong class="small text-dark">{{ $comentario->user->name }}</strong>
+                                <div class="d-flex align-items-center gap-3">
+                                    <span class="text-muted x-small" style="font-size: 0.8rem;">{{ $comentario->created_at->diffForHumans() }}</span>
+                                    
+                                    @if(Auth::id() === $comentario->user_id)
+                                        <form action="{{ route('comentarios.destroy', $comentario) }}" method="POST" onsubmit="return confirm('¿Seguro que quieres borrar tu opinión?');" class="m-0">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-link text-danger p-0 border-0 lh-1" title="Borrar comentario">
+                                                <i class="bi bi-trash3 fs-6"></i>
+                                            </button>
+                                        </form>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div class="text-warning mb-2 small">
+                                @for($i = 1; $i <= 5; $i++)
+                                    @if($comentario->puntuacion >= $i)
+                                        <i class="bi bi-star-fill"></i>
+                                    @elseif($comentario->puntuacion >= ($i - 0.5))
+                                        <i class="bi bi-star-half"></i>
+                                    @else
+                                        <i class="bi bi-star"></i>
+                                    @endif
+                                @endfor
+                            </div>
+
+                            @if($comentario->contenido)
+                                <p class="mb-0 text-secondary small">{{ $comentario->contenido }}</p>
+                            @endif
+                        </div>
+                    @endforeach
+                </div>
+
+                <div class="mt-4">
+                    {{ $comentarios->links() }}
+                </div>
+            @endif
+        </div>
+
+        <div class="col-md-5">
+            <div class="card border-0 shadow-sm p-4 bg-light">
+                <h4 class="h5 fw-bold mb-3">{{ __('products/show.write_review_title') }}</h4>
+                
+                @auth
+                    <form action="{{ route('comentarios.store', $product) }}" method="POST">
+                        @csrf
+                        
+                        <div class="mb-3">
+                            <label class="form-label d-block fw-semibold small">{{ __('products/show.rating_label') }}</label>
+                            
+                            <div class="star-rating-picker d-inline-flex gap-1 text-warning display-6" style="cursor: pointer;">
+                                <i class="bi bi-star" data-value="1"></i>
+                                <i class="bi bi-star" data-value="2"></i>
+                                <i class="bi bi-star" data-value="3"></i>
+                                <i class="bi bi-star" data-value="4"></i>
+                                <i class="bi bi-star" data-value="5"></i>
+                            </div>
+
+                            <input type="hidden" name="puntuacion" id="puntuacion-input" value="{{ old('puntuacion', $userReview->puntuacion ?? 5) }}">
+                            @error('puntuacion') <span class="text-danger d-block small">{{ $message }}</span> @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="contenido" class="form-label fw-semibold small">{{ __('products/show.comment_label') }}</label>
+                            <textarea name="contenido" id="contenido" rows="3" class="form-control form-control-sm" 
+                                placeholder="{{ __('products/show.comment_placeholder') }}">{{ old('contenido', $userReview->contenido ?? '') }}</textarea>
+                            @error('contenido') <span class="text-danger d-block small">{{ $message }}</span> @enderror
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 fw-bold">
+                            {{ $userReview ? __('products/show.update_review_btn') : __('products/show.submit_review_btn') }}
+                        </button>
+                    </form>
+                @else
+                    <div class="text-center py-3">
+                        <i class="bi bi-chat-left-dots text-muted display-6 d-block mb-2"></i>
+                        <p class="small text-muted mb-3">{{ __('products/show.login_to_review_desc') }}</p>
+                        <a href="{{ route('login') }}" class="btn btn-outline-primary btn-sm px-4 fw-bold">
+                            {{ __('products/show.login_btn') }}
+                        </a>
+                    </div>
+                @endauth
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const wrapper = document.querySelector('.star-rating-picker');
+    if (!wrapper) return;
+
+    const stars = wrapper.querySelectorAll('.bi');
+    const input = document.getElementById('puntuacion-input');
+    let currentRating = parseFloat(input.value) || 5;
+
+    // Pintar estado inicial cargado
+    updateStarsVisual(currentRating);
+
+    stars.forEach(star => {
+        star.addEventListener('mousemove', function (e) {
+            const rect = star.getBoundingClientRect();
+            const starValue = parseFloat(star.getAttribute('data-value'));
+            // Si el cursor está en la mitad izquierda de la estrella, resta 0.5
+            const isHalf = (e.clientX - rect.left) < (rect.width / 2);
+            const hoverValue = isHalf ? starValue - 0.5 : starValue;
+            
+            updateStarsVisual(hoverValue);
+        });
+
+        star.addEventListener('click', function (e) {
+            const rect = star.getBoundingClientRect();
+            const starValue = parseFloat(star.getAttribute('data-value'));
+            const isHalf = (e.clientX - rect.left) < (rect.width / 2);
+            
+            currentRating = isHalf ? starValue - 0.5 : starValue;
+            input.value = currentRating;
+        });
+    });
+
+    wrapper.addEventListener('mouseleave', function () {
+        // Al quitar el ratón, vuelve a fijar la puntuación guardada/seleccionada
+        updateStarsVisual(currentRating);
+    });
+
+    function updateStarsVisual(value) {
+        stars.forEach(star => {
+            const starValue = parseFloat(star.getAttribute('data-value'));
+            // Reseteamos las clases base manteniendo Bootstrap Icons
+            star.className = 'bi'; 
+            
+            if (value >= starValue) {
+                star.classList.add('bi-star-fill');
+            } else if (value === starValue - 0.5) {
+                star.classList.add('bi-star-half');
+            } else {
+                star.classList.add('bi-star');
+            }
+        });
+    }
+});
+</script>
+
 @if ($relatedProducts->isNotEmpty())
     <section class="mb-5">
         <div class="d-flex justify-content-between align-items-end gap-3 mb-3">

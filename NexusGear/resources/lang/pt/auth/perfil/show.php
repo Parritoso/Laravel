@@ -26,4 +26,7 @@ return [
     'edit_address' => 'Editar Endereço',
     'update_changes' => 'Atualizar Alterações',
     'close' => 'Fechar',
+    'my_reviews'     => 'Minhas Avaliações',
+    'no_comment'     => 'Ainda não deixou avaliações em nenhum produto.',
+    'coment_publish' => 'Publicado em :date',
 ];

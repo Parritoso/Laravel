@@ -26,4 +26,7 @@ return [
     'edit_address' => '住所を編集',
     'update_changes' => '変更を更新',
     'close' => '閉じる',
+    'my_reviews'     => 'マイレビュー',
+    'no_comment'     => 'まだどの商品にもレビューを投稿していません。',
+    'coment_publish' => ':date に公開',
 ];

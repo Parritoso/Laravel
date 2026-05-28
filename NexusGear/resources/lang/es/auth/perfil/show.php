@@ -26,4 +26,7 @@ return [
     'edit_address' => 'Editar Dirección',
     'update_changes' => 'Actualizar Cambios',
     'close' => 'Cerrar',
+    'my_reviews'=> 'Mis Valoraciones',
+    'no_comment'=> 'Aún no has dejado valoraciones en ningún producto.',
+    'coment_publish'=> 'Publicado el :date',
 ];

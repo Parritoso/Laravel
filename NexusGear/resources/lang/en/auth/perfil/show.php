@@ -26,4 +26,7 @@ return [
     'edit_address' => 'Edit Address',
     'update_changes' => 'Update Changes',
     'close' => 'Close',
+    'my_reviews'     => 'My Reviews',
+    'no_comment'     => 'You haven\'t left any reviews for any products yet.',
+    'coment_publish' => 'Published on :date',
 ];

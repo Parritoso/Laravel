@@ -163,6 +163,36 @@
 
             </div>
         </div>
+            <div class="card border-0 shadow-sm p-4 mt-4">
+                <h3 class="h5 fw-bold mb-3"><i class="bi bi-chat-square-text me-2 text-primary"></i>{{__('auth/perfil/show.my_reviews')}}</h3>
+                
+                @if($misComentarios->isEmpty())
+                    <p class="text-muted small mb-0">{{__('auth/perfil/show.no_comment')}}</p>
+                @else
+                    <div class="list-group list-group-flush">
+                        @foreach($misComentarios as $comentario)
+                            <div class="list-group-item px-0 py-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="h6 mb-1 fw-bold">
+                                        <a href="{{ route('products.show', $comentario->producto) }}" class="text-decoration-none text-dark">
+                                            {{ $comentario->producto->nombre }}
+                                        </a>
+                                    </h5>
+                                    <span class="text-warning small">
+                                        @for($i = 1; $i <= 5; $i++)
+                                            <i class="bi {{ $i <= $comentario->puntuacion ? 'bi-star-fill' : 'bi-star' }}"></i>
+                                        @endfor
+                                    </span>
+                                </div>
+                                @if($comentario->contenido)
+                                    <p class="text-muted small mb-0 mt-1">"{{ $comentario->contenido }}"</p>
+                                @endif
+                                <small class="text-muted d-block mt-1" style="font-size: 0.75rem;">{{ __('auth/perfil/show.coment_publish', ['date' => $comentario->created_at->isoFormat('LL')]) }}</small>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
+            </div>
 
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
