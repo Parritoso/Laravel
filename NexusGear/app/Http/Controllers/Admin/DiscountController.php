@@ -11,10 +11,10 @@ use Illuminate\View\View;
 
 class DiscountController extends Controller {
     /**
-     * Muestra el listado de todos los descuentos.
+     * Lista los descuentos junto al número de productos que los tienen asignados.
      */
     public function index(){
-        $descuentos = Descuento::withCount('productos')->get();;
+        $descuentos = Descuento::withCount('productos')->get();
         return view('admin.discounts.index', compact('descuentos'));
     }
 
@@ -24,12 +24,12 @@ class DiscountController extends Controller {
     }
 
     /**
-     * Almacena un nuevo descuento en la base de datos.
+     * Crea un descuento. La fecha final debe ser futura para que no nazca caducado.
      */
     public function store(Request $request){
         $validated = $request->validate([
             'codigo' => 'required|unique:descuentos|max:255',
-            'tipo' => 'required|in:fijo,porcentaje', // Ejemplo de tipos
+            'tipo' => 'required|in:fijo,porcentaje',
             'valor' => 'required|numeric|min:0',
             'fecha_fin' => 'required|date|after:today',
         ]);
@@ -40,7 +40,7 @@ class DiscountController extends Controller {
     }
 
     /**
-     * Muestra un descuento específico (y opcionalmente los productos asociados).
+     * Muestra el descuento con los productos asociados desde la tabla pivote.
      */
     public function show(Descuento $discount){
         $discount->load('productos'); 
@@ -55,7 +55,7 @@ class DiscountController extends Controller {
     }
 
     /**
-     * Actualiza el descuento en la base de datos.
+     * Actualiza el descuento manteniendo el código único excepto para el propio registro.
      */
     public function update(Request $request,Descuento $discount): RedirectResponse{
         $validated = $request->validate([
@@ -71,7 +71,7 @@ class DiscountController extends Controller {
     }
 
     /**
-     * Elimina un descuento específico.
+     * Elimina el descuento; las relaciones pivote se limpian por las claves foráneas.
      */
     public function destroy(Descuento $discount){
         $discount->delete();

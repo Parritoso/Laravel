@@ -10,18 +10,17 @@ use Illuminate\Support\Facades\Auth;
 class CheckAdmin
 {
     /**
-     * Handle an incoming request.
+     * Protege las rutas del panel de administración.
      *
      * @param  Closure(Request): (Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Verificamos si el usuario está autenticado y si es administrador
+        // La zona de administración exige sesión iniciada y rol admin asignado.
         if (Auth::check() && Auth::user()->isAdmin()) {
             return $next($request);
         }
 
-        // Si no es admin, lo redirigimos o lanzamos un error 403 (Prohibido)
         return redirect('/')->with('error', __('messages.admin_forbidden'));
     }
 }

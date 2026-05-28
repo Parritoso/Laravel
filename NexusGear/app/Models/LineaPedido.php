@@ -16,9 +16,9 @@ class LineaPedido extends Model
         'pedido_id',
         'producto_id',
         'cantidad',
-        'precio_unitario', // Precio final cobrado
-        'precio_original', // Precio en ese momento
-        'descuento_total', // Cantidad ahorrada
+        'precio_unitario', // precio final cobrado por unidad
+        'precio_original', // precio base del producto en el momento de compra
+        'descuento_total', // ahorro total de la línea
         'subtotal',
     ];
 

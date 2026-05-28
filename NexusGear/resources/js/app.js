@@ -2,12 +2,11 @@ import './bootstrap';
 import * as bootstrap from 'bootstrap';
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Escuchar cualquier modal que se abra en la app
     document.addEventListener('show.bs.modal', function (event) {
         const button = event.relatedTarget;
         if (!button) return;
 
-        // Buscamos si el botón tiene los atributos necesarios
+        // Los modales de borrado se reutilizan: el botón indica el texto visible y la ruta del form.
         const modal = event.target;
         const nombre = button.getAttribute('data-nombre') || button.getAttribute('data-codigo');
         const action = button.getAttribute('data-action');

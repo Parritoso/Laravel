@@ -69,8 +69,8 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-    * Método auxiliar para verificar si es administrador
-    */
+     * Centraliza la comprobación de administrador para middleware y vistas.
+     */
     public function isAdmin()
     {
         return $this->roles()->where('nombre_rol', 'admin')->exists();

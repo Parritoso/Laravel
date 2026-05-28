@@ -10,7 +10,7 @@ use App\Models\Categoria;
 class ProductoCategoriaSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Asigna categorías a productos de demo por nombre.
      */
     public function run(): void
     {
@@ -33,13 +33,14 @@ class ProductoCategoriaSeeder extends Seeder
         ];
 
         foreach ($asignaciones as $slug => $nombresProductos) {
+            // Se separa la asignación de categorías para poder ajustar los productos de demo sin tocar migraciones.
             $categoriaId = ($slug === 'office') ? $officeId : $gamerId;
 
             foreach ($nombresProductos as $nombre) {
                 $producto = Producto::where('nombre', $nombre)->first();
 
                 if ($producto && $categoriaId) {
-                    // syncWithoutDetaching evita duplicados si corres el seeder varias veces
+                    // Evita duplicados si el seeder se ejecuta más de una vez.
                     $producto->categorias()->syncWithoutDetaching([$categoriaId]);
                 }
             }

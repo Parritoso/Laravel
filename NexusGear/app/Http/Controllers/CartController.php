@@ -27,6 +27,7 @@ class CartController extends Controller
     {
         $data = $request->validate(['cantidad' => ['required', 'integer', 'min:1']]);
 
+        // No se permite añadir un producto agotado aunque llegue una petición manual al controlador.
         if (!$producto->disponible) {
             return back()->with('error', __('messages.cart_out_of_stock'));
         }
@@ -36,6 +37,7 @@ class CartController extends Controller
             $item        = $cart->items()->where('producto_id', $producto->id)->first();
             $newQuantity = ($item?->cantidad ?? 0) + $data['cantidad'];
 
+            // Se valida la cantidad final, no solo la cantidad enviada en esta petición.
             if ($newQuantity > $producto->stock) {
                 return back()->with('error', __('messages.cart_not_enough_stock'));
             }
@@ -57,6 +59,7 @@ class CartController extends Controller
             $existing    = collect($guest->items())->firstWhere('producto_id', $producto->id);
             $newQuantity = ($existing['cantidad'] ?? 0) + $data['cantidad'];
 
+            // El carrito invitado usa cookie, pero aplica las mismas reglas de stock que el carrito en BD.
             if ($newQuantity > $producto->stock) {
                 return back()->with('error', __('messages.cart_not_enough_stock'));
             }
@@ -115,6 +118,11 @@ class CartController extends Controller
         return Carrito::firstOrCreate(['usuario_id' => Auth::id()]);
     }
 
+    /**
+     * Adapta el carrito guardado en cookie al mismo formato que consume la vista del carrito.
+     * La cookie guarda solo datos mínimos; los productos se vuelven a consultar para evitar
+     * mostrar información obsoleta si el catálogo cambió desde la última visita.
+     */
     private function buildGuestCartView(): object
     {
         $rawItems   = app(GuestCartService::class)->items();
@@ -124,6 +132,7 @@ class CartController extends Controller
             : collect();
 
         $items = collect($rawItems)
+            // Si un producto fue eliminado del catálogo, no se muestra aunque siga en la cookie.
             ->filter(fn($i) => isset($products[$i['producto_id']]))
             ->map(fn($i) => (object) [
                 'producto_id'              => $i['producto_id'],

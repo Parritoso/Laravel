@@ -37,6 +37,7 @@ class Pedido extends Model
     {
         $key = 'statuses.'.$this->estado;
 
+        // Si aparece un estado no traducido, se usa pendiente como etiqueta segura.
         return trans()->has($key) ? __($key) : __('statuses.pendiente');
     }
 
@@ -66,6 +67,9 @@ class Pedido extends Model
         return $this->hasMany(LineaPedido::class, 'pedido_id');
     }
 
+    /**
+     * Dirección de envío guardada en el pedido, independiente de cambios posteriores del perfil.
+     */
     public function getDireccionCompletaAttribute() {
         return "{$this->envio_calle}, {$this->envio_ciudad} ({$this->envio_codigo_postal})";
     }

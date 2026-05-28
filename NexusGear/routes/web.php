@@ -17,6 +17,7 @@ use App\Models\Pedido;
 use App\Models\Producto;
 use Illuminate\Support\Facades\Route;
 
+// Portada pública con una selección corta de productos destacados.
 Route::get('/', function () {
     return view('home', [
         'featuredProducts' => Producto::where('destacado', true)->orderBy('nombre')->take(4)->get(),
@@ -32,6 +33,7 @@ Route::get('/home', function() {
     ]);
 })->middleware(['auth','verified'])->name('home');
 
+// Rutas del panel interno. Se agrupan para compartir prefijo, nombre y middleware de administrador.
 Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     
     Route::get('/dashboard', function () {
@@ -54,15 +56,18 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::patch('orders/{pedido}', [AdminOrderController::class, 'update'])->name('orders.update');
 });
 
+// Catálogo público y ficha de producto.
 Route::get('/productos', [ProductController::class, 'index'])->name('products.index');
 Route::get('/productos/{producto}', [ProductController::class, 'show'])->name('products.show');
 
+// Carrito disponible tanto para invitados como para usuarios autenticados.
 Route::get('/carrito', [CartController::class, 'index'])->name('cart.index');
 Route::post('/carrito/productos/{producto}', [CartController::class, 'store'])->name('cart.store');
 Route::patch('/carrito/productos/{producto}', [CartController::class, 'update'])->name('cart.update');
 Route::delete('/carrito/productos/{producto}', [CartController::class, 'destroy'])->name('cart.destroy');
 Route::delete('/carrito', [CartController::class, 'clear'])->name('cart.clear');
 
+// Operaciones que requieren cuenta verificada: compra, pedidos, favoritos, perfil y reseñas.
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout', [OrderController::class, 'store'])->name('checkout.store');
@@ -85,6 +90,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/comentarios/{comentario}', [ComentarioController::class, 'destroy'])->name('comentarios.destroy');
 });
 
+// Cambiar la contraseña exige confirmación previa para reducir el riesgo si la sesión queda abierta.
 Route::middleware(['auth', 'verified', 'password.confirm'])->group(function () {
     Route::get('/profile/password', [ProfileController::class, 'editPassword'])->name('profile.password.edit');
     Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');

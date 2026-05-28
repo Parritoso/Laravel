@@ -26,6 +26,7 @@ class ItemCarrito extends Model
 
     public function getSubtotalAttribute(): float
     {
+        // Se calcula con el precio final del producto para reflejar descuentos activos en el carrito.
         return $this->cantidad * (float) $this->producto->precio_final;
     }
 

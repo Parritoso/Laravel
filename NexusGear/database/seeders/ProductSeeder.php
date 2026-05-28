@@ -10,6 +10,7 @@ class ProductSeeder extends Seeder
 {
     public function run(): void
     {
+        // updateOrCreate permite regenerar datos de demo sin duplicar categorías.
         $office = Categoria::updateOrCreate(
             ['slug' => 'office'],
             ['nombre' => 'Office & Focus', 'slug' => 'office']
@@ -90,6 +91,7 @@ class ProductSeeder extends Seeder
         ];
 
         foreach ($productos as $producto) {
+        // Las categorías se sincronizan después porque pertenecen a una tabla pivote.
             $categorias = $producto['categorias'];
             unset($producto['categorias']);
 

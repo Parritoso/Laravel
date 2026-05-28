@@ -16,6 +16,7 @@ class ComentarioController extends Controller
             'contenido'  => 'nullable|string|max:1000',
         ]);
 
+        // Un usuario solo puede tener una valoración por producto; si vuelve a comentar, se actualiza.
         $producto->comentarios()->updateOrCreate(
             ['user_id' => Auth::id()],
             [
@@ -29,7 +30,7 @@ class ComentarioController extends Controller
 
     public function destroy(Comentario $comentario)
     {
-        // Seguridad: Verificar que el comentario pertenece al usuario logueado
+        // Solo el autor puede borrar su valoración.
         if ($comentario->user_id !== Auth::id()) {
             abort(403, __('produtcs/show.non_delete'));
         }

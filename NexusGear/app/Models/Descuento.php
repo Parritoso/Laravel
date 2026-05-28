@@ -29,8 +29,7 @@ class Descuento extends Model
     }
 
     /**
-     * Filtra los descuentos que aún no han caducado.
-     * Uso: Descuento::active()->get();
+     * Limita la consulta a descuentos que todavía pueden aplicarse.
      */
     public function scopeActive(Builder $query): void
     {
@@ -38,7 +37,7 @@ class Descuento extends Model
     }
 
     /**
-     * Busca un descuento por su código.
+     * Permite localizar un descuento desde formularios o futuras validaciones por código.
      */
     public function scopeByCodigo(Builder $query, string $codigo): void
     {
@@ -46,7 +45,7 @@ class Descuento extends Model
     }
 
     /**
-     * Determina si el descuento ha expirado.
+     * Comprueba la validez desde una instancia ya cargada.
      */
     public function esValido(): bool
     {
@@ -54,20 +53,17 @@ class Descuento extends Model
     }
 
     /**
-     * Calcula el nuevo precio aplicando este descuento.
-     * * @param float $precioOriginal
-     * @return float
+     * Calcula el precio final sin permitir importes negativos.
+     * Los descuentos pueden ser porcentuales o una cantidad fija en euros.
      */
     public function calcularPrecioDescontado(float $precioOriginal): float
     {
         if ($this->tipo === 'porcentaje') {
-            // Ejemplo: 20% de descuento
             $descuento = $precioOriginal * ($this->valor / 100);
             return max(0, $precioOriginal - $descuento);
         }
 
         if ($this->tipo === 'fijo') {
-            // Ejemplo: 10€ de descuento
             return max(0, $precioOriginal - $this->valor);
         }
 

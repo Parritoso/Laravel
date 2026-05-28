@@ -11,26 +11,25 @@ use App\Models\User;
 class UserSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Crea usuarios de prueba con los roles principales del sistema.
      */
     public function run(): void
     {
-        // 1. Obtenemos los IDs de los roles que acabamos de crear
+        // Se buscan los roles por nombre para no depender de IDs fijos entre entornos.
         $adminRoleId = DB::table('roles')->where('nombre_rol', 'admin')->value('id');
         $customerRoleId = DB::table('roles')->where('nombre_rol', 'customer')->value('id');
 
-        // 2. Crear un Administrador
+        // Usuarios base para probar el panel de administración y la parte de cliente.
         $admin = User::create([
             'name' => 'Admin Nexus',
             'email' => 'admin@nexusgear.com',
-            'password' => Hash::make('admin123'), // Siempre encriptada
+            'password' => Hash::make('admin123'),
             'email_verified_at' => now(),
         ]);
         
-        // Adjuntar rol en la tabla pivote con el campo 'asignado_el'
+        // La fecha de asignación queda registrada en la tabla pivote.
         $admin->roles()->attach($adminRoleId, ['asignado_el' => now()]);
 
-        // 3. Crear un Usuario Cliente
         $customer = User::create([
             'name' => 'Juan Cliente',
             'email' => 'juan@example.com',

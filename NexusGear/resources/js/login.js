@@ -3,11 +3,10 @@ document.addEventListener('DOMContentLoaded', function () {
         const toggleIcon = document.querySelector('#togglePasswordIcon');
 
         toggleIcon.addEventListener('click', function () {
-            // Cambiar el tipo de input
+            // Alterna visibilidad sin cambiar el valor escrito por el usuario.
             const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
             passwordInput.setAttribute('type', type);
             
-            // Cambiar el icono (Bootstrap Icons)
             this.classList.toggle('bi-eye');
             this.classList.toggle('bi-eye-slash');
         });

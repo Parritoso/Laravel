@@ -18,7 +18,8 @@ class DireccionController extends Controller
         ]);
 
         $user = auth()->user();
-        
+
+        // La primera dirección se marca como predeterminada para que el checkout pueda proponerla.
         $user->direcciones()->create([
             'calle' => $validated['calle'],
             'numero' => $validated['numero'],
@@ -40,12 +41,11 @@ class DireccionController extends Controller
 
     public function update(Request $request, Direccion $direccion)
     {
-        // 1. Validar que la dirección le pertenece al usuario autenticado
+        // Cada dirección pertenece a un usuario; se comprueba antes de aceptar cambios por URL.
         if ($direccion->usuario_id !== auth()->id()) {
             abort(403);
         }
 
-        // 2. Validar los datos
         $validated = $request->validate([
             'calle' => 'required|string|max:255',
             'numero' => 'required|string|max:20',
@@ -53,7 +53,6 @@ class DireccionController extends Controller
             'codigo_postal' => 'required|string|max:10',
         ]);
 
-        // 3. Actualizar
         $direccion->update($validated);
 
         return back()->with('success', __('messages.address_updated'));

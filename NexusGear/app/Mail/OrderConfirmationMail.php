@@ -19,7 +19,7 @@ class OrderConfirmationMail extends Mailable
     }
 
     /**
-     * Get the message envelope.
+     * Define el asunto del correo usando el número de factura generado para el pedido.
      */
     public function envelope(): Envelope
     {
@@ -31,7 +31,7 @@ class OrderConfirmationMail extends Mailable
     }
 
     /**
-     * Get the message content definition.
+     * Usa una vista Blade para poder traducir y maquetar el resumen de compra.
      */
     public function content(): Content
     {
@@ -44,7 +44,7 @@ class OrderConfirmationMail extends Mailable
     }
 
     /**
-     * Get the attachments for the message.
+     * De momento la confirmación no adjunta PDF; la factura se muestra desde el panel de pedidos.
      *
      * @return array<int, Attachment>
      */

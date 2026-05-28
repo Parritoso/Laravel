@@ -11,16 +11,10 @@ class DatabaseSeeder extends Seeder
     use WithoutModelEvents;
 
     /**
-     * Seed the application's database.
+     * Carga los datos mínimos en el orden necesario por dependencias.
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        /*User::factory()->create([
-            'nombre' => 'Test User',
-            'email' => 'test@example.com',
-        ]);*/
         $this->call([
             RolSeeder::class,
             CategoriaSeeder::class,

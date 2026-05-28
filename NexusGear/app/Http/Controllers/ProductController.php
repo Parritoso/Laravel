@@ -11,6 +11,8 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
+        // Los filtros se validan antes de construir la consulta para evitar parámetros inesperados
+        // en la paginación y mantener URLs compartibles del catálogo.
         $filters = $request->validate([
             'q'          => ['nullable', 'string', 'max:80'],
             'profile'    => ['nullable', 'string', 'exists:categorias,slug'],
@@ -27,6 +29,7 @@ class ProductController extends Controller
 
         $query = Producto::query();
 
+        // Búsqueda sencilla sobre nombre y descripción. No usa texto completo porque el catálogo es pequeño.
         if (! empty($filters['q'])) {
             $search = $filters['q'];
             $query->where(function ($query) use ($search) {
@@ -35,6 +38,7 @@ class ProductController extends Controller
             });
         }
 
+        // "profile" se mantiene para enlaces antiguos de una sola categoría.
         if (! empty($filters['profile'])) {
             $slug = $filters['profile'];
             $query->whereHas('categorias', fn ($q) => $q->where('slug', $slug));
@@ -56,6 +60,7 @@ class ProductController extends Controller
             $query->whereHas('descuentos', fn ($q) => $q->active());
         }
 
+        // "profiles" permite filtrar por varias categorías desde el formulario del catálogo.
         if (! empty($filters['profiles'])) {
             $query->whereHas('categorias', function ($q) use ($filters) {
                 $q->whereIn('slug', $filters['profiles']);
@@ -69,6 +74,8 @@ class ProductController extends Controller
             default      => $query->orderByDesc('destacado')->orderBy('nombre'),
         };
 
+        // Los destacados se muestran aparte para dar visibilidad a productos recomendados,
+        // respetando el filtro de categoría si el usuario entra desde una familia concreta.
         $featuredQuery = Producto::where('destacado', true)->orderBy('nombre')->take(3);
 
         if (! empty($filters['profile'])) {
@@ -87,6 +94,7 @@ class ProductController extends Controller
 
     public function show(Producto $producto)
     {
+        // Productos relacionados: misma categoría, sin repetir el producto actual.
         $categoryIds = $producto->categorias->pluck('id');
         $relatedProducts = Producto::whereKeyNot($producto->id)
             ->whereHas('categorias', function ($query) use ($categoryIds) {
@@ -97,6 +105,7 @@ class ProductController extends Controller
             ->take(3)
             ->get();
 
+        // Cada usuario puede editar su propia valoración desde la ficha del producto.
         $comentarios = $producto->comentarios()->with('user')->latest()->paginate(5);
         $userReview = Auth::check() 
             ? $producto->comentarios()->where('user_id', Auth::id())->first() 

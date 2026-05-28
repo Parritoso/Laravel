@@ -14,7 +14,7 @@ class CreateNewUser implements CreatesNewUsers
     use PasswordValidationRules;
 
     /**
-     * Validate and create a newly registered user.
+     * Valida el registro y crea la cuenta inicial del cliente.
      *
      * @param  array<string, string>  $input
      *
@@ -40,6 +40,7 @@ class CreateNewUser implements CreatesNewUsers
             'password' => Hash::make($input['password']),
         ]);
 
+        // Se crea el carrito del usuario al registrarse para simplificar las operaciones posteriores.
         $user->carrito()->create();
 
         return $user;

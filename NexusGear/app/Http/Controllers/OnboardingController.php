@@ -31,7 +31,6 @@ class OnboardingController extends Controller
     {
         $user = Auth::user();
 
-        // Validamos los datos
         $request->validate([
             'language' => 'required|in:es,en,pt,ja',
             'address' => 'nullable|string|max:255',
@@ -39,15 +38,15 @@ class OnboardingController extends Controller
             'zip_code' => 'nullable|string|max:10',
         ]);
 
-        // Guardamos en la base de datos (incluyendo el nuevo campo language)
+        // El onboarding recoge solo preferencias iniciales. El usuario puede completar
+        // o corregir la dirección más adelante desde su perfil.
         $user->update([
             'language' => $request->language,
-            'address' => $request->address, // Asegúrate de tener estos campos en tu migración o usarlos según tu lógica
+            'address' => $request->address,
             'city' => $request->city,
             'zip_code' => $request->zip_code,
         ]);
 
-        // Una vez completado, al Home
         return redirect()->route('home')->with('success', __('messages.onboarding_completed'));
     }
 }

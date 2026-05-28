@@ -7,10 +7,16 @@ use Illuminate\Support\Facades\Cookie;
 class GuestCartService
 {
     const COOKIE_NAME = 'guest_cart';
-    const LIFETIME_MINUTES = 30 * 24 * 60; // 30 días
+
+    // El carrito invitado dura 30 días para que el usuario no lo pierda entre sesiones.
+    const LIFETIME_MINUTES = 30 * 24 * 60;
 
     private ?array $cache = null;
 
+    /**
+     * Lee el carrito guardado en la cookie y lo mantiene en memoria durante la petición.
+     * Si la cookie viene vacía o manipulada, se descarta y se trabaja con un carrito limpio.
+     */
     private function read(): array
     {
         if ($this->cache !== null) {
@@ -21,6 +27,10 @@ class GuestCartService
         return $this->cache = is_array($decoded) ? $decoded : [];
     }
 
+    /**
+     * Reescribe la cookie completa.
+     * Se normalizan los índices para que JSON guarde siempre un array simple de productos.
+     */
     private function write(array $items): void
     {
         $this->cache = array_values($items);
@@ -50,6 +60,7 @@ class GuestCartService
         $items = $this->read();
         $index = $this->indexOf($items, $productoId);
 
+        // Si el producto ya estaba en el carrito, se acumula la cantidad y se actualiza el precio.
         if ($index !== false) {
             $items[$index]['cantidad'] += $cantidad;
             $items[$index]['precio_actual'] = $precio;

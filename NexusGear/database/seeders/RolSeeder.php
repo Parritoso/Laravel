@@ -9,11 +9,11 @@ use Illuminate\Support\Facades\DB;
 class RolSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Inserta los roles necesarios para permisos y navegacion.
      */
     public function run(): void
     {
-        // Insertamos los roles base siguiendo tu esquema
+        // Roles mínimos del proyecto: administración y cliente normal.
         DB::table('roles')->insert([
             ['nombre_rol' => 'admin'],
             ['nombre_rol' => 'customer'],

@@ -49,6 +49,7 @@ class Producto extends Model
     {
         $nombre = strtolower($this->nombre);
 
+        // Icono orientativo para tarjetas del catálogo cuando no se necesita una imagen específica.
         return match (true) {
             str_contains($nombre, 'teclado') => 'bi-keyboard',
             str_contains($nombre, 'mouse'), str_contains($nombre, 'raton'), str_contains($nombre, 'ratón') => 'bi-mouse2',
@@ -89,11 +90,11 @@ class Producto extends Model
     }
 
     /**
-    * Método extra para obtener el precio final ya rebajado
-    */
+     * Devuelve el precio vigente del producto aplicando el primer descuento activo.
+     * Si no hay descuentos válidos, se mantiene el precio base.
+     */
     public function getPrecioFinalAttribute()
     {
-        // Buscamos si tiene algún descuento activo
         $descuento = $this->descuentos()->active()->first();
         
         return $descuento 
@@ -101,13 +102,17 @@ class Producto extends Model
             : $this->precio;
     }
 
-    // Accessor para obtener la puntuación media (ej: 4.5)
+    /**
+     * Puntuación media redondeada a un decimal para mostrarla en la ficha del producto.
+     */
     public function getPuntuacionMediaAttribute(): float
     {
         return round($this->comentarios()->avg('puntuacion') ?? 0, 1);
     }
 
-    // Accessor para saber el total de valoraciones
+    /**
+     * Total de valoraciones publicadas para este producto.
+     */
     public function getTotalComentariosAttribute(): int
     {
         return $this->comentarios()->count();

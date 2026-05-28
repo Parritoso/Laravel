@@ -32,6 +32,8 @@ class OrderController extends Controller
     {
         $cart = $this->currentCart()->load('items.producto');
 
+        // Antes de crear el pedido se comprueba el estado actual del carrito.
+        // Así se evita generar facturas vacías o con cantidades que ya no están disponibles.
         if ($cart->items->isEmpty()) {
             return redirect()
                 ->route('cart.index')
@@ -59,6 +61,8 @@ class OrderController extends Controller
         ]);
 
         try {
+            // Pedido, líneas, factura y stock se guardan en una única transacción.
+            // Si falla alguna parte, no quedan datos a medias en la compra.
             $pedido = DB::transaction(function () use ($cart, $request) {
                 $user = Auth::user();
 
@@ -101,12 +105,16 @@ class OrderController extends Controller
                 $subtotal = 0.0;
 
                 foreach ($cart->items as $item) {
+                    // Bloquea el producto mientras se descuenta stock para evitar ventas simultáneas
+                    // por encima de las unidades reales.
                     $producto = Producto::whereKey($item->producto_id)->lockForUpdate()->firstOrFail();
 
                     if ($item->cantidad > $producto->stock) {
                         throw new \RuntimeException(__('messages.order_stock_product', ['product' => $producto->nombre]));
                     }
 
+                    // La línea guarda el precio original, el precio cobrado y el descuento aplicado.
+                    // Así el historial del pedido no cambia aunque el producto se edite después.
                     $precioOriginal = (float) $producto->precio;
                     $precioFinalUnitario = (float) $producto->precio_final;
                     $descuentoPorUnidad = $precioOriginal - $precioFinalUnitario;    
@@ -146,6 +154,7 @@ class OrderController extends Controller
                 ->with('error', $exception->getMessage());
         }
 
+        // El correo se envía cuando la transacción ya ha terminado y el pedido existe completo.
         Mail::to(Auth::user()->email)->send(new OrderConfirmationMail($pedido));
 
         return redirect()
@@ -171,6 +180,7 @@ class OrderController extends Controller
 
     private function invoiceNumber(Pedido $pedido): string
     {
+        // Formato legible para administración: prefijo, fecha y el id del pedido relleno con ceros.
         return 'NG-'.now()->format('Ymd').'-'.str_pad((string) $pedido->id, 6, '0', STR_PAD_LEFT);
     }
 }

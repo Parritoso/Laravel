@@ -18,15 +18,14 @@ use Laravel\Fortify\Contracts\VerifyEmailResponse;
 class FortifyServiceProvider extends ServiceProvider
 {
     /**
-     * Register any application services.
+     * No registra servicios propios, pero se deja el método por la estructura del provider.
      */
     public function register(): void
     {
-        //
     }
 
     /**
-     * Bootstrap any application services.
+     * Configura Fortify con las vistas del proyecto y los límites de intentos de acceso.
      */
     public function boot(): void
     {
@@ -70,11 +69,11 @@ class FortifyServiceProvider extends ServiceProvider
         });
 
         $this->app->instance(VerifyEmailResponse::class, new class implements VerifyEmailResponse {
-        public function toResponse($request)
-        {
-            // Aquí decides a dónde va tras verificar
-            return redirect()->route('onboarding.index');
-        }
-    });
+            public function toResponse($request)
+            {
+                // Tras verificar el correo, el usuario completa idioma y datos básicos.
+                return redirect()->route('onboarding.index');
+            }
+        });
     }
 }

@@ -33,6 +33,8 @@ class CategoriaController extends Controller
 
     public function show(Categoria $categoria): View
     {
+        // La ficha de categoría resume ventas, stock y descuentos de todos sus productos.
+        // Por eso se cargan aquí las relaciones que alimentan esos indicadores.
         $categoria->load([
             'productos.descuentos',
             'productos.favoritos',
@@ -85,6 +87,7 @@ class CategoriaController extends Controller
 
     public function destroy(Categoria $categoria): RedirectResponse
     {
+        // Se bloquea el borrado si aún hay productos asociados para no dejar productos sin clasificar.
         if ($categoria->productos()->exists()) {
             return back()->with('error', __('messages.admin_category_in_use'));
         }
@@ -98,6 +101,7 @@ class CategoriaController extends Controller
 
     private function validatedData(Request $request, ?int $ignoreId = null): array
     {
+        // El slug queda limitado a minúsculas, números y guiones para usarlo sin problemas en URLs.
         return $request->validate([
             'nombre' => ['required', 'string', 'max:100'],
             'slug'   => [

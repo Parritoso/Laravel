@@ -11,14 +11,14 @@ use Illuminate\Support\Facades\Session;
 class SetLocale
 {
     /**
-     * Handle an incoming request.
+     * Aplica el idioma preferido antes de resolver la vista de la petición.
      *
      * @param  Closure(Request): (Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
         if (auth()->check() && auth()->user()->language) {
-        // Leemos el idioma del usuario de la DB y lo aplicamos a la app
+            // El idioma guardado en el perfil tiene prioridad sobre la sesión del navegador.
             App::setLocale(auth()->user()->language);
         } elseif (session()->has('locale')) {
             App::setLocale(session()->get('locale'));

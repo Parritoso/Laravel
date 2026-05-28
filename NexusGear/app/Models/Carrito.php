@@ -40,8 +40,9 @@ class Carrito extends Model
     }
 
     /**
-    * Determina si el carrito contiene productos con problemas de stock.
-    */
+     * Detecta líneas que ya no se pueden comprar porque el stock cambió.
+     * Se usa antes del checkout y antes de cerrar el pedido.
+     */
     public function hasStockIssues(): bool
     {
         return $this->items->contains(fn ($item) => $item->cantidad > $item->producto->stock);

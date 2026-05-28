@@ -51,6 +51,7 @@ class ProductController extends Controller
     {
         $data = $this->validatedData($request);
 
+        // La imagen se valida aparte porque no forma parte de los campos editables básicos.
         if ($request->hasFile('imagen')) {
             $request->validate(['imagen' => ['image', 'mimes:jpg,jpeg,png', 'max:2048']]);
             $data['imagen'] = $request->file('imagen')->store('productos', 'public');
@@ -58,6 +59,7 @@ class ProductController extends Controller
 
         $product = Producto::create($data);
 
+        // El producto puede aparecer en varias categorías; sync deja la tabla pivote igual que el formulario.
         $product->categorias()->sync($request->categorias);
 
         if ($request->filled('descuento_id')) {
@@ -71,6 +73,7 @@ class ProductController extends Controller
 
     public function show(Producto $producto): View
     {
+        // Se cargan las relaciones necesarias para calcular el resumen administrativo sin consultas repetidas.
         $producto->load([
             'categorias',
             'descuentos',
@@ -120,6 +123,7 @@ class ProductController extends Controller
 
         if ($request->hasFile('imagen')) {
             $request->validate(['imagen' => ['image', 'mimes:jpg,jpeg,png', 'max:2048']]);
+            // Al cambiar la imagen se borra la anterior para no dejar archivos sin usar en storage.
             if ($producto->imagen) {
                 Storage::disk('public')->delete($producto->imagen);
             }
@@ -140,6 +144,7 @@ class ProductController extends Controller
 
     public function destroy(Producto $producto): RedirectResponse
     {
+        // No se eliminan productos ya vendidos para conservar el historial de pedidos y facturas.
         if ($producto->lineasPedido()->exists()) {
             return back()->with('error', __('messages.admin_product_in_use'));
         }
@@ -157,12 +162,13 @@ class ProductController extends Controller
 
     private function validatedData(Request $request): array
     {
+        // Reglas compartidas por alta y edición. Las categorías se validan como array
+        // porque el modelo usa una relación muchos a muchos.
         $data = $request->validate([
             'nombre'       => ['required', 'string', 'max:255'],
             'precio'       => ['required', 'numeric', 'min:0'],
             'descripcion'  => ['required', 'string', 'max:2000'],
             'stock'        => ['required', 'integer', 'min:0'],
-//            'categoria_id' => ['required', 'exists:categorias,id'],
             'destacado'    => ['nullable', 'boolean'],
             'descuento_id' => ['nullable', 'exists:descuentos,id'],
             'categorias'   => ['required', 'array', 'min:1'],

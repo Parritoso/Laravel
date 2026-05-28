@@ -11,6 +11,7 @@ class ProfileController extends Controller
     public function show()
     {
         $user = Auth::user()->load('direcciones');
+        // Se muestran las valoraciones del usuario en el perfil para que pueda revisarlas desde un único lugar.
         $misComentarios = $user->comentarios()->with('producto')->get();
         return view('auth.profile.show', [
             'user' => $user,
@@ -54,7 +55,7 @@ class ProfileController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        // Re-autenticar para que la sesión no quede inválida con el nuevo hash
+        // Se vuelve a iniciar la sesión con el nuevo hash para no cerrar al usuario tras cambiar la clave.
         Auth::login($request->user());
 
         return redirect()->route('profile.password.edit')->with('status', 'password-updated');
