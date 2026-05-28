@@ -16,6 +16,7 @@ use App\Http\Controllers\ComentarioController;
 use App\Models\Pedido;
 use App\Models\Producto;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\NotificationController;
 
 // Portada pública con una selección corta de productos destacados.
 Route::get('/', function () {
@@ -83,6 +84,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class,'show'])->name('profile');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('/favoritos/{producto}/config', [FavoriteController::class, 'updateSettings'])->name('favorites.updateSettings');
     Route::post('/direcciones', [DireccionController::class, 'store'])->name('direcciones.store');
     Route::delete('/direcciones/{direccion}', [DireccionController::class, 'destroy'])->name('direcciones.destroy');
     Route::put('/direcciones/{direccion}', [DireccionController::class, 'update'])->name('direcciones.update');

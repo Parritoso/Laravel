@@ -17,4 +17,18 @@ return [
     'empty_desc'     => 'カタログから製品をマークすると、ここに表示されます。',
     'added'          => ':product をお気に入りに追加しました。',
     'removed'        => ':product をお気に入りから削除しました。',
+    'preferences_success' => 'アラート設定が更新されました。',
+    'prices'              => '価格',
+    'active_alerts'       => '有効なアラート',
+    'config'              => '設定する',
+    'stock_alert'         => '在庫 (≤:threshold)',
+    'alerts' => [
+        'price_label'        => '値下げと割引',
+        'low_stock_label'    => '品薄アラート',
+        'out_of_stock_label' => '売り切れアラート',
+        'in_stock_label'     => '再入荷アラート',
+        'define_threshold'   => '品薄のしきい値を設定:',
+        'units'              => '個',
+        'save_alerts'        => 'アラートを保存',
+    ],
 ];
