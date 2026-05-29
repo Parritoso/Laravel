@@ -44,9 +44,13 @@
                     </div>
                     <div class="card border-0 shadow-sm p-4">
                         <div class="row g-3">
-                            <div class="col-12">
+                            <div class="col-md-8">
                                 <label class="form-label fw-semibold">{{ __('auth/onboarding.street_label') }}</label>
-                                <input type="text" name="address" class="form-control" placeholder="{{ __('auth/onboarding.street_placeholder') }}">
+                                <input type="text" name="address" class="form-control" value="{{ old('address') }}" placeholder="{{ __('auth/onboarding.street_placeholder') }}">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">{{ __('auth/onboarding.number_label') }}</label>
+                                <input type="text" name="number" class="form-control" value="{{ old('number') }}" placeholder="{{ __('auth/onboarding.number_placeholder') }}">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold">{{ __('auth/onboarding.city_label') }}</label>

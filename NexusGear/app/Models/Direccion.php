@@ -17,7 +17,10 @@ class Direccion extends Model
         'numero',
         'ciudad',
         'codigo_postal',
+        'es_predeterminada',
     ];
+
+    protected $casts = ['es_predeterminada' => 'boolean',];
 
     public function usuario(): BelongsTo
     {

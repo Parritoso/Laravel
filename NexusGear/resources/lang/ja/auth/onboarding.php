@@ -9,6 +9,8 @@ return [
     'step_address_desc' => 'スムーズな購入のために、主な配送先住所を追加してください。',
     'street_label' => '町名・番地',
     'street_placeholder' => '例：エルゴ町 1-2-3 エルゴビル 202号室',
+    'number_label' => '番地',
+    'number_placeholder' => '24',
     'city_label' => '市区町村',
     'city_placeholder' => '東京都港区',
     'zip_label' => '郵便番号',

@@ -9,6 +9,8 @@ return [
     'step_address_desc' => 'Add your primary address to speed up your purchases.',
     'street_label' => 'Street and Number',
     'street_placeholder' => 'e.g. 24 Ergo St, Flat 2B',
+    'number_label' => 'Number',
+    'number_placeholder' => '24',
     'city_label' => 'City',
     'city_placeholder' => 'London',
     'zip_label' => 'Postcode',

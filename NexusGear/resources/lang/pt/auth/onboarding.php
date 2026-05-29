@@ -9,6 +9,8 @@ return [
     'step_address_desc' => 'Adicione a sua morada principal para agilizar as suas compras.',
     'street_label' => 'Rua e Número',
     'street_placeholder' => 'Ex. Rua Ergo, 24, 2ºEsq',
+    'number_label' => 'Número',
+    'number_placeholder' => '24',
     'city_label' => 'Cidade',
     'city_placeholder' => 'Lisboa',
     'zip_label' => 'Código Postal',

@@ -9,6 +9,8 @@ return [
     'step_address_desc' => 'Añade tu dirección principal para agilizar tus compras.',
     'street_label' => 'Calle y Número',
     'street_placeholder' => 'Ej. Calle Ergo, 24, 2ºB',
+    'number_label' => 'Número',
+    'number_placeholder' => '24',
     'city_label' => 'Ciudad',
     'city_placeholder' => 'Sevilla',
     'zip_label' => 'Código Postal',

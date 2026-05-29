@@ -82,3 +82,8 @@ function confirm2FA() {
 function skip2FAAndFinish() {
     document.getElementById('onboarding-form').submit();
 }
+
+window.nextStep = nextStep;
+window.initialize2FA = initialize2FA;
+window.confirm2FA = confirm2FA;
+window.skip2FAAndFinish = skip2FAAndFinish;
