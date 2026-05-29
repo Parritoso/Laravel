@@ -119,6 +119,8 @@ class ProductController extends Controller
 
     public function update(Request $request, Producto $producto): RedirectResponse
     {
+        $oldPrecioFinal = (float) $producto->precio_final;
+        $oldStock = (int) $producto->stock;
         $data = $this->validatedData($request);
 
         if ($request->hasFile('imagen')) {
@@ -136,6 +138,9 @@ class ProductController extends Controller
 
         $descuentoId = $request->filled('descuento_id') ? [$request->descuento_id] : [];
         $producto->descuentos()->sync($descuentoId);
+
+        $producto->refresh();
+        $producto->procesarAlertasDeFavoritos($oldPrecioFinal, $oldStock);
 
         return redirect()
             ->route('admin.products.edit', $producto)

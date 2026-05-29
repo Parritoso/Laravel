@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Notifications\ProductAlertNotification;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -116,5 +117,51 @@ class Producto extends Model
     public function getTotalComentariosAttribute(): int
     {
         return $this->comentarios()->count();
+    }
+
+    public function procesarAlertasDeFavoritos(float $precioFinalAnterior, int $stockAnterior): void
+    {
+        $precioFinalActual = (float) $this->precio_final;
+        $stockActual = (int) $this->stock;
+
+        if ($precioFinalActual < $precioFinalAnterior) {
+            $this->dispararAlerta('precio', [
+                'antiguo' => $precioFinalAnterior,
+                'nuevo' => $precioFinalActual,
+            ]);
+        }
+
+        if ($stockAnterior > 0 && $stockActual === 0) {
+            $this->dispararAlerta('stock_agotado');
+            return;
+        }
+
+        if ($stockAnterior === 0 && $stockActual > 0) {
+            $this->dispararAlerta('stock_disponible');
+            return;
+        }
+
+        if ($stockActual > 0 && $stockActual < $stockAnterior) {
+            $this->dispararAlerta('stock_bajo', ['stock_anterior' => $stockAnterior]);
+        }
+    }
+
+    private function dispararAlerta(string $tipo, array $detalles = []): void
+    {
+        $query = Favorito::where('producto_id', $this->id)->with('usuario');
+
+        match ($tipo) {
+            'precio'           => $query->where('alerta_precio', true),
+            'stock_agotado'    => $query->where('alerta_stock_agotado', true),
+            'stock_disponible' => $query->where('alerta_stock_disponible', true),
+            'stock_bajo'       => $query
+                ->where('alerta_stock_bajo', true)
+                ->where('umbral_stock', '>=', $this->stock)
+                ->where('umbral_stock', '<', $detalles['stock_anterior'] ?? PHP_INT_MAX),
+        };
+
+        foreach ($query->get() as $favorito) {
+            $favorito->usuario->notify(new ProductAlertNotification($this, $tipo, $detalles));
+        }
     }
 }
