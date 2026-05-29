@@ -17,5 +17,12 @@ return [
     'manage'=> 'Gestionar',
     'units'=> ':count uds.',
     'no_products'=> 'No hay productos registrados.',
-    'most_wanted'=> 'Top Favoritos',
+    'most_wanted'=> 'Top favoritos',
+    'no_favorites_yet'=> 'Todavía no hay favoritos.',
+    'top_sales'=> 'Top ventas',
+    'sold_units'=> ':count uds. vendidas',
+    'no_sales_yet'=> 'Todavía no hay ventas.',
+    'orders_by_status'=> 'Pedidos por estado',
+    'orders_count'=> 'N.º pedidos',
+    'billing'=> 'Facturación',
 ];

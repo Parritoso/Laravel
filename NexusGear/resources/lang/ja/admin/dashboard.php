@@ -18,4 +18,11 @@ return [
     'units'=> ':count 個',
     'no_products'=> '登録されている商品はありません。',
     'most_wanted'=> '人気ランキング',
+    'no_favorites_yet'=> 'お気に入りはまだありません。',
+    'top_sales'=> '売上ランキング',
+    'sold_units'=> ':count 個販売',
+    'no_sales_yet'=> '売上はまだありません。',
+    'orders_by_status'=> 'ステータス別注文',
+    'orders_count'=> '注文数',
+    'billing'=> '請求額',
 ];

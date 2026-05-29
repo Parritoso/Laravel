@@ -18,4 +18,11 @@ return [
     'units'=> ':count units',
     'no_products'=> 'No products registered.',
     'most_wanted'=> 'Top Favorites',
+    'no_favorites_yet'=> 'No favorites yet.',
+    'top_sales'=> 'Top sales',
+    'sold_units'=> ':count sold',
+    'no_sales_yet'=> 'No sales yet.',
+    'orders_by_status'=> 'Orders by status',
+    'orders_count'=> 'Orders',
+    'billing'=> 'Billing',
 ];

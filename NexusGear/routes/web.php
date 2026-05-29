@@ -16,6 +16,7 @@ use App\Http\Controllers\ComentarioController;
 use App\Models\Pedido;
 use App\Models\Producto;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
 
 // Portada pública con una selección corta de productos destacados.
 Route::get('/', function () {
@@ -44,7 +45,9 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
             'pendingOrderCount' => Pedido::whereIn('estado', ['pendiente', 'procesando'])->count(),
             'recentOrders' => Pedido::with('usuario', 'factura')->latest('fecha')->take(5)->get(),
             'lowStockProducts' => Producto::orderBy('stock')->take(5)->get(),
-            'topFavorites' => Producto::has('favoritos') ->withCount('favoritos')->orderBy('favoritos_count', 'desc')->take(5)->get(),
+            'topFavorites' => DB::table('v_productos_mas_favoritos')->where('favoritos_count', '>', 0)->orderByDesc('favoritos_count')->limit(5)->get(),
+            'topSales' => DB::table('v_ventas_por_producto')->where('unidades_vendidas', '>', 0)->orderByDesc('ingresos_totales')->limit(5)->get(),
+            'ordersByStatus' => DB::table('v_resumen_pedidos_por_estado')->get()->keyBy('estado'),
         ]);
     })->name('dashboard');
 

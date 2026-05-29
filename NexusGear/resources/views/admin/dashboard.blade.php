@@ -125,7 +125,8 @@
             </div>
         </div>
     </div>
-    <div class="card border-0 shadow-sm h-100">
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm h-100">
         <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
             <h5 class="fw-bold mb-0">
                 <i class="bi bi-heart-fill text-danger me-2"></i>{{ __('admin/dashboard.most_wanted') }}
@@ -134,7 +135,6 @@
         </div>
         <div class="card-body">
         @php
-            // Obtenemos el valor máximo de favoritos para calcular el porcentaje relativo
             $maxFavorites = $topFavorites->first()->favoritos_count ?? 1;
         @endphp
 
@@ -145,31 +145,24 @@
             <div class="mb-4">
                 <div class="d-flex justify-content-between align-items-start mb-1">
                     <div class="me-2 text-truncate">
-                        <!-- Enlace en el nombre para acceso rápido -->
-                        <a href="{{ route('admin.products.edit', $product) }}" class="fw-bold small text-decoration-none text-dark hover-primary">
+                        <a href="{{ route('admin.products.edit', $product->producto_id) }}" class="fw-bold small text-decoration-none text-dark hover-primary">
                             {{ $product->nombre }}
                         </a>
-                        <div class="text-muted" style="font-size: 0.7rem;">{{ $product->perfil_nombre }}</div>
+                        <div class="text-muted" style="font-size: 0.7rem;">{{ $product->categoria_principal ?? __('common.no_category') }}</div>
                     </div>
                     
                     <div class="d-flex align-items-center">
                         <span class="badge bg-danger bg-opacity-10 text-danger small me-2">
                             {{ $product->favoritos_count }} <i class="bi bi-heart-fill ms-1" style="font-size: 0.7rem;"></i>
                         </span>
-                        <!-- Botón de edición tipo icono -->
-                        <a href="{{ route('admin.products.edit', $product) }}" class="btn btn-sm btn-light p-1 lh-1 rounded-circle" title="{{ __('admin/dashboard.manage') }}">
+                        <a href="{{ route('admin.products.edit', $product->producto_id) }}" class="btn btn-sm btn-light p-1 lh-1 rounded-circle" title="{{ __('admin/dashboard.manage') }}">
                             <i class="bi bi-pencil-square text-primary" style="font-size: 0.85rem;"></i>
                         </a>
                     </div>
                 </div>
 
                 <div class="progress mt-2" style="height: 6px;">
-                    <div class="progress-bar bg-danger rounded-pill" 
-                        role="progressbar" 
-                        style="width: {{ $percentage }}%" 
-                        aria-valuenow="{{ $percentage }}" 
-                        aria-valuemin="0" 
-                        aria-valuemax="100">
+                    <div class="progress-bar bg-danger rounded-pill" role="progressbar" style="width: {{ $percentage }}%" aria-valuenow="{{ $percentage }}" aria-valuemin="0" aria-valuemax="100">
                     </div>
                 </div>
             </div>
@@ -179,6 +172,73 @@
                 <p class="text-muted mt-2">{{ __('admin/dashboard.no_favorites_yet') }}</p>
             </div>
         @endforelse
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
+                <h5 class="fw-bold mb-0">
+                    <i class="bi bi-graph-up-arrow text-success me-2"></i>{{ __('admin/dashboard.top_sales') }}
+                </h5>
+                <span class="badge rounded-pill bg-light text-dark border">Top 5</span>
+            </div>
+            <div class="card-body">
+                @forelse ($topSales as $product)
+                    <div class="d-flex justify-content-between align-items-start gap-3 py-3 border-bottom">
+                        <div class="text-truncate">
+                            <a href="{{ route('admin.products.edit', $product->producto_id) }}" class="fw-bold small text-decoration-none text-dark hover-primary">
+                                {{ $product->nombre }}
+                            </a>
+                            <div class="text-muted" style="font-size: 0.7rem;">{{ $product->categoria_principal ?? __('common.no_category') }}</div>
+                        </div>
+                        <div class="text-end flex-shrink-0">
+                            <span class="badge bg-success bg-opacity-10 text-success small">
+                                {{ __('admin/dashboard.sold_units', ['count' => $product->unidades_vendidas]) }}
+                            </span>
+                            <div class="fw-bold mt-1">{{ number_format((float) $product->ingresos_totales, 2, ',', '.') }} &euro;</div>
+                        </div>
+                    </div>
+                @empty
+                    <div class="text-center py-5">
+                        <i class="bi bi-bar-chart text-muted display-4"></i>
+                        <p class="text-muted mt-2">{{ __('admin/dashboard.no_sales_yet') }}</p>
+                    </div>
+                @endforelse
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 py-3">
+                <h5 class="fw-bold mb-0">
+                    <i class="bi bi-pie-chart-fill text-info me-2"></i>{{ __('admin/dashboard.orders_by_status') }}
+                </h5>
+            </div>
+            <div class="table-responsive p-3">
+                <table class="table align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>{{ __('admin/dashboard.status') }}</th>
+                            <th>{{ __('admin/dashboard.orders_count') }}</th>
+                            <th class="text-end">{{ __('admin/dashboard.billing') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (['pendiente', 'procesando', 'enviado', 'entregado', 'cancelado'] as $estado)
+                            @php($summary = $ordersByStatus->get($estado))
+                            <tr>
+                                <td><span class="badge text-bg-light border">{{ __('statuses.'.$estado) }}</span></td>
+                                <td>{{ $summary->pedidos_count ?? 0 }}</td>
+                                <td class="text-end fw-bold">{{ number_format((float) ($summary->facturacion_total ?? 0), 2, ',', '.') }} &euro;</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 @endsection

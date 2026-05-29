@@ -18,4 +18,11 @@ return [
     'units'=> ':count uds.',
     'no_products'=> 'Não há produtos.',
     'most_wanted'=> 'Principais favoritos',
+    'no_favorites_yet'=> 'Ainda não há favoritos.',
+    'top_sales'=> 'Top vendas',
+    'sold_units'=> ':count unid. vendidas',
+    'no_sales_yet'=> 'Ainda não há vendas.',
+    'orders_by_status'=> 'Pedidos por estado',
+    'orders_count'=> 'N.º pedidos',
+    'billing'=> 'Faturação',
 ];
