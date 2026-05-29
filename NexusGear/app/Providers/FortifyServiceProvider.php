@@ -14,6 +14,9 @@ use Illuminate\Support\Str;
 use Laravel\Fortify\Actions\RedirectIfTwoFactorAuthenticatable;
 use Laravel\Fortify\Fortify;
 use Laravel\Fortify\Contracts\VerifyEmailResponse;
+use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Notifications\Messages\MailMessage;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -74,6 +77,36 @@ class FortifyServiceProvider extends ServiceProvider
                 // Tras verificar el correo, el usuario completa idioma y datos básicos.
                 return redirect()->route('onboarding.index');
             }
+        });
+
+        VerifyEmail::toMailUsing(function (object $notifiable, string $url) {
+            return (new MailMessage)
+                ->subject(__('emails.verification.subject'))
+                #->greeting(__('emails.verification.greeting', ['name' => $notifiable->name]))
+                #->line(__('emails.verification.line_1'))
+                #->action(__('emails.verification.action'), $url)
+                #->line(__('emails.verification.line_2'));
+                ->view('emails.verify', [
+                        'name' => $notifiable->name,
+                        'url' => $url
+                ]);
+        });
+
+        ResetPassword::toMailUsing(function (object $notifiable, string $token) {
+            $url = url(route('password.reset', [
+                'token' => $token,
+                'email' => $notifiable->getEmailForPasswordReset(),
+            ], false));
+
+            return (new MailMessage)
+                ->subject(__('emails.password.subject'))
+                #->line(__('emails.password.line_1'))
+                #->action(__('emails.password.action'), $url)
+                #->line(__('emails.password.line_2', ['count' => config('auth.passwords.users.expire')]));
+                ->view('emails.reset', [
+                        'count' => config('auth.passwords.users.expire'),
+                        'url' => $url
+                ]);
         });
     }
 }
