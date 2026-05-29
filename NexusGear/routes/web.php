@@ -13,6 +13,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\DireccionController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\ComentarioController;
+use App\Http\Controllers\NotificationController;
 use App\Models\Pedido;
 use App\Models\Producto;
 use Illuminate\Support\Facades\Route;
@@ -83,11 +84,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class,'show'])->name('profile');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('/favoritos/{producto}/config', [FavoriteController::class, 'updateSettings'])->name('favorites.updateSettings');
     Route::post('/direcciones', [DireccionController::class, 'store'])->name('direcciones.store');
     Route::delete('/direcciones/{direccion}', [DireccionController::class, 'destroy'])->name('direcciones.destroy');
     Route::put('/direcciones/{direccion}', [DireccionController::class, 'update'])->name('direcciones.update');
     Route::post('/productos/{producto}/comentarios', [ComentarioController::class, 'store'])->name('comentarios.store');
     Route::delete('/comentarios/{comentario}', [ComentarioController::class, 'destroy'])->name('comentarios.destroy');
+    Route::get('/notificaciones/{id}/leer', [NotificationController::class, 'read'])->name('notifications.read');
+    Route::post('/notificaciones/marcar-todas', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
 });
 
 // Cambiar la contraseña exige confirmación previa para reducir el riesgo si la sesión queda abierta.

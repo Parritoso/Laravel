@@ -16,10 +16,20 @@ class Favorito extends Model
         'usuario_id',
         'producto_id',
         'agregado_el',
+        'alerta_precio',
+        'alerta_stock_bajo',
+        'alerta_stock_agotado',
+        'alerta_stock_disponible',
+        'umbral_stock',
     ];
 
     protected $casts = [
         'agregado_el' => 'datetime',
+        'alerta_precio' => 'boolean',
+        'alerta_stock_bajo'  => 'boolean',
+        'alerta_stock_agotado' => 'boolean',
+        'alerta_stock_disponible' => 'boolean',
+        'umbral_stock'  => 'integer',
     ];
 
     public function usuario(): BelongsTo

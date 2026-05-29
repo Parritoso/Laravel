@@ -7,6 +7,7 @@ use App\Models\Producto;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Illuminate\Http\Request;
 
 class FavoriteController extends Controller
 {
@@ -44,5 +45,28 @@ class FavoriteController extends Controller
             ->delete();
 
         return back()->with('success', __('favorites/index.removed', ['product' => $producto->nombre]));
+    }
+
+    public function updateSettings(Request $request, Producto $producto): RedirectResponse
+    {
+        $data = $request->validate([
+            'alerta_precio'            => ['nullable', 'boolean'],
+            'alerta_stock_bajo'        => ['nullable', 'boolean'],
+            'alerta_stock_agotado'     => ['nullable', 'boolean'],
+            'alerta_stock_disponible'  => ['nullable', 'boolean'],
+            'umbral_stock'             => ['required', 'integer', 'min:0', 'max:100'],
+        ]);
+
+        Auth::user()->favoritos()
+            ->where('producto_id', $producto->id)
+            ->update([
+                'alerta_precio'           => $request->has('alerta_precio'),
+                'alerta_stock_bajo'       => $request->has('alerta_stock_bajo'),
+                'alerta_stock_agotado'    => $request->has('alerta_stock_agotado'),
+                'alerta_stock_disponible' => $request->has('alerta_stock_disponible'),
+                'umbral_stock'            => $data['umbral_stock'],
+            ]);
+
+        return back()->with('success', __('favorites/index.preferences_success'));
     }
 }

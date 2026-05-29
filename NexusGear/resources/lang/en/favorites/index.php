@@ -17,4 +17,18 @@ return [
     'empty_desc'     => 'Mark products from the catalog to keep them close.',
     'added'          => ':product added to favorites.',
     'removed'        => ':product removed from favorites.',
+    'preferences_success' => 'Alert preferences updated.',
+    'prices'              => 'Prices',
+    'active_alerts'       => 'Active alerts',
+    'config'              => 'Configure',
+    'stock_alert'         => 'Stock (≤:threshold)',
+    'alerts' => [
+        'price_label'        => 'Price drops and discounts',
+        'low_stock_label'    => 'Low stock warning',
+        'out_of_stock_label' => 'Out of stock warning',
+        'in_stock_label'     => 'Restock warning',
+        'define_threshold'   => 'Define low stock threshold:',
+        'units'              => 'units',
+        'save_alerts'        => 'Save Alerts',
+    ],
 ];

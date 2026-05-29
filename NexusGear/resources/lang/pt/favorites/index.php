@@ -17,4 +17,18 @@ return [
     'empty_desc'     => 'Marque produtos no catálogo para os ter sempre à mão.',
     'added'          => ':product adicionado aos favoritos.',
     'removed'        => ':product removido dos favoritos.',
+    'preferences_success' => 'Preferências de alerta atualizadas.',
+    'prices'              => 'Preços',
+    'active_alerts'       => 'Alertas ativas',
+    'config'              => 'Configurar',
+    'stock_alert'         => 'Stock (≤:threshold)',
+    'alerts' => [
+        'price_label'        => 'Baixas de preço e descontos',
+        'low_stock_label'    => 'Aviso de poucas unidades',
+        'out_of_stock_label' => 'Aviso de produto esgotado',
+        'in_stock_label'     => 'Aviso de reposição de stock',
+        'define_threshold'   => 'Definir limite de poucas unidades:',
+        'units'              => 'uds',
+        'save_alerts'        => 'Guardar Alertas',
+    ],
 ];

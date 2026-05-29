@@ -13,4 +13,8 @@ return[
     'terms' => 'Terms',
     'contact' => 'Contact',
     'dashboard' => 'Dashboard',
+    'notifications_title' => 'Notifications',
+    'mark_all_read' => 'Mark all as read',
+    'no_notifications' => 'You have no pending notifications.',
+    'notification_success' => 'Notifications marked as read.',
 ];
