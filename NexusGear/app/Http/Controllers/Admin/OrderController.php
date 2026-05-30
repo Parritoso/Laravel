@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pedido;
+use App\Services\MongoLog\AdminAuditService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -43,7 +44,11 @@ class OrderController extends Controller
             'estado' => ['required', 'in:pendiente,procesando,enviado,entregado,cancelado'],
         ]);
 
+        $oldValues = ['estado' => $pedido->estado];
+
         $pedido->update($data);
+
+        AdminAuditService::track('update', 'Pedido', $pedido->id, $oldValues, ['estado' => $pedido->estado]);
 
         return back()->with('success', __('messages.admin_order_updated'));
     }
