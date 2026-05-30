@@ -1,5 +1,6 @@
 <?php
-return[
+
+return [
     'catalog' => 'Catalog',
     'favorites' => 'Favorites',
     'cart' => 'Cart',
@@ -17,4 +18,5 @@ return[
     'mark_all_read' => 'Mark all as read',
     'no_notifications' => 'You have no pending notifications.',
     'notification_success' => 'Notifications marked as read.',
+    'about' => 'About us',
 ];

@@ -17,4 +17,5 @@ return[
     'mark_all_read' => 'Marcar todas como leídas',
     'no_notifications' => 'No tienes notificaciones pendientes.',
     'notification_success' => 'Notificaciones marcadas como leídas.',
+    'about' => 'Sobre nosotros',
 ];

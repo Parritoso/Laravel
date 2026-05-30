@@ -156,6 +156,7 @@
                 <p>&copy; {{ date('Y') }} {{__('layouts/app.footer')}}</p>
                 <div class="small">
                     <a href="#" class="text-decoration-none text-primary mx-2">{{__('layouts/app.terms')}}</a>
+                    <a href="{{ route('about') }}" class="text-decoration-none text-primary mx-2">{{ __('layouts/app.about') }}</a>
                     <a href="#" class="text-decoration-none text-primary mx-2">{{__('layouts/app.contact')}}</a>
                 </div>
             </div>
