@@ -19,5 +19,16 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $exceptions->report(function (Throwable $e) {
+            // 1. Generamos un código único corto y fácil de leer
+            $errorRef = 'REF-' . strtoupper(Str::random(6));
+
+            // 2. Lo compartimos globalmente con Blade para este ciclo de vida
+            View::share('globalErrorRef', $errorRef);
+
+            // 3. Lo inyectamos en el contexto del log de Laravel de forma nativa
+            Log::shareContext([
+                'error_ref' => $errorRef
+            ]);
+        });
     })->create();
