@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\MongoLog;
 
-use App\Models\ErrorLog;
+use App\Models\MongoLog\ErrorLog;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Throwable;
