@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
+use Stripe\Checkout\Session;
+use Stripe\Exception\ApiErrorException;
+use Stripe\Stripe;
 
 class OrderController extends Controller
 {
@@ -19,6 +22,7 @@ class OrderController extends Controller
     {
         $orders = Auth::user()
             ->pedidos()
+            ->whereHas('factura')
             ->with('factura')
             ->latest('fecha')
             ->paginate(10);
@@ -32,8 +36,6 @@ class OrderController extends Controller
     {
         $cart = $this->currentCart()->load('items.producto');
 
-        // Antes de crear el pedido se comprueba el estado actual del carrito.
-        // Así se evita generar facturas vacías o con cantidades que ya no están disponibles.
         if ($cart->items->isEmpty()) {
             return redirect()
                 ->route('cart.index')
@@ -61,8 +63,6 @@ class OrderController extends Controller
         ]);
 
         try {
-            // Pedido, líneas, factura y stock se guardan en una única transacción.
-            // Si falla alguna parte, no quedan datos a medias en la compra.
             $pedido = DB::transaction(function () use ($cart, $request) {
                 $user = Auth::user();
 
@@ -102,25 +102,17 @@ class OrderController extends Controller
                     'direccion_id' => $dir,
                 ]);
 
-                $subtotal = 0.0;
-
                 foreach ($cart->items as $item) {
-                    // Bloquea el producto mientras se descuenta stock para evitar ventas simultáneas
-                    // por encima de las unidades reales.
                     $producto = Producto::whereKey($item->producto_id)->lockForUpdate()->firstOrFail();
 
                     if ($item->cantidad > $producto->stock) {
                         throw new \RuntimeException(__('messages.order_stock_product', ['product' => $producto->nombre]));
                     }
 
-                    // La línea guarda el precio original, el precio cobrado y el descuento aplicado.
-                    // Así el historial del pedido no cambia aunque el producto se edite después.
                     $precioOriginal = (float) $producto->precio;
                     $precioFinalUnitario = (float) $producto->precio_final;
-                    $descuentoPorUnidad = $precioOriginal - $precioFinalUnitario;    
-
-                    $lineSubtotal = round($item->cantidad * (float) $precioFinalUnitario, 2);
-                    $subtotal += $lineSubtotal;
+                    $descuentoPorUnidad = $precioOriginal - $precioFinalUnitario;
+                    $lineSubtotal = round($item->cantidad * $precioFinalUnitario, 2);
 
                     $pedido->lineas()->create([
                         'producto_id' => $producto->id,
@@ -130,10 +122,90 @@ class OrderController extends Controller
                         'descuento_total' => $descuentoPorUnidad * $item->cantidad,
                         'subtotal' => $lineSubtotal,
                     ]);
-
-                    $producto->decrement('stock', $item->cantidad);
                 }
 
+                return $pedido->load('lineas');
+            });
+
+            if (! config('services.stripe.secret')) {
+                throw new \RuntimeException(__('messages.payment_not_configured'));
+            }
+
+            Stripe::setApiKey(config('services.stripe.secret'));
+
+            $subtotal = (float) $pedido->lineas->sum('subtotal');
+            $totalFactura = round($subtotal + ($subtotal * 0.21), 2);
+            $totalEnCentimos = (int) round($totalFactura * 100);
+
+            $checkoutSession = Session::create([
+                'payment_method_types' => ['card'],
+                'line_items' => [[
+                    'price_data' => [
+                        'currency' => 'eur',
+                        'product_data' => [
+                            'name' => 'Pedido #'.$pedido->id.' en NexusGear',
+                        ],
+                        'unit_amount' => $totalEnCentimos,
+                    ],
+                    'quantity' => 1,
+                ]],
+                'mode' => 'payment',
+                'metadata' => [
+                    'pedido_id' => (string) $pedido->id,
+                    'usuario_id' => (string) Auth::id(),
+                ],
+                'success_url' => route('checkout.success', [], true).'?session_id={CHECKOUT_SESSION_ID}&order_id='.$pedido->id,
+                'cancel_url' => route('checkout.cancel', $pedido, true),
+            ]);
+
+            return redirect()->away($checkoutSession->url);
+        } catch (\RuntimeException $exception) {
+            return redirect()
+                ->route('cart.index')
+                ->with('error', $exception->getMessage());
+        } catch (ApiErrorException $exception) {
+            return redirect()
+                ->route('cart.index')
+                ->with('error', __('messages.payment_session_error'));
+        }
+    }
+
+    public function success(Request $request): RedirectResponse
+    {
+        if (! config('services.stripe.secret')) {
+            return redirect()->route('cart.index')->with('error', __('messages.payment_not_configured'));
+        }
+
+        Stripe::setApiKey(config('services.stripe.secret'));
+
+        try {
+            $session = Session::retrieve($request->query('session_id'));
+
+            if ($session->payment_status !== 'paid') {
+                return redirect()->route('cart.index')->with('error', __('messages.payment_not_confirmed'));
+            }
+
+            $pedido = Pedido::where('id', $request->query('order_id'))
+                ->where('usuario_id', Auth::id())
+                ->with('lineas.producto', 'factura', 'usuario')
+                ->firstOrFail();
+
+            if ($pedido->factura) {
+                return redirect()->route('orders.show', $pedido)->with('success', __('messages.order_completed'));
+            }
+
+            DB::transaction(function () use ($pedido) {
+                foreach ($pedido->lineas as $linea) {
+                    $producto = Producto::whereKey($linea->producto_id)->lockForUpdate()->firstOrFail();
+
+                    if ($linea->cantidad > $producto->stock) {
+                        throw new \RuntimeException(__('messages.order_stock_product', ['product' => $producto->nombre]));
+                    }
+
+                    $producto->decrement('stock', $linea->cantidad);
+                }
+
+                $subtotal = (float) $pedido->lineas->sum('subtotal');
                 $iva = round($subtotal * 0.21, 2);
 
                 $pedido->factura()->create([
@@ -144,27 +216,42 @@ class OrderController extends Controller
                     'fecha_emision' => now(),
                 ]);
 
-                $cart->items()->delete();
+                $pedido->update(['estado' => 'procesando']);
 
-                return $pedido->load('lineas.producto', 'factura', 'usuario');
+                $this->currentCart()->items()->delete();
             });
-        } catch (\RuntimeException $exception) {
+
+            $pedido->load('lineas.producto', 'factura', 'usuario');
+
+            Mail::to(Auth::user()->email)->send(new OrderConfirmationMail($pedido));
+
             return redirect()
-                ->route('cart.index')
-                ->with('error', $exception->getMessage());
+                ->route('orders.show', $pedido)
+                ->with('success', __('messages.order_completed'));
+        } catch (\RuntimeException $exception) {
+            return redirect()->route('cart.index')->with('error', $exception->getMessage());
+        } catch (ApiErrorException $exception) {
+            return redirect()->route('cart.index')->with('error', __('messages.payment_processing_error'));
+        }
+    }
+
+    public function cancel(Pedido $pedido): RedirectResponse
+    {
+        abort_unless($pedido->usuario_id === Auth::id(), 403);
+
+        if ($pedido->estado === 'pendiente' && ! $pedido->factura()->exists()) {
+            $pedido->update(['estado' => 'cancelado']);
         }
 
-        // El correo se envía cuando la transacción ya ha terminado y el pedido existe completo.
-        Mail::to(Auth::user()->email)->send(new OrderConfirmationMail($pedido));
-
         return redirect()
-            ->route('orders.show', $pedido)
-            ->with('success', __('messages.order_completed'));
+            ->route('cart.index')
+            ->with('error', __('messages.payment_cancelled'));
     }
 
     public function show(Pedido $pedido): View
     {
         abort_unless($pedido->usuario_id === Auth::id(), 403);
+        abort_unless($pedido->factura()->exists(), 404);
 
         return view('orders.show', [
             'order' => $pedido->load('lineas.producto', 'factura'),
@@ -180,7 +267,6 @@ class OrderController extends Controller
 
     private function invoiceNumber(Pedido $pedido): string
     {
-        // Formato legible para administración: prefijo, fecha y el id del pedido relleno con ceros.
         return 'NG-'.now()->format('Ymd').'-'.str_pad((string) $pedido->id, 6, '0', STR_PAD_LEFT);
     }
 }

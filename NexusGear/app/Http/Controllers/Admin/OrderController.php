@@ -18,6 +18,7 @@ class OrderController extends Controller
         ]);
 
         $orders = Pedido::with('usuario', 'factura')
+            ->whereHas('factura')
             ->when($filters['estado'] ?? null, fn ($query, string $estado) => $query->where('estado', $estado))
             ->latest('fecha')
             ->paginate(12)
@@ -32,6 +33,8 @@ class OrderController extends Controller
 
     public function show(Pedido $pedido): View
     {
+        abort_unless($pedido->factura()->exists(), 404);
+
         return view('admin.orders.show', [
             'order' => $pedido->load('usuario', 'factura', 'lineas.producto'),
             'statuses' => $this->statuses(),
