@@ -6,18 +6,21 @@ use App\Mail\OrderConfirmationMail;
 use App\Models\Carrito;
 use App\Models\Pedido;
 use App\Models\Producto;
+use App\Services\Payments\PaymentGateway;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
-use Stripe\Checkout\Session;
 use Stripe\Exception\ApiErrorException;
-use Stripe\Stripe;
 
 class OrderController extends Controller
 {
+    public function __construct(private PaymentGateway $payments)
+    {
+    }
+
     public function index(): View
     {
         $orders = Auth::user()
@@ -127,36 +130,12 @@ class OrderController extends Controller
                 return $pedido->load('lineas');
             });
 
-            if (! config('services.stripe.secret')) {
-                throw new \RuntimeException(__('messages.payment_not_configured'));
-            }
-
-            Stripe::setApiKey(config('services.stripe.secret'));
-
-            $subtotal = (float) $pedido->lineas->sum('subtotal');
-            $totalFactura = round($subtotal + ($subtotal * 0.21), 2);
-            $totalEnCentimos = (int) round($totalFactura * 100);
-
-            $checkoutSession = Session::create([
-                'payment_method_types' => ['card'],
-                'line_items' => [[
-                    'price_data' => [
-                        'currency' => 'eur',
-                        'product_data' => [
-                            'name' => 'Pedido #'.$pedido->id.' en NexusGear',
-                        ],
-                        'unit_amount' => $totalEnCentimos,
-                    ],
-                    'quantity' => 1,
-                ]],
-                'mode' => 'payment',
-                'metadata' => [
-                    'pedido_id' => (string) $pedido->id,
-                    'usuario_id' => (string) Auth::id(),
-                ],
-                'success_url' => route('checkout.success', [], true).'?session_id={CHECKOUT_SESSION_ID}&order_id='.$pedido->id,
-                'cancel_url' => route('checkout.cancel', $pedido, true),
-            ]);
+            $checkoutSession = $this->payments->createCheckoutSession(
+                $pedido,
+                Auth::id(),
+                route('checkout.success', [], true).'?session_id={CHECKOUT_SESSION_ID}&order_id='.$pedido->id,
+                route('checkout.cancel', $pedido, true),
+            );
 
             return redirect()->away($checkoutSession->url);
         } catch (\RuntimeException $exception) {
@@ -172,14 +151,14 @@ class OrderController extends Controller
 
     public function success(Request $request): RedirectResponse
     {
-        if (! config('services.stripe.secret')) {
-            return redirect()->route('cart.index')->with('error', __('messages.payment_not_configured'));
-        }
-
-        Stripe::setApiKey(config('services.stripe.secret'));
-
         try {
-            $session = Session::retrieve($request->query('session_id'));
+            $sessionId = (string) $request->query('session_id', '');
+
+            if ($sessionId === '') {
+                return redirect()->route('cart.index')->with('error', __('messages.payment_not_confirmed'));
+            }
+
+            $session = $this->payments->retrieveCheckoutSession($sessionId);
 
             if ($session->payment_status !== 'paid') {
                 return redirect()->route('cart.index')->with('error', __('messages.payment_not_confirmed'));

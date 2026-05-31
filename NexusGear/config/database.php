@@ -119,8 +119,8 @@ return [
             'host'     => env('MONGODB_HOST', '127.0.0.1'),
             'port'     => env('MONGODB_PORT', 27017),
             'database' => env('MONGODB_DATABASE', 'nexusgear_analytics'),
-            'username' => env('MONGODB_USERNAME', ''),
-            'password' => env('MONGODB_PASSWORD', ''),
+            'username' => env('MONGODB_USERNAME') ?: null,
+            'password' => env('MONGODB_PASSWORD') ?: null,
             'options'  => [
                 'database' => env('MONGODB_AUTHENTICATION_DATABASE', 'admin'),
             ],

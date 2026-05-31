@@ -5,6 +5,8 @@ namespace App\Providers;
 use App\Models\Carrito;
 use App\Models\Producto;
 use App\Services\GuestCartService;
+use App\Services\Payments\PaymentGateway;
+use App\Services\Payments\StripePaymentGateway;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Event;
@@ -16,6 +18,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(GuestCartService::class);
+        $this->app->singleton(PaymentGateway::class, StripePaymentGateway::class);
     }
 
     public function boot(): void

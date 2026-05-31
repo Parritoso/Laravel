@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
@@ -12,6 +10,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        DB::statement('DROP VIEW IF EXISTS v_resumen_pedidos_por_estado');
+        DB::statement('DROP VIEW IF EXISTS v_ventas_por_producto');
+        DB::statement('DROP VIEW IF EXISTS v_productos_mas_favoritos');
+
         DB::statement('
             CREATE VIEW v_productos_mas_favoritos AS
             SELECT

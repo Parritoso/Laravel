@@ -1,0 +1,16 @@
+.git
+.agents
+.codex
+NexusGear/.env
+NexusGear/.phpunit.cache
+NexusGear/node_modules
+NexusGear/public/build
+NexusGear/public/hot
+NexusGear/storage/*.key
+NexusGear/storage/framework/cache/data/*
+NexusGear/storage/framework/sessions/*
+NexusGear/storage/framework/testing/*
+NexusGear/storage/framework/views/*
+NexusGear/storage/logs/*.log
+NexusGear/storage/pail
+NexusGear/vendor

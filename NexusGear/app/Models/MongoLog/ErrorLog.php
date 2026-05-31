@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\MongoLog;
 
 use MongoDB\Laravel\Eloquent\Model as MongoModel;
 

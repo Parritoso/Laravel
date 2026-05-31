@@ -8,9 +8,11 @@ use App\Models\Pedido;
 use App\Models\Producto;
 use App\Models\Rol;
 use App\Models\User;
+use App\Services\Payments\PaymentGateway;
 use Database\Seeders\ProductSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
+use Tests\Fakes\PaidPaymentGateway;
 use Tests\TestCase;
 
 class AdminPanelTest extends TestCase
@@ -77,6 +79,7 @@ class AdminPanelTest extends TestCase
 
     public function test_admin_can_view_and_update_order_status(): void
     {
+        $this->fakePaidPaymentGateway();
         Mail::fake();
         $this->seed(ProductSeeder::class);
 
@@ -88,6 +91,14 @@ class AdminPanelTest extends TestCase
         $this->actingAs($customer)->post(route('checkout.store'), $this->newAddressPayload());
 
         $order = Pedido::with('factura')->firstOrFail();
+
+        $this->actingAs($customer)
+            ->get(route('checkout.success', [
+                'session_id' => PaidPaymentGateway::SESSION_ID,
+                'order_id' => $order->id,
+            ]));
+
+        $order->refresh()->load('factura');
 
         $this->actingAs($admin)
             ->get(route('admin.orders.index'))
@@ -143,5 +154,10 @@ class AdminPanelTest extends TestCase
             'city' => 'Madrid',
             'zip_code' => '28001',
         ];
+    }
+
+    private function fakePaidPaymentGateway(): void
+    {
+        $this->app->instance(PaymentGateway::class, new PaidPaymentGateway());
     }
 }
