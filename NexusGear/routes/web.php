@@ -26,6 +26,10 @@ Route::get('/', function () {
     ]);
 }); 
 
+Route::get('/about-us', function () {
+    return view('about');
+})->name('about');
+
 Route::get('/home', function() {
     if (Auth::user()->isAdmin()) {
         return redirect()->route('admin.dashboard');

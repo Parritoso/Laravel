@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Descuento;
+use App\Services\MongoLog\AdminAuditService;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -34,7 +35,9 @@ class DiscountController extends Controller {
             'fecha_fin' => 'required|date|after:today',
         ]);
 
-        Descuento::create($validated);
+        $discount = Descuento::create($validated);
+
+        AdminAuditService::track('store', 'Descuento', $discount->id, null, $discount->toArray());
 
         return redirect()->route('admin.discounts.index')->with('success', __('messages.admin_discount_created'));
     }
@@ -65,7 +68,10 @@ class DiscountController extends Controller {
             'fecha_fin' => 'required|date',
         ]);
 
+        $oldValues = $discount->toArray();
         $discount->update($validated);
+
+        AdminAuditService::track('update', 'Descuento', $discount->id, $oldValues, $discount->refresh()->toArray());
 
         return redirect()->route('admin.discounts.index')->with('success', __('messages.admin_discount_updated'));
     }
@@ -74,7 +80,11 @@ class DiscountController extends Controller {
      * Elimina el descuento; las relaciones pivote se limpian por las claves foráneas.
      */
     public function destroy(Descuento $discount){
+        $oldValues = $discount->toArray();
         $discount->delete();
+
+        AdminAuditService::track('destroy', 'Descuento', $discount->id, $oldValues, null);
+
         return redirect()->route('admin.discounts.index')->with('success', __('messages.admin_discount_deleted'));
     }
 }

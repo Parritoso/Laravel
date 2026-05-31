@@ -1,11 +1,12 @@
 <?php
-return[
+
+return [
     'catalog' => 'カタログ',
     'favorites' => 'お気に入り',
     'cart' => 'カート',
     'login' => 'ログイン',
     'close' => '閉じる',
-    'title' => 'エルゴノミック Eコマース',
+    'title' => 'エルゴノミックEC',
     'profile' => 'マイプロフィール',
     'orders' => '注文履歴',
     'close_session' => 'ログアウト',
@@ -17,4 +18,5 @@ return[
     'mark_all_read' => 'すべて既読にする',
     'no_notifications' => '未読の通知はありません。',
     'notification_success' => '通知を既読にしました。',
+    'about' => '私たちについて',
 ];
