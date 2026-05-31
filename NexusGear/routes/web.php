@@ -46,9 +46,9 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
         return view('admin.dashboard', [
             'productCount' => Producto::count(),
             'lowStockCount' => Producto::where('stock', '<=', 5)->count(),
-            'orderCount' => Pedido::count(),
-            'pendingOrderCount' => Pedido::whereIn('estado', ['pendiente', 'procesando'])->count(),
-            'recentOrders' => Pedido::with('usuario', 'factura')->latest('fecha')->take(5)->get(),
+            'orderCount' => Pedido::whereHas('factura')->count(),
+            'pendingOrderCount' => Pedido::whereHas('factura')->whereIn('estado', ['pendiente', 'procesando'])->count(),
+            'recentOrders' => Pedido::with('usuario', 'factura')->whereHas('factura')->latest('fecha')->take(5)->get(),
             'lowStockProducts' => Producto::orderBy('stock')->take(5)->get(),
             'topFavorites' => DB::table('v_productos_mas_favoritos')->where('favoritos_count', '>', 0)->orderByDesc('favoritos_count')->limit(5)->get(),
             'topSales' => DB::table('v_ventas_por_producto')->where('unidades_vendidas', '>', 0)->orderByDesc('ingresos_totales')->limit(5)->get(),
@@ -79,6 +79,8 @@ Route::delete('/carrito', [CartController::class, 'clear'])->name('cart.clear');
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout', [OrderController::class, 'store'])->name('checkout.store');
+    Route::get('/checkout/success', [OrderController::class, 'success'])->name('checkout.success');
+    Route::get('/checkout/cancel/{pedido}', [OrderController::class, 'cancel'])->name('checkout.cancel');
     Route::get('/pedidos', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/pedidos/{pedido}', [OrderController::class, 'show'])->name('orders.show');
     Route::get('/favoritos', [FavoriteController::class, 'index'])->name('favorites.index');
