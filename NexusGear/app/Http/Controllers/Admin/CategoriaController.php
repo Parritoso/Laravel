@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Categoria;
+use App\Services\MongoLog\AdminAuditService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -24,7 +25,9 @@ class CategoriaController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        Categoria::create($this->validatedData($request));
+        $categoria = Categoria::create($this->validatedData($request));
+
+        AdminAuditService::track('store', 'Categoria', $categoria->id, null, $categoria->toArray());
 
         return redirect()
             ->route('admin.categorias.index')
@@ -78,7 +81,11 @@ class CategoriaController extends Controller
 
     public function update(Request $request, Categoria $categoria): RedirectResponse
     {
+        $oldValues = $categoria->toArray();
+
         $categoria->update($this->validatedData($request, $categoria->id));
+
+        AdminAuditService::track('update', 'Categoria', $categoria->id, $oldValues, $categoria->refresh()->toArray());
 
         return redirect()
             ->route('admin.categorias.index')
@@ -92,7 +99,10 @@ class CategoriaController extends Controller
             return back()->with('error', __('messages.admin_category_in_use'));
         }
 
+        $oldValues = $categoria->toArray();
         $categoria->delete();
+
+        AdminAuditService::track('destroy', 'Categoria', $categoria->id, $oldValues, null);
 
         return redirect()
             ->route('admin.categorias.index')

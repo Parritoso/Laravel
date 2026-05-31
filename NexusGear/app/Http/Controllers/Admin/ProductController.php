@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Categoria;
 use App\Models\Producto;
 use App\Models\Descuento;
+use App\Services\MongoLog\AdminAuditService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -66,6 +67,8 @@ class ProductController extends Controller
             $product->descuentos()->sync([$request->descuento_id]);
         }
 
+        AdminAuditService::track('store', 'Producto', $product->id, null, $product->toArray());
+
         return redirect()
             ->route('admin.products.edit', $product)
             ->with('success', __('messages.admin_product_created'));
@@ -121,6 +124,7 @@ class ProductController extends Controller
     {
         $oldPrecioFinal = (float) $producto->precio_final;
         $oldStock = (int) $producto->stock;
+        $oldValues = $producto->toArray();
         $data = $this->validatedData($request);
 
         if ($request->hasFile('imagen')) {
@@ -142,6 +146,8 @@ class ProductController extends Controller
         $producto->refresh();
         $producto->procesarAlertasDeFavoritos($oldPrecioFinal, $oldStock);
 
+        AdminAuditService::track('update', 'Producto', $producto->id, $oldValues, $producto->toArray());
+
         return redirect()
             ->route('admin.products.edit', $producto)
             ->with('success', __('messages.admin_product_updated'));
@@ -158,7 +164,10 @@ class ProductController extends Controller
             Storage::disk('public')->delete($producto->imagen);
         }
 
+        $oldValues = $producto->toArray();
         $producto->delete();
+
+        AdminAuditService::track('destroy', 'Producto', $producto->id, $oldValues, null);
 
         return redirect()
             ->route('admin.products.index')

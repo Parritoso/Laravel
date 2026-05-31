@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Producto;
 use App\Models\Categoria;
+use App\Services\MongoLog\UserAnalyticsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -82,6 +83,10 @@ class ProductController extends Controller
             $slug = $filters['profile'];
             $featuredQuery->whereHas('categorias', fn ($q) => $q->where('slug', $slug));
         }
+
+        $products = $query->paginate(9)->withQueryString();
+
+        UserAnalyticsService::logSearch($filters, $products->total());
 
         return view('products.index', [
             'products'           => $query->paginate(9)->withQueryString(),
