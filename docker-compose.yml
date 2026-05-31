@@ -1,0 +1,143 @@
+name: nexusgear
+
+x-laravel-env: &laravel-env
+  APP_NAME: NexusGear
+  APP_URL: ${APP_URL:-http://localhost:8080}
+  HOME: /tmp
+  DB_CONNECTION: mysql
+  DB_HOST: mysql
+  DB_PORT: 3306
+  DB_DATABASE: nexusgear
+  DB_USERNAME: nexusgear
+  DB_PASSWORD: nexusgear
+  SESSION_DRIVER: redis
+  QUEUE_CONNECTION: redis
+  CACHE_STORE: redis
+  REDIS_CLIENT: predis
+  REDIS_HOST: redis
+  REDIS_PORT: 6379
+  MONGODB_CONNECTION: mongodb
+  MONGODB_HOST: mongodb
+  MONGODB_PORT: 27017
+  MONGODB_DATABASE: nexusgear_analytics
+  MONGODB_USERNAME: ""
+  MONGODB_PASSWORD: ""
+  MONGODB_AUTHENTICATION_DATABASE: admin
+  MAIL_MAILER: smtp
+  MAIL_SCHEME: ""
+  MAIL_HOST: mailpit
+  MAIL_PORT: 1025
+  MAIL_USERNAME: ""
+  MAIL_PASSWORD: ""
+  MAIL_ENCRYPTION: ""
+  VITE_APP_NAME: NexusGear
+  VITE_DEV_SERVER_HOST: 0.0.0.0
+  VITE_DEV_SERVER_HMR_HOST: localhost
+  VITE_DEV_SERVER_PORT: ${VITE_PORT:-5173}
+
+x-app-base: &app-base
+  build:
+    context: .
+    dockerfile: docker/php/Dockerfile
+    args:
+      WWWUSER: ${WWWUSER:-1000}
+      WWWGROUP: ${WWWGROUP:-1000}
+  env_file:
+    - path: ./NexusGear/.env
+      required: false
+  environment:
+    <<: *laravel-env
+  working_dir: /var/www/html
+  volumes:
+    - ./NexusGear:/var/www/html:z
+    - ./docker/scripts:/opt/docker:ro,z
+  depends_on:
+    mysql:
+      condition: service_healthy
+    redis:
+      condition: service_healthy
+    mongodb:
+      condition: service_healthy
+
+services:
+  app:
+    <<: *app-base
+
+  queue:
+    <<: *app-base
+    command: php artisan queue:work redis --tries=1 --timeout=0
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-8080}:80"
+    volumes:
+      - ./NexusGear:/var/www/html:ro,z
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro,z
+    depends_on:
+      - app
+
+  vite:
+    image: node:22-alpine
+    env_file:
+      - path: ./NexusGear/.env
+        required: false
+    working_dir: /var/www/html
+    user: "${WWWUSER:-1000}:${WWWGROUP:-1000}"
+    environment:
+      <<: *laravel-env
+      HOME: /tmp
+      NPM_CONFIG_CACHE: /tmp/.npm
+    command: sh -c "npm run dev -- --host 0.0.0.0 --port ${VITE_PORT:-5173}"
+    ports:
+      - "${VITE_PORT:-5173}:${VITE_PORT:-5173}"
+    volumes:
+      - ./NexusGear:/var/www/html:z
+
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: nexusgear
+      MYSQL_USER: nexusgear
+      MYSQL_PASSWORD: nexusgear
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -proot --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  mongodb:
+    image: mongo:7
+    volumes:
+      - mongodb-data:/data/db
+    healthcheck:
+      test: ["CMD-SHELL", "mongosh --quiet --eval 'db.adminCommand({ ping: 1 }).ok' | grep 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "${MAILPIT_PORT:-8025}:8025"
+
+volumes:
+  mysql-data:
+  redis-data:
+  mongodb-data:
