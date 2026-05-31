@@ -6,9 +6,11 @@ use App\Mail\OrderConfirmationMail;
 use App\Models\Pedido;
 use App\Models\Producto;
 use App\Models\User;
+use App\Services\Payments\PaymentGateway;
 use Database\Seeders\ProductSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
+use Tests\Fakes\PaidPaymentGateway;
 use Tests\TestCase;
 
 class CheckoutTest extends TestCase
@@ -17,6 +19,7 @@ class CheckoutTest extends TestCase
 
     public function test_user_can_checkout_cart_and_create_order(): void
     {
+        $this->fakePaidPaymentGateway();
         Mail::fake();
         $this->seed(ProductSeeder::class);
 
@@ -29,14 +32,26 @@ class CheckoutTest extends TestCase
 
         $this->actingAs($user)
             ->post(route('checkout.store'), $this->newAddressPayload())
-            ->assertRedirect();
+            ->assertRedirect('https://payments.test/checkout/'.PaidPaymentGateway::SESSION_ID);
 
         $pedido = Pedido::with('factura', 'lineas')->firstOrFail();
+
+        $this->assertNull($pedido->factura);
+        $this->assertSame('pendiente', $pedido->estado);
+
+        $this->actingAs($user)
+            ->get(route('checkout.success', [
+                'session_id' => PaidPaymentGateway::SESSION_ID,
+                'order_id' => $pedido->id,
+            ]))
+            ->assertRedirect();
+
+        $pedido->refresh()->load('factura', 'lineas');
         $subtotal = round((float) $product->precio * 2, 2);
         $iva = round($subtotal * 0.21, 2);
 
         $this->assertSame($user->id, $pedido->usuario_id);
-        $this->assertSame('pendiente', $pedido->estado);
+        $this->assertSame('procesando', $pedido->estado);
         $this->assertDatabaseHas('linea_pedido', [
             'pedido_id' => $pedido->id,
             'producto_id' => $product->id,
@@ -73,6 +88,7 @@ class CheckoutTest extends TestCase
 
     public function test_user_can_view_own_orders_and_detail(): void
     {
+        $this->fakePaidPaymentGateway();
         Mail::fake();
         $this->seed(ProductSeeder::class);
 
@@ -85,6 +101,14 @@ class CheckoutTest extends TestCase
         $this->actingAs($user)->post(route('checkout.store'), $this->newAddressPayload());
 
         $pedido = Pedido::with('factura')->firstOrFail();
+
+        $this->actingAs($user)
+            ->get(route('checkout.success', [
+                'session_id' => PaidPaymentGateway::SESSION_ID,
+                'order_id' => $pedido->id,
+            ]));
+
+        $pedido->refresh()->load('factura');
 
         $this->actingAs($user)
             ->get(route('orders.index'))
@@ -100,6 +124,7 @@ class CheckoutTest extends TestCase
 
     public function test_user_cannot_view_other_user_order(): void
     {
+        $this->fakePaidPaymentGateway();
         Mail::fake();
         $this->seed(ProductSeeder::class);
 
@@ -128,5 +153,10 @@ class CheckoutTest extends TestCase
             'city' => 'Madrid',
             'zip_code' => '28001',
         ];
+    }
+
+    private function fakePaidPaymentGateway(): void
+    {
+        $this->app->instance(PaymentGateway::class, new PaidPaymentGateway());
     }
 }
