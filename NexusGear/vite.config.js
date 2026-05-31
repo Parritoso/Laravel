@@ -2,6 +2,10 @@ import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import tailwindcss from '@tailwindcss/vite';
 
+const devServerHost = process.env.VITE_DEV_SERVER_HOST || '127.0.0.1';
+const devServerPort = Number(process.env.VITE_DEV_SERVER_PORT || 5173);
+const hmrHost = process.env.VITE_DEV_SERVER_HMR_HOST || 'localhost';
+
 export default defineConfig({
     plugins: [
         laravel({
@@ -26,6 +30,11 @@ export default defineConfig({
         tailwindcss(),
     ],
     server: {
+        host: devServerHost,
+        port: devServerPort,
+        hmr: {
+            host: hmrHost,
+        },
         watch: {
             ignored: ['**/storage/framework/views/**'],
         },
