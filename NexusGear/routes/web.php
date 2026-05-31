@@ -24,7 +24,7 @@ Route::get('/', function () {
     return view('home', [
         'featuredProducts' => Producto::where('destacado', true)->orderBy('nombre')->take(4)->get(),
     ]);
-});
+}); 
 
 Route::get('/home', function() {
     if (Auth::user()->isAdmin()) {
