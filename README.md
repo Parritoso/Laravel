@@ -26,6 +26,35 @@ El desarrollo se fundamenta en los siguientes pilares:
 
 Repositorio público: <https://github.com/Parritoso/Laravel>
 
+## 2.1 Entorno local con Docker
+
+El proyecto incluye una pila Docker Compose para levantar NexusGear sin instalar PHP, MySQL, Redis, MongoDB ni Node directamente en el sistema.
+
+Servicios expuestos:
+
+- Aplicación: <http://localhost:8080>
+- Vite: <http://localhost:5173>
+- Mailpit: <http://localhost:8025>
+
+Si algún puerto ya está ocupado, puedes cambiarlo al ejecutar `make`, por ejemplo:
+
+```bash
+make docker-up APP_PORT=8081
+```
+
+Comandos desde la raíz del repositorio:
+
+```bash
+make docker-up
+make docker-test
+make docker-reset
+make docker-down
+```
+
+`make docker-up` crea `NexusGear/.env` desde `NexusGear/.env.docker.example` si no existe, construye la imagen PHP, instala dependencias, genera `APP_KEY`, ejecuta migraciones y siembra datos de demo cuando la base de datos está vacía.
+
+Para probar compras reales en local, configura `STRIPE_SECRET` con una clave de test válida en `NexusGear/.env`. Los correos de recuperación, verificación y pedidos se capturan en Mailpit.
+
 ## 3. Identidad Visual y Diseño (UI/UX)
 
 Siguiendo las directrices del proyecto, se ha establecido el **verde agua** como color primario de la plataforma. Esta elección encaja con la temática ergonómica porque transmite calma, equilibrio, frescura y bienestar, valores relacionados con la reducción de fatiga en contextos de trabajo y juego prolongado.
