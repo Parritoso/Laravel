@@ -19,24 +19,44 @@ class UserSeeder extends Seeder
         $adminRoleId = DB::table('roles')->where('nombre_rol', 'admin')->value('id');
         $customerRoleId = DB::table('roles')->where('nombre_rol', 'customer')->value('id');
 
-        // Usuarios base para probar el panel de administración y la parte de cliente.
-        $admin = User::create([
-            'name' => 'Admin Nexus',
-            'email' => 'admin@nexusgear.com',
-            'password' => Hash::make('admin123'),
-            'email_verified_at' => now(),
-        ]);
-        
-        // La fecha de asignación queda registrada en la tabla pivote.
-        $admin->roles()->attach($adminRoleId, ['asignado_el' => now()]);
+        $users = [
+            [
+                'name' => 'Admin Nexus',
+                'email' => 'admin@nexusgear.com',
+                'password' => 'admin123',
+                'role_id' => $adminRoleId,
+            ],
+            [
+                'name' => 'Juan Cliente',
+                'email' => 'juan@example.com',
+                'password' => 'user123',
+                'role_id' => $customerRoleId,
+            ],
+            [
+                'name' => 'María Ergonomía',
+                'email' => 'maria@example.com',
+                'password' => 'user123',
+                'role_id' => $customerRoleId,
+            ],
+        ];
 
-        $customer = User::create([
-            'name' => 'Juan Cliente',
-            'email' => 'juan@example.com',
-            'password' => Hash::make('user123'),
-            'email_verified_at' => now(),
-        ]);
-        
-        $customer->roles()->attach($customerRoleId, ['asignado_el' => now()]);
+        foreach ($users as $data) {
+            $user = User::updateOrCreate(
+                ['email' => $data['email']],
+                [
+                    'name' => $data['name'],
+                    'password' => Hash::make($data['password']),
+                ],
+            );
+
+            $user->forceFill(['email_verified_at' => $user->email_verified_at ?? now()])->save();
+
+            if ($data['role_id']) {
+                // La fecha de asignación queda registrada en la tabla pivote.
+                $user->roles()->syncWithoutDetaching([
+                    $data['role_id'] => ['asignado_el' => now()],
+                ]);
+            }
+        }
     }
 }

@@ -14,9 +14,11 @@ class RolSeeder extends Seeder
     public function run(): void
     {
         // Roles mínimos del proyecto: administración y cliente normal.
-        DB::table('roles')->insert([
-            ['nombre_rol' => 'admin'],
-            ['nombre_rol' => 'customer'],
-        ]);
+        foreach (['admin', 'customer'] as $role) {
+            DB::table('roles')->updateOrInsert(
+                ['nombre_rol' => $role],
+                ['nombre_rol' => $role],
+            );
+        }
     }
 }
